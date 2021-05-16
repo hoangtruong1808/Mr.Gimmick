@@ -1,0 +1,121 @@
+# id	file_path	transparent_color_r	g	b
+[TEXTURES]
+0	map\map1\scene2\scene2_bank.png	255	0	0
+10	textures\gimmick_right.png	0	0	255
+20	textures\gimmick_left.png	0	0	255
+30	textures\stage1.png	215	121	214
+
+[MAP]
+# TileSetID	MapY	MapX	TileSizeY	TileSizeX	MapMatrixPath
+
+0	12	32	5	11	map\map1\scene2\scene2_map.txt
+
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+# BIG MARIO 
+# idle right
+10001	246	154	260	181	0
+# walk
+10002	275	154	290	181	0		
+10003	304	154	321	181	0
+
+# GIMMICK
+# idle right					
+20101	2	2	18	21	10
+20102	22	2	38	21	10
+# idle left					
+20151	399	2	415	21	20
+20152	379	2	395	21	20
+# walk right					
+20201	2	24	18	43	10
+20202	21	24	37	43	10
+20203	39	24	55	43	10
+20204	58	24	74	43	10
+20205	79	24	95	43	10
+20206	99	24	115	43	10
+# walk left					
+20251	399	24	415	43	20
+20252	380	24	396	43	20
+20253	362	24	378	43	20
+20254	343	24	359	43	20
+20255	322	24	338	43	20
+20256	302	24	318	43	20
+# jump right					
+20301	2	46	18	70	10
+# jump left					
+20351	399	46	415	70	20
+# pipe right
+# pipe left
+# stun right
+# stun left
+
+# BRICK	
+# 
+30101	120	1	136	17	30
+30102	137	1	153	17	30
+30103	154	1	170	17	30
+
+30201	103	69	119	85	30
+30202	120	69	136	85	30
+30203	137	69	153	85	30
+
+						
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+
+# ==== GIMMICK=========
+# idle right					
+20101	20101	1000	20102	100
+# idle left					
+20151	20151	1000	20152	100
+# walk right					
+20201	20201	100	20202	100	20203	100	20204	100	20205	100	20206	100
+# walk left					
+20251	20251	100	20252	100	20253	100	20254	100	20255	100	20256	100
+# jump right					
+20301	20301	100
+# jump left					
+20351	20351	100
+
+# ==== BRICK ========
+30101	30101	100
+30102	30102	100
+30103	30103	100
+
+30201	30201	100
+30202	30202	100
+30203	30203	100
+
+
+#
+# id	ani1	ani2	ani3
+#
+[ANIMATION_SETS]
+# GIMMICK				
+20101	20101	20151	20201	20251	20301	20351	20351
+
+# BRICK
+30101	30101
+30102	30102
+30103	30103
+30201	30201
+30202	30202
+30203	30203
+
+[OBJECTS]
+# type	x	y	ani_set_id	extra_settings per object type
+# type: 0 = Gimmick , 1 = Brick, 2 = Goomba
+
+# GIMMICK
+0	50	0	20101
+
+# BRICK
+1	0	352	30201
+1	16	352	30102
+1	32	352	30102
+1	48	352	30102
+
+# --- SCENE PORTAL ----
+# type	l	t	ani_set_id	r	b	scene_id
+#50	300	98	0	316	150	2
+

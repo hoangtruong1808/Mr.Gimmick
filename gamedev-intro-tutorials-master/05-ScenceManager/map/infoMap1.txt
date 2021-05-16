@@ -1,0 +1,9 @@
+Map {w: 128, h: 48}
+Tileset {w: 11, h: 40, count: 440}
+
+map1
+scene1 map 64, 24, tileset w11 h:8
+scene2 map 32, 12, tileset 11, 5
+scene3 map 95, 12, tileset 12, 12
+scene4 map 16, 24, tileset 11, 5
+scene5 map 64, 12, tileset 11, 6 

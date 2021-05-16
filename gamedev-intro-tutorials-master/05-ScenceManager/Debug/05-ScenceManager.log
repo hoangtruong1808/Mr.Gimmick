@@ -1,0 +1,48 @@
+﻿  Animations.cpp
+  Brick.cpp
+  Gimmick.cpp
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\Gimmick.h(40,79): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+  Koopas.cpp
+  MapGame.cpp
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\MapGame.h(15,2): warning C4091: 'typedef ': ignored on left of 'Map' when no variable is declared
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\MapGame.cpp(36,45): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\MapGame.cpp(37,45): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\MapGame.cpp(39,67): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\MapGame.cpp(39,58): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\MapGame.cpp(39,51): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\MapGame.cpp(39,47): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\MapGame.cpp(55,12): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\MapGame.cpp(56,12): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\MapGame.cpp(67,24): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\MapGame.cpp(71,24): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+  Portal.cpp
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\Portal.cpp(9,16): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\Portal.cpp(10,17): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  Utils.cpp
+  Game.cpp
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\MapGame.h(15,2): warning C4091: 'typedef ': ignored on left of 'Map' when no variable is declared
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\Gimmick.h(40,79): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+  GameObject.cpp
+  Goomba.cpp
+  main.cpp
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\MapGame.h(15,2): warning C4091: 'typedef ': ignored on left of 'Map' when no variable is declared
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\Gimmick.h(40,79): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\main.cpp(184,61): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\main.cpp(184,42): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  Mario.cpp
+  PlayScence.cpp
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\MapGame.h(15,2): warning C4091: 'typedef ': ignored on left of 'Map' when no variable is declared
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\Gimmick.h(40,79): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\PlayScence.cpp(90,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\PlayScence.cpp(112,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\PlayScence.cpp(135,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\PlayScence.cpp(136,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\PlayScence.cpp(162,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\PlayScence.cpp(163,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\PlayScence.cpp(291,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\05-ScenceManager\PlayScence.cpp(300,20): warning C4018: '<': signed/unsigned mismatch
+  Scence.cpp
+  Sprites.cpp
+  Textures.cpp
+  Generating Code...
+  05-ScenceManager.vcxproj -> C:\Users\Administrator\Desktop\SE102Project\Mr.Gimmick\gamedev-intro-tutorials-master\Debug\Mr.Gimmick.exe
