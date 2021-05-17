@@ -327,13 +327,21 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	CGimmick *gimmick = ((CPlayScene*)scence)->GetPlayer();
 
 	// disable control key when Mario die 
-	if (gimmick->GetState() == GIMMICK_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_RIGHT))
-		gimmick->SetState(GIMMICK_STATE_WALKING_RIGHT);
-	else if (game->IsKeyDown(DIK_LEFT))
-		gimmick->SetState(GIMMICK_STATE_WALKING_LEFT);
-	else if (game->IsKeyDown(DIK_UP))
-		gimmick->SetState(GIMMICK_STATE_JUMP);
+	if (gimmick->GetState() == GIMMICK_STATE_DIE ) return;
+	else if (gimmick->GetState() != GIMMICK_STATE_JUMP && gimmick->GetState() != GIMMICK_STATE_JUMP_RIGHT && gimmick->GetState() != GIMMICK_STATE_JUMP_LEFT)
+	{
+		if (game->IsKeyDown(DIK_RIGHT))
+			gimmick->SetState(GIMMICK_STATE_WALKING_RIGHT);
+		else if (game->IsKeyDown(DIK_LEFT))
+			gimmick->SetState(GIMMICK_STATE_WALKING_LEFT);
+		else
+			gimmick->SetState(GIMMICK_STATE_IDLE);
+	}
 	else
-		gimmick->SetState(GIMMICK_STATE_IDLE);
+	{
+		if (game->IsKeyDown(DIK_RIGHT))
+			gimmick->SetState(GIMMICK_STATE_JUMP_RIGHT);
+		else if (game->IsKeyDown(DIK_LEFT))
+			gimmick->SetState(GIMMICK_STATE_JUMP_LEFT);
+	}
 }

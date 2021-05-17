@@ -76,14 +76,17 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			//Brick
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
-				x = x + dx - min_tx * dx - nx * 0.4f;
-				if (e->ny > 0)
-					y = y + dy - min_ty * dy - ny * 0.4f;
 				CBrick* brick = dynamic_cast<CBrick*>(e->obj);
-
-				if (e->ny < 0)
+				if (e->nx != 0)
 				{
+					vx = 0;
+				}
+				if (e->ny != 0)
+				{	
 					vy = 0;
+					if (vx > 0) state = GIMMICK_STATE_WALKING_RIGHT;
+					else if (vx < 0) state = GIMMICK_STATE_WALKING_LEFT;
+					else if (vx == 0) state = GIMMICK_STATE_IDLE;
 					y = y0 + min_ty * dy + ny * 0.4f;
 				}
 
@@ -95,9 +98,10 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
-
+	DebugOut(L"[INFO] vy: %d\n", vy);
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+
 }
 
 void CGimmick::Render()
@@ -106,12 +110,14 @@ void CGimmick::Render()
 	if (state == GIMMICK_STATE_DIE)
 		ani = GIMMICK_ANI_DIE;
 	else {
-		if (vy != 0) {
+		if (state == GIMMICK_STATE_JUMP) {
 			if (nx > 0)
 				ani = GIMMICK_ANI_JUMP_RIGHT;
-			else 
+			else
 				ani = GIMMICK_ANI_JUMP_LEFT;
 		}
+		else if (state == GIMMICK_STATE_JUMP_RIGHT) ani = GIMMICK_ANI_JUMP_RIGHT;
+		else if (state == GIMMICK_STATE_JUMP_LEFT) ani = GIMMICK_ANI_JUMP_LEFT;
 		else {
 			if (vx == 0)
 			{
@@ -121,15 +127,16 @@ void CGimmick::Render()
 			else if (vx > 0)
 				ani = GIMMICK_ANI_WALKING_RIGHT;
 			else ani = GIMMICK_ANI_WALKING_LEFT;
+			
 		}
-	}
+	}	
 
 	int alpha = 255;
 	if (untouchable) alpha = 128;
 
-	animation_set->at(ani)->Render(x, y - 3, alpha);
+	animation_set->at(ani)->Render(x, y-3, alpha);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CGimmick::SetState(int state)
@@ -153,6 +160,14 @@ void CGimmick::SetState(int state)
 	case GIMMICK_STATE_IDLE:
 		vx = 0;
 		break;
+	case GIMMICK_STATE_JUMP_RIGHT:
+		vx = GIMMICK_WALKING_SPEED;
+		nx = 1;
+		break;
+	case GIMMICK_STATE_JUMP_LEFT:
+		vx = -GIMMICK_WALKING_SPEED;
+		nx = -1;
+		break;
 	}
 }
 
@@ -160,7 +175,15 @@ void CGimmick::GetBoundingBox(float& left, float& top, float& right, float& bott
 {
 	left = x;
 	top = y;
-	right = x + GIMMICK_BBOX_WIDTH;
-	bottom = y + GIMMICK_BBOX_HEIGHT;
+	if (state == GIMMICK_STATE_JUMP)
+	{
+		right = x + GIMMICK_BBOX_JUMP_WIDTH;
+		bottom = y + GIMMICK_BBOX_JUMP_HEIGHT;
+	}
+	else
+	{
+		right = x + GIMMICK_BBOX_WIDTH;
+		bottom = y + GIMMICK_BBOX_HEIGHT;
+	}
 }
 

@@ -155,9 +155,6 @@
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Gimmick , 1 = Brick, 2 = Goomba
 
-# GIMMICK
-0	50	0	20101
-
 # BRICK
 1	0	352	30201
 1	16	352	30102
@@ -313,7 +310,9 @@
 1	0	320	30303
 1	0	336	30303
 
+# GIMMICK
+0	50	0	20101
+
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
-#50	300	98	0	316	150	2
-
+50	992	352	0	1008	384	2
