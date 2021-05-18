@@ -13,11 +13,14 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Brick">
+      <UniqueIdentifier>{1a6c63c9-d4c9-420c-87d8-eb0de9431ea3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Brick">
+      <UniqueIdentifier>{f1c7951b-5cfd-4bf5-9529-9e6b55246c71}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Brick.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -63,11 +66,14 @@
     <ClCompile Include="Gimmick.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Brick.cpp">
+      <Filter>Source Files\Brick</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformsMoving.cpp">
+      <Filter>Source Files\Brick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Brick.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -112,6 +118,12 @@
     </ClInclude>
     <ClInclude Include="Gimmick.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Brick.h">
+      <Filter>Header Files\Brick</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformsMoving.h">
+      <Filter>Header Files\Brick</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

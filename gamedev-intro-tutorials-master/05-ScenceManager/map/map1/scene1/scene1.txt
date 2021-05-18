@@ -4,6 +4,7 @@
 10	textures\gimmick_right.png	0	0	255
 20	textures\gimmick_left.png	0	0	255
 30	textures\stage1.png	215	121	214
+40	map\map1\scene1\scene1.png	255	0	0
 
 [MAP]
 # TileSetID	MapY	MapX	TileSizeY	TileSizeX	MapMatrixPath
@@ -12,12 +13,6 @@
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
-# BIG MARIO 
-# idle right
-10001	246	154	260	181	0
-# walk
-10002	275	154	290	181	0		
-10003	304	154	321	181	0
 
 # GIMMICK
 # idle right					
@@ -76,6 +71,23 @@
 30405	69	69	85	85	30
 30406	86	69	102	85	30
 
+#BRICK SPEED UP
+30501	1	171	17	187	30
+30502	18	171	34	187	30
+30503	35	171	51	187	30
+30504	52	171	68	187	30
+
+#BRICK SPEED BACK
+30514	1	188	17	204	30
+30513	18	188	34	204	30
+30512	35	188	51	204	30
+30511	52	188	68	204	30
+
+
+#PLATFORMSMOVING
+
+40101	193	120	225	136	40
+
 						
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
@@ -120,6 +132,15 @@
 30405	30405	100
 30406	30406	100
 
+# ==== BRICK SPEED UP ===
+30501	30501	50	30502	50	30503	50	30504	50
+
+# ==== BRICK SPEED BACK ===
+30511	30511	50	30512	50	30513	50	30514	50
+
+# ====PLATFORMSMOVING===
+ 40101	40101	100
+
 
 #
 # id	ani1	ani2	ani3
@@ -151,9 +172,19 @@
 30405	30405
 30406	30406
 
+# BRICK SPEED UP
+30501	30501
+
+# BRICK SPEED BACK
+30511	30511
+
+
+# PLATFORMSMOVING
+40101	40101
+
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 0 = Gimmick , 1 = Brick, 2 = Goomba
+# type: 0 = Gimmick , 1 = Brick, 2 = Goomba, 4= Platforms Moving
 
 # BRICK
 1	0	352	30201
@@ -310,9 +341,31 @@
 1	0	320	30303
 1	0	336	30303
 
+# BRICK SPEED UP  (type	x	y	ani_set_id 	state (state = 100 BRICK_STATE_UP )
+1	272	272	30501	100
+1	288	272	30501	100
+
+# BRICK SPEED BACK  (type	x	y	ani_set_id 	state (state = 200 BRICK_STATE_BACK )
+1	368	272	30511	200
+1	384	272	30511	200
+1	400	352	30511	200
+1	416	352	30511	200
+1	432	352	30511	200
+1	448	352	30511	200
+1	720	352	30511	200
+1	736	352	30511	200
+1	752	352	30511	200
+1	768	352	30511	200
+
+
+#flatforms moving: 4	x	y	ani_set_id	start	end	id_set_state (id_set_state = 100 : moving width, id_set_state = 200 :moving height )
+4	192	120	40101	192	256	100
+4	304	144	40101	80	144	200
+4	424	80	40101	368	432	100
+4	472	136	40101	80	144	200
 # GIMMICK
 0	50	0	20101
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
-50	992	352	0	1008	384	2
+50	992	368	0	1008	384	2

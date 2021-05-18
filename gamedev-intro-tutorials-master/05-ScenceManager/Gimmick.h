@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
+
 #define GIMMICK_WALKING_SPEED		0.1f 
 #define GIMMICK_JUMP_SPEED_Y		0.5f
 #define GIMMICK_GRAVITY				0.002f
@@ -40,7 +41,6 @@ public:
 	CGimmick();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
-
 	void SetState(int state);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 

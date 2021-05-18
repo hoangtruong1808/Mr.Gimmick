@@ -1,3 +1,6 @@
+#include <iostream>
+#include <fstream>
+
 #include "Gimmick.h"
 #include <algorithm>
 #include <assert.h>
@@ -5,6 +8,7 @@
 #include "Game.h"
 #include "Brick.h"
 #include "Portal.h"
+#include "PlatformsMoving.h"
 
 
 CGimmick::CGimmick() : CGameObject()
@@ -61,7 +65,6 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x0 = x;
 		y0 = y;
 
-
 		x = x0 + min_tx * dx + nx * 0.4f;
 		y = y0 + min_ty * dy + ny * 0.4f;
 
@@ -71,6 +74,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		//
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
+			
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
 			//Brick
@@ -84,10 +88,40 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->ny != 0)
 				{	
 					vy = 0;
-					if (vx > 0) state = GIMMICK_STATE_WALKING_RIGHT;
-					else if (vx < 0) state = GIMMICK_STATE_WALKING_LEFT;
-					else if (vx == 0) state = GIMMICK_STATE_IDLE;
-					y = y0 + min_ty * dy + ny * 0.4f;
+					if (e->ny < 0)
+					{
+						if (vx > 0) state = GIMMICK_STATE_WALKING_RIGHT;
+						else if (vx < 0) state = GIMMICK_STATE_WALKING_LEFT;
+						else if (vx == 0) state = GIMMICK_STATE_IDLE;
+
+					}
+					
+				}
+				if (e->ny <= 0 && e->nx == 0)
+				{
+					if (brick->GetState() != NULL)
+					{
+						x += brick->GetBrickSpeed()*dt;
+					}
+				}
+
+			}
+			else if (dynamic_cast<CPlatformsMoving*>(e->obj))
+			{
+				CPlatformsMoving* pm = dynamic_cast<CPlatformsMoving*>(e->obj);
+				if (e->nx != 0)
+				{
+					vx = 0;
+				}
+				if (e->ny != 0)
+				{
+					vy = 0;
+					if (e->ny < 0)
+					{
+						if (vx > 0) state = GIMMICK_STATE_WALKING_RIGHT;
+						else if (vx < 0) state = GIMMICK_STATE_WALKING_LEFT;
+						else if (vx == 0) state = GIMMICK_STATE_IDLE;
+					}
 				}
 
 			}
@@ -98,7 +132,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
-	DebugOut(L"[INFO] vy: %d\n", vy);
+
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 

@@ -9,6 +9,7 @@
 #include "Koopas.h"
 #include "MapGame.h"
 #include "Gimmick.h"
+#include "PlatformsMoving.h"
 
 
 class CPlayScene: public CScene
