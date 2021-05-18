@@ -52,7 +52,7 @@ public:
 
 typedef vector<LPANIMATION> CAnimationSet;
 
-typedef CAnimationSet* LPANIMATION_SET;
+typedef CAnimationSet* LPANIMATION_SET; 
 
 /*
 	Manage animation set database

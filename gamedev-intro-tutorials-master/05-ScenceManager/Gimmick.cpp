@@ -88,13 +88,6 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->ny != 0)
 				{	
 					vy = 0;
-					if (e->ny < 0)
-					{
-						if (vx > 0) state = GIMMICK_STATE_WALKING_RIGHT;
-						else if (vx < 0) state = GIMMICK_STATE_WALKING_LEFT;
-						else if (vx == 0) state = GIMMICK_STATE_IDLE;
-
-					}
 					
 				}
 				if (e->ny <= 0 && e->nx == 0)
@@ -116,13 +109,10 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->ny != 0)
 				{
 					vy = 0;
-					if (e->ny < 0)
-					{
-						if (vx > 0) state = GIMMICK_STATE_WALKING_RIGHT;
-						else if (vx < 0) state = GIMMICK_STATE_WALKING_LEFT;
-						else if (vx == 0) state = GIMMICK_STATE_IDLE;
-					}
+				
 				}
+				x = x + pm->GetPosition_dx() ;
+				y = y + pm->GetPosition_dy() ;
 
 			}
 			else if (dynamic_cast<CPortal*>(e->obj))
@@ -130,6 +120,15 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CPortal* p = dynamic_cast<CPortal*>(e->obj);
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
 			}
+
+			if (e->ny < 0)
+			{
+				if (vx > 0) state = GIMMICK_STATE_WALKING_RIGHT;
+				else if (vx < 0) state = GIMMICK_STATE_WALKING_LEFT;
+				else if (vx == 0) state = GIMMICK_STATE_IDLE;
+
+			}
+
 		}
 	}
 

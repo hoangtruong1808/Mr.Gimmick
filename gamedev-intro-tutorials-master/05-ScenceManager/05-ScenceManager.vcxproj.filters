@@ -72,6 +72,9 @@
     <ClCompile Include="PlatformsMoving.cpp">
       <Filter>Source Files\Brick</Filter>
     </ClCompile>
+    <ClCompile Include="SlopeBrick.cpp">
+      <Filter>Source Files\Brick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -123,6 +126,9 @@
       <Filter>Header Files\Brick</Filter>
     </ClInclude>
     <ClInclude Include="PlatformsMoving.h">
+      <Filter>Header Files\Brick</Filter>
+    </ClInclude>
+    <ClInclude Include="SlopeBrick.h">
       <Filter>Header Files\Brick</Filter>
     </ClInclude>
   </ItemGroup>

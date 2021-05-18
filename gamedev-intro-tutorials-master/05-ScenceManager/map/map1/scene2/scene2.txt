@@ -4,6 +4,7 @@
 10	textures\gimmick_right.png	0	0	255
 20	textures\gimmick_left.png	0	0	255
 30	textures\stage1.png	215	121	214
+40	map\map1\scene2\scene2.png	255	0	0
 
 [MAP]
 # TileSetID	MapY	MapX	TileSizeY	TileSizeX	MapMatrixPath

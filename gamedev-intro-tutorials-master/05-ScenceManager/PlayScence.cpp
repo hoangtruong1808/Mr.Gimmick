@@ -6,6 +6,7 @@
 #include "Textures.h"
 #include "Sprites.h"
 #include "Portal.h"
+#include "SlopeBrick.h"
 
 
 using namespace std;
@@ -34,6 +35,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define OBJECT_TYPE_GOOMBA	2
 #define OBJECT_TYPE_KOOPAS	3
 #define OBJECT_TYPE_PLATFORMSMOVING		4
+#define OBJECT_TYPE_SLOPE	5
+
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -159,10 +162,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
 	case OBJECT_TYPE_BRICK:
 	{
-		obj = new CBrick(); 
-		if (tokens.size() > 4)
+		if (tokens.size() < 6) return;
+		float width = atof(tokens[4].c_str());
+		float height = atof(tokens[5].c_str());
+
+		obj = new CBrick(width, height); 
+		if (tokens.size() > 6)
 		{
-			int brick_state = atoi(tokens[4].c_str());
+			int brick_state = atoi(tokens[6].c_str());
 			DebugOut(L"[INFO] brick_state: %d\n", brick_state);
 			obj->SetState(brick_state);
 		}
@@ -171,14 +178,32 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_PLATFORMSMOVING: 
 		{
-			obj = new CPlatformsMoving();
+		if (tokens.size() < 9) return;
+			float width = atof(tokens[4].c_str());
+			float height = atof(tokens[5].c_str());
+			obj = new CPlatformsMoving(width,height);
 			CPlatformsMoving* pm = (CPlatformsMoving*)obj;
-			int start = atoi(tokens[4].c_str());
-			int end = atoi(tokens[5].c_str());
+			int start = atoi(tokens[6].c_str());
+			int end = atoi(tokens[7].c_str());
 			pm->SetStart(start);
 			pm->SetEnd(end);
-			int id_set_state = atoi(tokens[6].c_str());
+			int id_set_state = atoi(tokens[8].c_str());
 			obj->SetState(id_set_state);
+		}
+		break;
+	case OBJECT_TYPE_SLOPE:
+		{
+		if (tokens.size() < 10) return;
+			float width = atof(tokens[4].c_str());
+			float height = atof(tokens[5].c_str());
+			Slope slope;
+			slope.start_x = atof(tokens[6].c_str());
+			slope.start_y = atof(tokens[7].c_str());
+			slope.end_x = atof(tokens[8].c_str());
+			slope.end_y = atof(tokens[9].c_str());
+			slope.d_x = slope.end_x - slope.start_x;
+			slope.d_y = slope.end_y - slope.start_y;
+			obj = new CSlopeBrick(width, height, slope);
 		}
 		break;
 	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;

@@ -11,8 +11,8 @@ void CBrick::GetBoundingBox(float &l, float &t, float &r, float &b)
 {
 	l = x;
 	t = y;
-	r = x + BRICK_BBOX_WIDTH;
-	b = y + BRICK_BBOX_HEIGHT;
+	r = x + brick_width;
+	b = y + brick_height;
 }
 
 void CBrick::SetState(int state)

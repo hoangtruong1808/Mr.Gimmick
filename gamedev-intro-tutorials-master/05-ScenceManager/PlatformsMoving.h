@@ -14,9 +14,12 @@
 class CPlatformsMoving : public CGameObject
 {
 public:
+	float pm_width;
+	float pm_height;
 	int start;
 	int end;
 public:
+	CPlatformsMoving(float width, float height) { this->pm_width = width; this->pm_height = height; };
 	void SetStart(int start) { this->start = start; }
 	void SetEnd(int end) { this->end = end; }
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
