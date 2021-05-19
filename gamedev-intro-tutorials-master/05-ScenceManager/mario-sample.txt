@@ -2,6 +2,5 @@
 start	1
 #scene list
 [SCENES]
-1	map\map1\scene1\scene1.txt
-2	map\map1\scene2\scene2.txt
-3	map\map1\scene3\scene3.txt
+1	map\map1\scene5\scene5.txt
+2	map\map1\scene3\scene3.txt
