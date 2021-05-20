@@ -9,6 +9,13 @@ void CSlopeBrick::Render()
 
 void CSlopeBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
+	if (slope.start_x <= x <= slope.end_x)
+	{
+		if (slope.start_y <= y <= slope.end_y)
+		{
+
+		}
+	}
 	l = x;
 	t = y;
 	r = x + slope_width;

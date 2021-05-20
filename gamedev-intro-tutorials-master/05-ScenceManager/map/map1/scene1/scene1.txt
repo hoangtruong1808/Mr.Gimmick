@@ -373,7 +373,7 @@
 4	472	136	30601	32	16	80	144	200
 
 # PLOSE : type=5	x	y	ami_set_id	width	height	start_x	start_y	end_x	end_y
-5	480	336	30701	16	16	480	352	512	336
+5	480	336	30701	2	2	480	352	512	336
 # GIMMICK
 0	50	0	20101
 

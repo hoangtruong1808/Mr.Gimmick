@@ -10,6 +10,7 @@
 #include "MapGame.h"
 #include "Gimmick.h"
 #include "PlatformsMoving.h"
+#include "Camera.h"
 
 
 class CPlayScene: public CScene
@@ -17,6 +18,7 @@ class CPlayScene: public CScene
 protected: 
 	CGimmick *player;					// A play scene has to have player, right? 
 	MapGame* map;
+	CCamera* camera;
 
 	vector<LPGAMEOBJECT> objects;
 

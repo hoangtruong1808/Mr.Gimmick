@@ -3,6 +3,8 @@
 #include "Textures.h"
 
 
+
+
 #define TILE_WIDTH 16
 #define TILE_HEIGHT 16
 
@@ -26,6 +28,10 @@ public:
 		this->game_map.TILE_SIZE_X = TileSizeX;
 		this->game_map.TILE_SIZE_Y = TileSizeY;
 		TileSetImg = CTextures::GetInstance()->Get(TileSetID);
+		this->cam_x = NULL;
+		this->cam_y = NULL;
+		this->screenHeight = NULL;
+		this->screenWidth = NULL;
 		LoadMap(MapPath);
 	}
 	~MapGame() { ; }

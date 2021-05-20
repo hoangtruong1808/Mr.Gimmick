@@ -56,6 +56,12 @@ public:
 
 	int nx;	 
 
+	float cam_x = 0.0f;
+	float cam_y = 0.0f;
+
+	float screenWidth = 0.0f;
+	float screenHeight = 0.0f;
+
 	int state;
 
 	DWORD dt; 
@@ -80,6 +86,17 @@ public:
 
 	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
 
+	void SetCamera(float camx, float camy)
+	{
+		this->cam_x = camx;
+		this->cam_y = camy;
+	};
+	void SetScreen(float width, float height)
+	{
+		this->screenHeight = height;
+		this->screenWidth = width;
+	}
+
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
 	void CalcPotentialCollisions(vector<LPGAMEOBJECT> *coObjects, vector<LPCOLLISIONEVENT> &coEvents);
 	void FilterCollision(
@@ -103,4 +120,3 @@ public:
 	~CGameObject();
 };
 
-	

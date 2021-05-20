@@ -15,6 +15,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	CScene(id, filePath)
 {
 	key_handler = new CPlayScenceKeyHandler(this);
+	camera = new CCamera();
 }
 
 /*
@@ -155,7 +156,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			return;
 		}
 		obj = new CGimmick(); 
-		player = (CGimmick*)obj;  
+		player = (CGimmick*)obj;
 
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
@@ -316,21 +317,28 @@ void CPlayScene::Update(DWORD dt)
 	if (player == NULL) return; 
 
 	// Update camera to follow mario
-	float cx, cy;
-	player->GetPosition(cx, cy);
 
-	CGame* game = CGame::GetInstance();
-	cx -= game->GetScreenWidth() / 2;
-	cy -= game->GetScreenHeight() / 2;
 	if (map != NULL)
 	{
+		float cx, cy;
+		player->GetPosition(cx, cy);
+
+		CGame* game = CGame::GetInstance();
+		cx -= game->GetScreenWidth() / 2;
+		cy -= game->GetScreenHeight() / 2;
+
 		if (cy < 0) cy = 0;
 		if (cy > map->getMapHeight() - game->GetScreenHeight()) cy = map->getMapHeight() - game->GetScreenHeight();
 		if (cx < 0) cx = 0;
 		if (cx > map->getMapWidth() - game->GetScreenWidth()) cx = map->getMapWidth() - game->GetScreenWidth();
+		map->SetCamera(cx, cy);
+		map->SetScreen(game->GetScreenWidth(), game->GetScreenHeight());
+		camera->SetCamera(cx, cy);
+		CGame::GetInstance()->SetCamPos(cx, cy);
+
 	}
 
-	CGame::GetInstance()->SetCamPos(cx, cy);
+
 }
 
 void CPlayScene::Render()

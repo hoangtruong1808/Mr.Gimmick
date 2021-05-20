@@ -19,11 +19,12 @@ CGimmick::CGimmick() : CGameObject()
 
 void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	vy += GIMMICK_GRAVITY * dt;
+
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	vy += GIMMICK_GRAVITY * dt;
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -65,8 +66,12 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x0 = x;
 		y0 = y;
 
-		x = x0 + min_tx * dx + nx * 0.4f;
-		y = y0 + min_ty * dy + ny * 0.4f;
+		if (nx != 0)
+			x = x0 + min_tx * dx + nx * 0.4f;
+		else x = x + dx;
+		if (ny != 0)
+			y = y0 + min_ty * dy + ny * 0.4f;
+		else y = y + dy;
 
 
 		//
@@ -84,12 +89,12 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0)
 				{
 					vx = 0;
-				}
-				if (e->ny != 0)
-				{	
+				} 
+				else if (e->ny != 0)
+				{
 					vy = 0;
-					
 				}
+
 				if (e->ny <= 0 && e->nx == 0)
 				{
 					if (brick->GetState() != NULL)
@@ -104,15 +109,16 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CPlatformsMoving* pm = dynamic_cast<CPlatformsMoving*>(e->obj);
 				if (e->nx != 0)
 				{
-					vx = 0;
+					vx = pm->GetPosition_vx();
+					vy += pm->GetPosition_vy();
 				}
-				if (e->ny != 0)
+				else if (e->ny != 0)
 				{
-					vy = 0;
+					vx += pm->GetPosition_vx();
+					vy = pm->GetPosition_vy();
 				
 				}
-				x = x + pm->GetPosition_dx() ;
-				y = y + pm->GetPosition_dy() ;
+				
 
 			}
 			else if (dynamic_cast<CPortal*>(e->obj))

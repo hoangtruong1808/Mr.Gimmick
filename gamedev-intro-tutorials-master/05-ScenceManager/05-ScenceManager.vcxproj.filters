@@ -75,6 +75,9 @@
     <ClCompile Include="SlopeBrick.cpp">
       <Filter>Source Files\Brick</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -130,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="SlopeBrick.h">
       <Filter>Header Files\Brick</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

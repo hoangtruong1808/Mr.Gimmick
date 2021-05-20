@@ -1,10 +1,11 @@
-
+﻿
 #include "Game.h"
 #include "MapGame.h"
 #include "Textures.h"
 #include <iostream>
 #include <fstream>
 #include "Utils.h"
+
 
 
 
@@ -44,21 +45,19 @@ void MapGame::DrawTiles(int val, float x, float y)
 
 void MapGame::Render()
 {
-	float x0, y0;
+	int x0, y0;
 	int temp = 0;
-	for (int i = 0; i < game_map.MAP_Y; i++)
+	
+	for (int i = 0; i < screenHeight/16 ; i++)
 	{
-		for (int j = 0; j < game_map.MAP_X; j++)
+		for (int j = 0; j < screenWidth/16; j++)
 		{
-			if (temp < game_map.MAP_Y * game_map.MAP_X)
-			{
-				x0 = j * 16;
-				y0 = i * 16;
-				int val = game_map.ArrayTile[temp];
+				x0 = j * 16 + int(cam_x/16) * 16; // lấy vị trí chia hết cho 16
+				y0 = i * 16 + int(cam_y/16) * 16; 
+
+				temp =int(y0/16)* game_map.MAP_X  + int(x0/16) ; // lấy vị trí  tile
+				int val = game_map.ArrayTile[temp] ;
 				DrawTiles(val, x0, y0);
-				temp++;
-			}
-		
 		}
 	}
 
