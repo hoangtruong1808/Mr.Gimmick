@@ -13,7 +13,7 @@
 
 CGimmick::CGimmick() : CGameObject()
 {
-	untouchable = 0;
+	untouchable = 0;	
 	SetState(GIMMICK_STATE_IDLE);
 }
 
