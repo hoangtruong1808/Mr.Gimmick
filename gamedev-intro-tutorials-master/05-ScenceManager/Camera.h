@@ -1,16 +1,40 @@
-#pragma once
-
+﻿#pragma once
+#include <cstddef>
 #include "Game.h"
+#include "GameObject.h"
+#include "Gimmick.h"
+
 class CCamera
 {
-private:
-	float cam_x;
-	float cam_y;
+	static CCamera* __intance;
+
+	D3DXVECTOR2 camPos;
+
+	int ScreenWidth;
+	int ScreenHeight;
+	float MapWidth;
+	float MapHeight;
+
+	RECT camBound;		  //giới hạn camera dựa  map
+
 public:
-	CCamera();
-	void SetCamera(float CamX, float CamY);
-	void GetCamera(float CamX, float CamY);
-	float GetCam_X() { return cam_x; }
-	float GetCam_Y() { return cam_y; }
+	static CCamera* GetInstance();
+	CCamera(int w, int h);
+	~CCamera();
+
+	void SetPosition(const D3DXVECTOR2& pos);
+	void SetDefaultCam();
+	D3DXVECTOR2 GetCamPos() { return camPos; }
+
+	int GetWidth() { return this->ScreenWidth; }
+	int GetHeight() { return this->ScreenHeight; }
+	RECT GetCamBound();
+
+	bool isContain(RECT rect);
+	bool isContain(D3DXVECTOR2 pos);
+
+	void SetCamMap(float mapWidth, float mapHeight);
+	void Update(float x, float y);
 };
+
 

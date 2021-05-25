@@ -41,11 +41,13 @@ public:
 	void DrawTiles(int val, float x, float y);
 	void Render();
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom) { return; }
-	float getMapWidth();
-	float getMapHeight();
+	float GetMapWidth();
+	float GetMapHeight();
 
 private:
 	Map game_map;
 	LPDIRECT3DTEXTURE9 TileSetImg;
+protected:
+
 };
 

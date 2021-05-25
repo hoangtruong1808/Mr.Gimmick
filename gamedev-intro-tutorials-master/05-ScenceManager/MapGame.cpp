@@ -48,7 +48,7 @@ void MapGame::Render()
 	int x0, y0;
 	int temp = 0;
 	
-	for (int i = 0; i < screenHeight/16 ; i++)
+	for (int i = 0; i < screenHeight/16	 ; i++)
 	{
 		for (int j = 0; j < screenWidth/16; j++)
 		{
@@ -62,10 +62,10 @@ void MapGame::Render()
 	}
 
 }
-float MapGame::getMapWidth() {
+float MapGame::GetMapWidth() {
 	return game_map.MAP_X * TILE_WIDTH;
 }
 
-float MapGame::getMapHeight() {
+float MapGame::GetMapHeight() {
 	return game_map.MAP_Y * TILE_HEIGHT;
 }

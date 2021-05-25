@@ -15,7 +15,6 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	CScene(id, filePath)
 {
 	key_handler = new CPlayScenceKeyHandler(this);
-	camera = new CCamera();
 }
 
 /*
@@ -160,7 +159,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
 	case OBJECT_TYPE_BRICK:
 	{
 		if (tokens.size() < 6) return;
@@ -207,7 +205,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new CSlopeBrick(width, height, slope);
 		}
 		break;
-	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
 	case OBJECT_TYPE_PORTAL:
 		{	
 			float r = atof(tokens[4].c_str());
@@ -295,6 +292,14 @@ void CPlayScene::Load()
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
+
+	camera = CCamera::GetInstance();
+	camera->SetCamMap(map->GetMapWidth(), map->GetMapHeight());
+	grid = new CGrid(map->GetMapWidth(), map->GetMapHeight());
+	for (int i = 0; i < objects.size(); i++)
+	{
+			grid->AddObject(objects.at(i));
+	}
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -302,15 +307,11 @@ void CPlayScene::Update(DWORD dt)
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
-	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
-	{
-		coObjects.push_back(objects[i]);
-	}
+	vector<LPGAMEOBJECT> coObjects = grid->GetActiveObj();
 
-	for (size_t i = 0; i < objects.size(); i++)
+	for (size_t i = 0; i < coObjects.size(); i++)
 	{
-		objects[i]->Update(dt, &coObjects);
+		coObjects[i]->Update(dt, &coObjects);
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
@@ -322,23 +323,15 @@ void CPlayScene::Update(DWORD dt)
 	{
 		float cx, cy;
 		player->GetPosition(cx, cy);
-
+		CCamera* camera = CCamera::GetInstance();
 		CGame* game = CGame::GetInstance();
-		cx -= game->GetScreenWidth() / 2;
-		cy -= game->GetScreenHeight() / 2;
-
-		if (cy < 0) cy = 0;
-		if (cy > map->getMapHeight() - game->GetScreenHeight()) cy = map->getMapHeight() - game->GetScreenHeight();
-		if (cx < 0) cx = 0;
-		if (cx > map->getMapWidth() - game->GetScreenWidth()) cx = map->getMapWidth() - game->GetScreenWidth();
-		map->SetCamera(cx, cy);
+		camera->Update(cx, cy);
+		D3DXVECTOR2 camPos = camera->GetCamPos();
+		map->SetCamera(camPos.x, camPos.y);
 		map->SetScreen(game->GetScreenWidth(), game->GetScreenHeight());
-		camera->SetCamera(cx, cy);
-		CGame::GetInstance()->SetCamPos(cx, cy);
-
 	}
 
-
+	grid->Update(coObjects);
 }
 
 void CPlayScene::Render()

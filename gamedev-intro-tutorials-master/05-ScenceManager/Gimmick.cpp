@@ -13,7 +13,7 @@
 
 CGimmick::CGimmick() : CGameObject()
 {
-	untouchable = 0;	
+	untouchable = 0;
 	SetState(GIMMICK_STATE_IDLE);
 }
 
@@ -73,6 +73,13 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			y = y0 + min_ty * dy + ny * 0.4f;
 		else y = y + dy;
 
+		if (ny < 0)
+		{
+			if (vx > 0) state = GIMMICK_STATE_WALKING_RIGHT;
+			else if (vx < 0) state = GIMMICK_STATE_WALKING_LEFT;
+			else if (vx == 0) state = GIMMICK_STATE_IDLE;
+
+		}
 
 		//
 		// Collision logic with other objects
@@ -127,14 +134,6 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
 			}
 
-			if (e->ny < 0)
-			{
-				if (vx > 0) state = GIMMICK_STATE_WALKING_RIGHT;
-				else if (vx < 0) state = GIMMICK_STATE_WALKING_LEFT;
-				else if (vx == 0) state = GIMMICK_STATE_IDLE;
-
-			}
-
 		}
 	}
 
@@ -146,29 +145,36 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CGimmick::Render()
 {
 	int ani = -1;
-	if (state == GIMMICK_STATE_DIE)
+	
+	switch (state)
+	{
+	case GIMMICK_STATE_DIE:
 		ani = GIMMICK_ANI_DIE;
-	else {
-		if (state == GIMMICK_STATE_JUMP) {
-			if (nx > 0)
-				ani = GIMMICK_ANI_JUMP_RIGHT;
-			else
-				ani = GIMMICK_ANI_JUMP_LEFT;
-		}
-		else if (state == GIMMICK_STATE_JUMP_RIGHT) ani = GIMMICK_ANI_JUMP_RIGHT;
-		else if (state == GIMMICK_STATE_JUMP_LEFT) ani = GIMMICK_ANI_JUMP_LEFT;
-		else {
-			if (vx == 0)
-			{
-				if (nx > 0) ani = GIMMICK_ANI_IDLE_RIGHT;
-				else ani = GIMMICK_ANI_IDLE_LEFT;
-			}
-			else if (vx > 0)
-				ani = GIMMICK_ANI_WALKING_RIGHT;
-			else ani = GIMMICK_ANI_WALKING_LEFT;
-			
-		}
-	}	
+		break;
+	case GIMMICK_STATE_JUMP:
+		if (nx > 0)
+			ani = GIMMICK_ANI_JUMP_RIGHT;
+		else
+			ani = GIMMICK_ANI_JUMP_LEFT;
+		break;
+	case GIMMICK_STATE_JUMP_RIGHT:
+		ani = GIMMICK_ANI_JUMP_RIGHT;
+		break;
+	case GIMMICK_STATE_JUMP_LEFT:
+		ani = GIMMICK_ANI_JUMP_LEFT;
+		break;
+	case GIMMICK_STATE_IDLE:
+		if (nx > 0) ani = GIMMICK_ANI_IDLE_RIGHT;
+		else ani = GIMMICK_ANI_IDLE_LEFT;
+		break;
+	case GIMMICK_STATE_WALKING_RIGHT:
+		ani = GIMMICK_ANI_WALKING_RIGHT;
+		break;
+	case GIMMICK_STATE_WALKING_LEFT:
+		ani = GIMMICK_ANI_WALKING_LEFT;
+		break;
+
+	}
 
 	int alpha = 255;
 	if (untouchable) alpha = 128;
