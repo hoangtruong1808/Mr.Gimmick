@@ -47,27 +47,27 @@ void CPlatformsMoving::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (state == PM_STATE_HEIGHT)
 	{
-		if (y < start)
+		if (y > start)
 		{
 			y = start;
-			vy = PM_SPEED;
+			vy = -PM_SPEED;
 		}
-		else if (y > end)
+		else if (y < end)
 		{
 			y = end;
-			vy = -PM_SPEED;
+			vy = +PM_SPEED;
 		}
 		else
 		{
 			if (vy > 0)
 			{
-				if (y < (start + 5 + float((end - start) / 2)))
+				if (y < (end + 5 + float((start - end) / 2)))
 					vy += PM_SPEED_ACCELERATION;
 				else vy -= PM_SPEED_ACCELERATION;
 			}
 			else if (vy < 0)
 			{
-				if (y > (start - 5 + float((end - start) / 2)))
+				if (y > (end - 5 + float((start- end) / 2)))
 					vy -= PM_SPEED_ACCELERATION;
 				else vy += PM_SPEED_ACCELERATION;
 			}
@@ -104,7 +104,7 @@ void CPlatformsMoving::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CPlatformsMoving::Render()
 {
 	animation_set->at(0)->Render(x, y);
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CPlatformsMoving::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -112,7 +112,7 @@ void CPlatformsMoving::GetBoundingBox(float& l, float& t, float& r, float& b)
 	l = x;
 	t = y;
 	r = x +pm_width;
-	b = y + pm_height;
+	b = y - pm_height;
 }
 
 void CPlatformsMoving::SetState(int state)

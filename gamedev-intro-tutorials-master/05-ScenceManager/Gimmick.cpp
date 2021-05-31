@@ -66,14 +66,19 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x0 = x;
 		y0 = y;
 
-		if (nx != 0)
+		/*if (nx != 0)
 			x = x0 + min_tx * dx + nx * 0.4f;
 		else x = x + dx;
 		if (ny != 0)
 			y = y0 + min_ty * dy + ny * 0.4f;
 		else y = y + dy;
+		*/
+		if (nx==0)
+			x = x + dx;
+		if (ny == 0)
+			y = y + dy;
 
-		if (ny < 0)
+		if (ny > 0)
 		{
 			if (vx > 0) state = GIMMICK_STATE_WALKING_RIGHT;
 			else if (vx < 0) state = GIMMICK_STATE_WALKING_LEFT;
@@ -91,22 +96,28 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			//Brick
 			if (dynamic_cast<CBrick*>(e->obj))
-			{
+			{ 
 				CBrick* brick = dynamic_cast<CBrick*>(e->obj);
-				if (e->nx != 0)
-				{
-					vx = 0;
-				} 
-				else if (e->ny != 0)
+				
+				if (e->ny != 0)
 				{
 					vy = 0;
+					if (e->ny > 0)
+						if (brick->GetState() != NULL)
+							x += brick->GetBrickSpeed() * dt;
+					y = y0 + min_ty * dy + ny * 0.4f;
 				}
-
-				if (e->ny <= 0 && e->nx == 0)
+				else
 				{
-					if (brick->GetState() != NULL)
+					if (e->nx != 0)
 					{
-						x += brick->GetBrickSpeed()*dt;
+						if (brick->GetState() == NULL)
+						{
+							vx = 0;
+							x = x0 + min_tx * dx + nx * 0.4f;
+						}
+						else
+							x = x + dx; 
 					}
 				}
 
@@ -179,7 +190,7 @@ void CGimmick::Render()
 	int alpha = 255;
 	if (untouchable) alpha = 128;
 
-	animation_set->at(ani)->Render(x, y-3, alpha);
+	animation_set->at(ani)->Render(x, y+3, alpha);
 
 	//RenderBoundingBox();
 }
@@ -200,7 +211,7 @@ void CGimmick::SetState(int state)
 		break;
 	case GIMMICK_STATE_JUMP:
 		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
-		vy = -GIMMICK_JUMP_SPEED_Y;
+		vy = GIMMICK_JUMP_SPEED_Y;
 		break;
 	case GIMMICK_STATE_IDLE:
 		vx = 0;
@@ -223,12 +234,12 @@ void CGimmick::GetBoundingBox(float& left, float& top, float& right, float& bott
 	if (state == GIMMICK_STATE_JUMP)
 	{
 		right = x + GIMMICK_BBOX_JUMP_WIDTH;
-		bottom = y + GIMMICK_BBOX_JUMP_HEIGHT;
+		bottom = y - GIMMICK_BBOX_JUMP_HEIGHT;
 	}
 	else
 	{
 		right = x + GIMMICK_BBOX_WIDTH;
-		bottom = y + GIMMICK_BBOX_HEIGHT;
+		bottom = y - GIMMICK_BBOX_HEIGHT;
 	}
 }
 

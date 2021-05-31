@@ -291,29 +291,45 @@ void CPlayScene::Load()
 
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
 
-	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 
 	camera = CCamera::GetInstance();
 	camera->SetCamMap(map->GetMapWidth(), map->GetMapHeight());
-	grid = new CGrid(map->GetMapWidth(), map->GetMapHeight());
-	for (int i = 0; i < objects.size(); i++)
-	{
-			grid->AddObject(objects.at(i));
-	}
+	quadtree = new CQuadtree(0, 0, 0, map->GetMapWidth(), map->GetMapHeight());
+	
 }
 
 void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
-
-	vector<LPGAMEOBJECT> coObjects = grid->GetActiveObj();
-
-	for (size_t i = 0; i < coObjects.size(); i++)
+	 
+	quadtree = new CQuadtree(0, 0, 0, map->GetMapWidth(), map->GetMapHeight());
+	vector<LPGAMEOBJECT> coObjects;
+	for (size_t i = 0; i < objects.size(); i++)
 	{
-		coObjects[i]->Update(dt, &coObjects);
+		if (!dynamic_cast<CGimmick*>(objects[i]))
+			quadtree->Insert(objects[i]);
+
+		if (camera->isContain(objects[i]))
+			coObjects.push_back(objects[i]);
 	}
 
+
+	
+	for (size_t i = 0; i < coObjects.size(); i++)
+	{
+		vector<LPGAMEOBJECT> coObjects_quadtree;
+		if (dynamic_cast<CGimmick*>(coObjects[i]))
+		{
+			quadtree->Retrieve(&coObjects_quadtree, coObjects[i]);
+			coObjects[i]->Update(dt, &coObjects_quadtree);
+		} 
+		else coObjects[i]->Update(dt, &coObjects);
+
+
+	}
+	
+	
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
 
@@ -323,7 +339,7 @@ void CPlayScene::Update(DWORD dt)
 	{
 		float cx, cy;
 		player->GetPosition(cx, cy);
-		CCamera* camera = CCamera::GetInstance();
+		
 		CGame* game = CGame::GetInstance();
 		camera->Update(cx, cy);
 		D3DXVECTOR2 camPos = camera->GetCamPos();
@@ -331,7 +347,8 @@ void CPlayScene::Update(DWORD dt)
 		map->SetScreen(game->GetScreenWidth(), game->GetScreenHeight());
 	}
 
-	grid->Update(coObjects);
+	quadtree->Clear();
+
 }
 
 void CPlayScene::Render()

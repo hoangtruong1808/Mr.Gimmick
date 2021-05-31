@@ -31,7 +31,7 @@ public:
 	RECT GetCamBound();
 
 	bool isContain(RECT rect);
-	bool isContain(D3DXVECTOR2 pos);
+	bool isContain(LPGAMEOBJECT obj);
 
 	void SetCamMap(float mapWidth, float mapHeight);
 	void Update(float x, float y);

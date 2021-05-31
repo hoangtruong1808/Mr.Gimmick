@@ -12,7 +12,7 @@ void CSlopeBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 	l = x;
 	t = y;
 	r = x + slope_width;
-	b = y + slope_height;
+	b = y - slope_height;
 }
 
 void CSlopeBrick::SetState(int state)

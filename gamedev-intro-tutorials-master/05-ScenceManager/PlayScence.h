@@ -12,6 +12,7 @@
 #include "PlatformsMoving.h"
 #include "Camera.h"
 #include "Grid.h"
+#include "Quadtree.h"
 
 
 class CPlayScene: public CScene
@@ -20,10 +21,10 @@ protected:
 	CGimmick *player;					// A play scene has to have player, right? 
 	MapGame* map;
 	CCamera* camera;
-	CGrid* grid;
+	CQuadtree* quadtree;
 
 	vector<LPGAMEOBJECT> objects;
-	vector<LPGAMEOBJECT> objectsgrid;
+	vector<LPGAMEOBJECT> objectsquadtree;
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
