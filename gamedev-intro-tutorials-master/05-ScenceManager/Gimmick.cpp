@@ -9,6 +9,7 @@
 #include "Brick.h"
 #include "Portal.h"
 #include "PlatformsMoving.h"
+#include "SlopeBrick.h"
 
 
 CGimmick::CGimmick() : CGameObject()
@@ -25,6 +26,19 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
+
+	for (UINT i = 0; i < coObjects->size(); i++)
+	{
+		if (dynamic_cast<CSlopeBrick*>(coObjects->at(i))) {
+			CSlopeBrick* brick = dynamic_cast<CSlopeBrick*>(coObjects->at(i));
+			brick->Collision(this, dy, dx);
+		}
+
+		/*if (dynamic_cast<CPlatformsMoving*>(coObjects->at(i))) {
+			CPlatformsMoving* brick = dynamic_cast<CPlatformsMoving*>(coObjects->at(i));
+			brick->Collision(this, dy, dx, dt);
+		}*/
+	}
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -105,7 +119,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (e->ny > 0)
 						if (brick->GetState() != NULL)
 							x += brick->GetBrickSpeed() * dt;
-					y = y0 + min_ty * dy + ny * 0.4f;
+					y = y0 + min_ty * dy + ny * 0.2f;
 				}
 				else
 				{
@@ -114,7 +128,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						if (brick->GetState() == NULL)
 						{
 							vx = 0;
-							x = x0 + min_tx * dx + nx * 0.4f;
+							x = x0 + min_tx * dx + nx * 0.2f;
 						}
 						else
 							x = x + dx; 
@@ -127,16 +141,49 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CPlatformsMoving* pm = dynamic_cast<CPlatformsMoving*>(e->obj);
 				if (e->nx != 0)
 				{
-					vx = pm->GetPosition_vx();
-					vy += pm->GetPosition_vy();
+					vx = 0;
+					x = x0 + min_tx * dx + nx * 0.2f;
+
 				}
 				else if (e->ny != 0)
-				{
-					vx += pm->GetPosition_vx();
-					vy = pm->GetPosition_vy();
-				
+				{	
+					vy = -0.0015;
+					if (e->ny > 0)
+					{
+						if (pm->GetState() == PM_STATE_WIDTH)
+						{
+							y = y0 + min_ty * dy + ny * 0.2f;
+							x += pm->GetPosition_dx();
+							//pm->Collision(this, this->dy, this->dx, dt);
+						}
+						else
+						{
+							if (pm->GetPosition_dy() < 0)
+							{
+								y = y0 + min_ty * dy + ny * 2.0f;
+							}
+							else
+							{
+								y = y0 + min_ty * dy + ny * 5.0f;
+								y += pm->GetPosition_dy();
+							}
+							
+							//pm->Collision(this, y);
+						}
+					}
+					else {
+						y = y0 + min_ty * dy + ny * 0.2f;
+					}
 				}
 				
+
+			}
+			else if (dynamic_cast<CSlopeBrick*>(e->obj))
+			{
+				if (e->nx != 0)
+					x += dx;
+				else if (e->ny != 0)
+					y += dy;
 
 			}
 			else if (dynamic_cast<CPortal*>(e->obj))

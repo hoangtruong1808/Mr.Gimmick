@@ -2,6 +2,26 @@
 #include "Utils.h"
 #include "Gimmick.h"
 
+void CPlatformsMoving::Collision(LPGAMEOBJECT object, float& y)
+{
+	
+	float l, t, r, b;
+	this->GetBoundingBox(l, t, r, b);
+
+	float obj_l, obj_t, obj_r, obj_b;
+	object->GetBoundingBox(obj_l, obj_t, obj_r, obj_b);
+
+	float obj_width = obj_r - obj_l;
+	float obj_height = obj_t - obj_b;
+	if (y - obj_height < t)
+	{
+		if (dy > 0)
+			y = this->y + obj_height + 3;
+		else
+			y = this->y + obj_height + 1;
+	}
+}
+
 void CPlatformsMoving::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
@@ -75,28 +95,7 @@ void CPlatformsMoving::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	
-	if (coEvents.size() != 0)
-	{
-		float min_tx, min_ty, nx = 0, ny;
-		float rdx = 0;
-		float rdy = 0;
-
-		// TODO: This is a very ugly designed function!!!!
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-
-		//
-		// Collision logic with other objects
-		//
-		for (UINT i = 0; i < coEventsResult.size(); i++)
-		{
-			LPCOLLISIONEVENT e = coEventsResult[i];
-			if (dynamic_cast<CGimmick*>(e->obj)) // if e->obj is Goomba 
-			{
-				CGimmick* gimmick = dynamic_cast<CGimmick*>(e->obj);
-				gimmick->SetPosition(x , y);
-			}
-		}
-	}
+	
 
 
 }

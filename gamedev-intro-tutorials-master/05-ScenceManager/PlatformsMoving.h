@@ -18,10 +18,12 @@ public:
 	float pm_height;
 	int start;
 	int end;
+	bool col;
 public:
 	CPlatformsMoving(float width, float height) { this->pm_width = width; this->pm_height = height; };
 	void SetStart(int start) { this->start = start; }
 	void SetEnd(int end) { this->end = end; }
+	void Collision(LPGAMEOBJECT object, float& y);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);

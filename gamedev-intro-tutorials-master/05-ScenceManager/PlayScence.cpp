@@ -192,17 +192,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_SLOPE:
 		{
-		if (tokens.size() < 10) return;
+			if (tokens.size() < 6) return;
 			float width = atof(tokens[4].c_str());
 			float height = atof(tokens[5].c_str());
-			Slope slope;
-			slope.start_x = atof(tokens[6].c_str());
-			slope.start_y = atof(tokens[7].c_str());
-			slope.end_x = atof(tokens[8].c_str());
-			slope.end_y = atof(tokens[9].c_str());
-			slope.d_x = slope.end_x - slope.start_x;
-			slope.d_y = slope.end_y - slope.start_y;
-			obj = new CSlopeBrick(width, height, slope);
+			obj = new CSlopeBrick(width, height);
+			int brick_state = atoi(tokens[6].c_str());
+			obj->SetState(brick_state);
 		}
 		break;
 	case OBJECT_TYPE_PORTAL:
@@ -307,26 +302,25 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		if (!dynamic_cast<CGimmick*>(objects[i]))
-			quadtree->Insert(objects[i]);
-
 		if (camera->isContain(objects[i]))
+		{
 			coObjects.push_back(objects[i]);
+			if (!dynamic_cast<CGimmick*>(objects[i]))
+				quadtree->Insert(objects[i]);
+		}
 	}
 
 
 	
 	for (size_t i = 0; i < coObjects.size(); i++)
 	{
-		vector<LPGAMEOBJECT> coObjects_quadtree;
 		if (dynamic_cast<CGimmick*>(coObjects[i]))
 		{
+			vector<LPGAMEOBJECT> coObjects_quadtree;
 			quadtree->Retrieve(&coObjects_quadtree, coObjects[i]);
 			coObjects[i]->Update(dt, &coObjects_quadtree);
 		} 
 		else coObjects[i]->Update(dt, &coObjects);
-
-
 	}
 	
 	

@@ -72,12 +72,12 @@ public:
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
-	float GetPosition_x() { return this->x;}
-	float GetPosition_y() { return this->y; }
-	float GetPosition_vx() { return this->vx; }
-	float GetPosition_vy() { return this->vy; }
-	float GetPosition_dx() { return this->dx; }
-	float GetPosition_dy() { return this->dy; }
+	float GetPosition_x() { return x;}
+	float GetPosition_y() { return y; }
+	float GetPosition_vx() { return vx; }
+	float GetPosition_vy() { return vy; }
+	float GetPosition_dx() { return dx; }
+	float GetPosition_dy() { return dy; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
 
 	int GetState() { return this->state; }
@@ -97,6 +97,8 @@ public:
 		this->screenWidth = width;
 	}
 
+	bool isContain(CGameObject* obj);
+
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
 	void CalcPotentialCollisions(vector<LPGAMEOBJECT> *coObjects, vector<LPCOLLISIONEVENT> &coEvents);
 	void FilterCollision(
@@ -114,9 +116,7 @@ public:
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void Render() = 0;
-	virtual void SetState(int state) { this->state = state; }
-
-
+	virtual void SetState(int state) { this->state = state; };
 	~CGameObject();
 };
 
