@@ -19,12 +19,6 @@
     <Filter Include="Source Files\Brick">
       <UniqueIdentifier>{f1c7951b-5cfd-4bf5-9529-9e6b55246c71}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Enemy">
-      <UniqueIdentifier>{902ee60d-1290-47c4-a22c-d42496c1efd9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Enemy">
-      <UniqueIdentifier>{3da8c6d4-568b-4dc4-a997-b7385cc15d28}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -90,31 +84,25 @@
     <ClCompile Include="Quadtree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Source Files\Enemy</Filter>
+    <ClCompile Include="Cord.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FallenBomb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BlackEnemy.cpp">
-      <Filter>Source Files\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Fire.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CPinion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SmallPinion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Pinion.cpp">
+    <ClCompile Include="Swing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Worm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Cord.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Swing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -182,31 +170,25 @@
     <ClInclude Include="Quadtree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Header Files\Enemy</Filter>
+    <ClInclude Include="Cord.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FallenBomb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BlackEnemy.h">
-      <Filter>Header Files\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="Fire.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CPinion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SmallPinion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Pinion.h">
+    <ClInclude Include="Swing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Worm.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Cord.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Swing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
