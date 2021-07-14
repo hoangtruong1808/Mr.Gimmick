@@ -7,11 +7,16 @@
 #include "Sprites.h"
 #include "Portal.h"
 #include "SlopeBrick.h"
-
-
+#include "FallenBomb.h"
+#include "Fire.h"
+#include "SmallPinion.h"
+#include "CPinion.h"
+#include "Worm.h"
+#include "Cord.h"
+#include "Swing.h"
 using namespace std;
 
-CPlayScene::CPlayScene(int id, LPCWSTR filePath):
+CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
 	key_handler = new CPlayScenceKeyHandler(this);
@@ -37,6 +42,13 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define OBJECT_TYPE_PLATFORMSMOVING		4
 #define OBJECT_TYPE_SLOPE	5
 
+#define OBJECT_TYPE_FALLENBOMB	7
+#define OBJECT_TYPE_FIRE	8
+#define OBJECT_TYPE_SMALLPINION	9
+#define OBJECT_TYPE_PINION	10
+#define OBJECT_TYPE_CORD	11
+#define OBJECT_TYPE_WORM	12
+#define OBJECT_TYPE_SWING	13
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -75,7 +87,7 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 	if (tex == NULL)
 	{
 		DebugOut(L"[ERROR] Texture ID %d not found!\n", texID);
-		return; 
+		return;
 	}
 
 	CSprites::GetInstance()->Add(ID, l, t, r, b, tex);
@@ -95,7 +107,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
 	{
 		int sprite_id = atoi(tokens[i].c_str());
-		int frame_time = atoi(tokens[i+1].c_str());
+		int frame_time = atoi(tokens[i + 1].c_str());
 		ani->Add(sprite_id, frame_time);
 	}
 
@@ -112,12 +124,12 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 
 	LPANIMATION_SET s = new CAnimationSet();
 
-	CAnimations *animations = CAnimations::GetInstance();
+	CAnimations* animations = CAnimations::GetInstance();
 
 	for (int i = 1; i < tokens.size(); i++)
 	{
 		int ani_id = atoi(tokens[i].c_str());
-		
+
 		LPANIMATION ani = animations->Get(ani_id);
 		s->push_back(ani);
 	}
@@ -126,7 +138,7 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 }
 
 /*
-	Parse a line in section [OBJECTS] 
+	Parse a line in section [OBJECTS]
 */
 void CPlayScene::_ParseSection_OBJECTS(string line)
 {
@@ -142,19 +154,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	int ani_set_id = atoi(tokens[3].c_str());
 
-	CAnimationSets * animation_sets = CAnimationSets::GetInstance();
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 
-	CGameObject *obj = NULL;
+	CGameObject* obj = NULL;
 
 	switch (object_type)
 	{
 	case OBJECT_TYPE_GIMMICK:
-		if (player!=NULL) 
+		if (player != NULL)
 		{
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		obj = new CGimmick(); 
+		obj = new CGimmick();
 		player = (CGimmick*)obj;
 
 		DebugOut(L"[INFO] Player object created!\n");
@@ -165,49 +177,93 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float width = atof(tokens[4].c_str());
 		float height = atof(tokens[5].c_str());
 
-		obj = new CBrick(width, height); 
+		obj = new CBrick(width, height);
 		if (tokens.size() > 6)
 		{
 			int brick_state = atoi(tokens[6].c_str());
 			DebugOut(L"[INFO] brick_state: %d\n", brick_state);
 			obj->SetState(brick_state);
 		}
-		
+
 	}
-		break;
-	case OBJECT_TYPE_PLATFORMSMOVING: 
-		{
+	break;
+	case OBJECT_TYPE_PLATFORMSMOVING:
+	{
 		if (tokens.size() < 9) return;
-			float width = atof(tokens[4].c_str());
-			float height = atof(tokens[5].c_str());
-			obj = new CPlatformsMoving(width,height);
-			CPlatformsMoving* pm = (CPlatformsMoving*)obj;
-			int start = atoi(tokens[6].c_str());
-			int end = atoi(tokens[7].c_str());
-			pm->SetStart(start);
-			pm->SetEnd(end);
-			int id_set_state = atoi(tokens[8].c_str());
-			obj->SetState(id_set_state);
-		}
-		break;
+		float width = atof(tokens[4].c_str());
+		float height = atof(tokens[5].c_str());
+		obj = new CPlatformsMoving(width, height);
+		CPlatformsMoving* pm = (CPlatformsMoving*)obj;
+		int start = atoi(tokens[6].c_str());
+		int end = atoi(tokens[7].c_str());
+		pm->SetStart(start);
+		pm->SetEnd(end);
+		int id_set_state = atoi(tokens[8].c_str());
+		obj->SetState(id_set_state);
+	}
+	break;
+	case OBJECT_TYPE_WORM:
+	{
+
+		obj = new CWorm();
+		CWorm* pm = (CWorm*)obj;
+		int start = atoi(tokens[4].c_str());
+		int end = atoi(tokens[5].c_str());
+		pm->SetStart(start);
+		pm->SetEnd(end);
+	}
+	break;
 	case OBJECT_TYPE_SLOPE:
-		{
-			if (tokens.size() < 6) return;
-			float width = atof(tokens[4].c_str());
-			float height = atof(tokens[5].c_str());
-			obj = new CSlopeBrick(width, height);
-			int brick_state = atoi(tokens[6].c_str());
-			obj->SetState(brick_state);
-		}
+	{
+		if (tokens.size() < 6) return;
+		float width = atof(tokens[4].c_str());
+		float height = atof(tokens[5].c_str());
+		obj = new CSlopeBrick(width, height);
+		int brick_state = atoi(tokens[6].c_str());
+		obj->SetState(brick_state);
+	}
+	break;
+
+	case OBJECT_TYPE_FALLENBOMB:
+	{
+		obj = new CFallenBomb();
 		break;
+	}
 	case OBJECT_TYPE_PORTAL:
-		{	
-			float r = atof(tokens[4].c_str());
-			float b = atof(tokens[5].c_str());
-			int scene_id = atoi(tokens[6].c_str());
-			obj = new CPortal(x, y, r, b, scene_id);
-		}
+	{
+		float r = atof(tokens[4].c_str());
+		float b = atof(tokens[5].c_str());
+		int scene_id = atoi(tokens[6].c_str());
+		obj = new CPortal(x, y, r, b, scene_id);
+	}
+	break;
+	case OBJECT_TYPE_FIRE:
+	{
+		obj = new CFire();
 		break;
+	}
+	case OBJECT_TYPE_SMALLPINION:
+	{
+		obj = new CSmallPinion();
+		break;
+	}
+	case OBJECT_TYPE_PINION:
+	{
+		int t = atof(tokens[4].c_str());
+		obj = new CPinion(t);
+		break;
+	}
+	case OBJECT_TYPE_CORD:
+	{
+		int t = atof(tokens[4].c_str());
+		obj = new CCord(t);
+		break;
+	}
+	case OBJECT_TYPE_SWING:
+	{
+		obj = new CSwing();
+		break;
+	}
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -234,7 +290,7 @@ void CPlayScene::_ParseSection_MAP(string line)
 	int TotalColumnsOfTileSet = atoi(tokens[4].c_str());
 	wstring mapMatrixPath = ToWSTR(tokens[5]);
 
-	this->map = new MapGame(TileSetID ,TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, mapMatrixPath);
+	this->map = new MapGame(TileSetID, TotalRowsOfMap, TotalColumnsOfMap, TotalRowsOfTileSet, TotalColumnsOfTileSet, mapMatrixPath);
 	DebugOut(L"[INFO] Load map OK\n");
 }
 
@@ -246,7 +302,7 @@ void CPlayScene::Load()
 	f.open(sceneFilePath);
 
 	// current resource section flag
-	int section = SCENE_SECTION_UNKNOWN;					
+	int section = SCENE_SECTION_UNKNOWN;
 
 	char str[MAX_SCENE_LINE];
 	while (f.getline(str, MAX_SCENE_LINE))
@@ -256,29 +312,34 @@ void CPlayScene::Load()
 		if (line[0] == '#') continue;	// skip comment lines	
 
 		if (line == "[TEXTURES]") { section = SCENE_SECTION_TEXTURES; continue; }
-		if (line == "[SPRITES]") { 
-			section = SCENE_SECTION_SPRITES; continue; }
-		if (line == "[ANIMATIONS]") { 
-			section = SCENE_SECTION_ANIMATIONS; continue; }
-		if (line == "[ANIMATION_SETS]") { 
-			section = SCENE_SECTION_ANIMATION_SETS; continue; }
-		if (line == "[OBJECTS]") { 
-			section = SCENE_SECTION_OBJECTS; continue; }
+		if (line == "[SPRITES]") {
+			section = SCENE_SECTION_SPRITES; continue;
+		}
+		if (line == "[ANIMATIONS]") {
+			section = SCENE_SECTION_ANIMATIONS; continue;
+		}
+		if (line == "[ANIMATION_SETS]") {
+			section = SCENE_SECTION_ANIMATION_SETS; continue;
+		}
+		if (line == "[OBJECTS]") {
+			section = SCENE_SECTION_OBJECTS; continue;
+		}
 		if (line == "[MAP]") {
-			section = SCENE_SECTION_MAP; continue;}
-		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
+			section = SCENE_SECTION_MAP; continue;
+		}
+		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
 
 		//
 		// data section
 		//
 		switch (section)
-		{ 
-			case SCENE_SECTION_TEXTURES: _ParseSection_TEXTURES(line); break;
-			case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
-			case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
-			case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
-			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
-			case SCENE_SECTION_MAP: _ParseSection_MAP(line); break;
+		{
+		case SCENE_SECTION_TEXTURES: _ParseSection_TEXTURES(line); break;
+		case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
+		case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
+		case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
+		case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+		case SCENE_SECTION_MAP: _ParseSection_MAP(line); break;
 		}
 	}
 
@@ -290,14 +351,14 @@ void CPlayScene::Load()
 	camera = CCamera::GetInstance();
 	camera->SetCamMap(map->GetMapWidth(), map->GetMapHeight());
 	quadtree = new CQuadtree(0, 0, 0, map->GetMapWidth(), map->GetMapHeight());
-	
+
 }
 
 void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
-	 
+
 	quadtree = new CQuadtree(0, 0, 0, map->GetMapWidth(), map->GetMapHeight());
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
@@ -311,7 +372,7 @@ void CPlayScene::Update(DWORD dt)
 	}
 
 
-	
+
 	for (size_t i = 0; i < coObjects.size(); i++)
 	{
 		if (dynamic_cast<CGimmick*>(coObjects[i]))
@@ -319,13 +380,13 @@ void CPlayScene::Update(DWORD dt)
 			vector<LPGAMEOBJECT> coObjects_quadtree;
 			quadtree->Retrieve(&coObjects_quadtree, coObjects[i]);
 			coObjects[i]->Update(dt, &coObjects_quadtree);
-		} 
+		}
 		else coObjects[i]->Update(dt, &coObjects);
 	}
-	
-	
+
+
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
-	if (player == NULL) return; 
+	if (player == NULL) return;
 
 	// Update camera to follow mario
 
@@ -333,7 +394,7 @@ void CPlayScene::Update(DWORD dt)
 	{
 		float cx, cy;
 		player->GetPosition(cx, cy);
-		
+
 		CGame* game = CGame::GetInstance();
 		camera->Update(cx, cy);
 		D3DXVECTOR2 camPos = camera->GetCamPos();
@@ -372,24 +433,24 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
-	CGimmick *gimmick = ((CPlayScene*)scence)->GetPlayer();
+	CGimmick* gimmick = ((CPlayScene*)scence)->GetPlayer();
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
 		gimmick->SetState(GIMMICK_STATE_JUMP);
 		break;
-	case DIK_A: 
+	case DIK_A:
 		break;
 	}
 }
 
-void CPlayScenceKeyHandler::KeyState(BYTE *states)
+void CPlayScenceKeyHandler::KeyState(BYTE* states)
 {
-	CGame *game = CGame::GetInstance();
-	CGimmick *gimmick = ((CPlayScene*)scence)->GetPlayer();
+	CGame* game = CGame::GetInstance();
+	CGimmick* gimmick = ((CPlayScene*)scence)->GetPlayer();
 
 	// disable control key when Mario die 
-	if (gimmick->GetState() == GIMMICK_STATE_DIE ) return;
+	if (gimmick->GetState() == GIMMICK_STATE_DIE) return;
 	else if (gimmick->GetState() != GIMMICK_STATE_JUMP && gimmick->GetState() != GIMMICK_STATE_JUMP_RIGHT && gimmick->GetState() != GIMMICK_STATE_JUMP_LEFT)
 	{
 		if (game->IsKeyDown(DIK_RIGHT))
