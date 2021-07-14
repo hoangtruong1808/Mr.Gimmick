@@ -126,9 +126,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp" />
+    <ClCompile Include="BlackEnemy.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Cord.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="FallenBomb.cpp" />
+    <ClCompile Include="Fire.cpp" />
     <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="Pinion.cpp" />
     <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="SlopeBrick.cpp" />
     <ClCompile Include="PlatformsMoving.cpp" />
@@ -136,6 +142,8 @@
     <ClCompile Include="Koopas.cpp" />
     <ClCompile Include="MapGame.cpp" />
     <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="SmallPinion.cpp" />
+    <ClCompile Include="Swing.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -146,12 +154,19 @@
     <ClCompile Include="Scence.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
+    <ClCompile Include="Worm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
+    <ClInclude Include="BlackEnemy.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Cord.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="FallenBomb.h" />
+    <ClInclude Include="Fire.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="Pinion.h" />
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="SlopeBrick.h" />
     <ClInclude Include="PlatformsMoving.h" />
@@ -159,6 +174,8 @@
     <ClInclude Include="Koopas.h" />
     <ClInclude Include="MapGame.h" />
     <ClInclude Include="Portal.h" />
+    <ClInclude Include="SmallPinion.h" />
+    <ClInclude Include="Swing.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
@@ -169,6 +186,7 @@
     <ClInclude Include="Scence.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Textures.h" />
+    <ClInclude Include="Worm.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
