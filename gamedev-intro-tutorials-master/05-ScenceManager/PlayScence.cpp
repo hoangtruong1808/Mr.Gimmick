@@ -14,6 +14,10 @@
 #include "Worm.h"
 #include "Cord.h"
 #include "Swing.h"
+#include "Window.h"
+#include "Tunnel.h"
+#include "Tube.h"
+
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
@@ -49,6 +53,9 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_CORD	11
 #define OBJECT_TYPE_WORM	12
 #define OBJECT_TYPE_SWING	13
+#define OBJECT_TYPE_TUNNEL	14
+#define OBJECT_TYPE_TUBE	15
+#define OBJECT_TYPE_WINDOW	20
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -263,7 +270,25 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new CSwing();
 		break;
+	}	
+	case OBJECT_TYPE_TUNNEL:
+	{
+		int t = atof(tokens[4].c_str());
+		obj = new CTunnel(t);
+		break;
 	}
+	case OBJECT_TYPE_TUBE:
+	{
+		int t = atof(tokens[4].c_str());
+		obj = new CTube(t);
+		break;
+	}
+	case OBJECT_TYPE_WINDOW:
+	{
+		obj = new CWindow();
+		break;
+	}
+
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;

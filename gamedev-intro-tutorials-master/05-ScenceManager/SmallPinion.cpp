@@ -4,7 +4,8 @@ void CSmallPinion::Render()
 {
 	int ani = SMALLPINION_ANI_TURN;
 
-	animation_set->at(ani)->Render(x, y);
+	int alpha = 255;
+	animation_set->at(ani)->Render(x, y, alpha);
 }
 
 void CSmallPinion::GetBoundingBox(float& l, float& t, float& r, float& b)

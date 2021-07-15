@@ -10,6 +10,7 @@
 #include "Portal.h"
 #include "PlatformsMoving.h"
 #include "SlopeBrick.h"
+#include "Swing.h"
 
 
 CGimmick::CGimmick() : CGameObject()
@@ -26,9 +27,13 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-
+	vector<LPGAMEOBJECT> newCoObjects;
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
+		if (dynamic_cast<CBrick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CPlatformsMoving*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CSwing*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+
 		if (dynamic_cast<CSlopeBrick*>(coObjects->at(i))) {
 			CSlopeBrick* brick = dynamic_cast<CSlopeBrick*>(coObjects->at(i));
 			brick->Collision(this, dy, dx);
@@ -47,7 +52,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	// turn off collision when die 
 	if (state != GIMMICK_STATE_DIE)
-		CalcPotentialCollisions(coObjects, coEvents);
+		CalcPotentialCollisions(&newCoObjects, coEvents);
 
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount() - untouchable_start > GIMMICK_UNTOUCHABLE_TIME)
