@@ -3,8 +3,9 @@
 
 
 #define GIMMICK_WALKING_SPEED		0.1f 
-#define GIMMICK_JUMP_SPEED_Y		0.35f
-#define GIMMICK_GRAVITY				-0.001f
+#define GIMMICK_JUMP_SPEED			0.25f
+#define GIMMICK_GRAVITY				-0.0005f
+#define GIMMICK_INERTIA				0.003f
 #define GIMMICK_DIE_DEFLECT_SPEED	 0.5f
 
 #define GIMMICK_STATE_IDLE			0
@@ -37,6 +38,7 @@ class CGimmick : public CGameObject
 {
 	int untouchable;
 	DWORD untouchable_start;
+	bool bol_jump = false;
 public:
 	CGimmick();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
@@ -45,4 +47,16 @@ public:
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+
+
+	void UpdateSpeed_IDLE(float &vx, float &vy, int nx);
+	void UpdateSpeed_WALKING_RIGHT(float& vx, float& vy);
+	void UpdateSpeed_WALKING_LEFT(float& vx, float& vy);
+	void UpdateSpeed_JUMP(float& vx, float& vy, int nx);
+	void UpdateSpeed_JUMP_RIGHT(float& vx, float& vy);
+	void UpdateSpeed_JUMP_LEFT(float& vx, float& vy);
+
+	void JUMP() { bol_jump = true; };
+	void STOP_JUMP() { bol_jump = false; };
+
 };

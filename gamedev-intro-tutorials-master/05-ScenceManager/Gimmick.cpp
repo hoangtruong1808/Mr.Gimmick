@@ -23,6 +23,16 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += GIMMICK_GRAVITY * dt;
 
+	switch (state)
+	{
+	case GIMMICK_STATE_IDLE: UpdateSpeed_IDLE(vx, vy, nx); break;
+	case GIMMICK_STATE_WALKING_RIGHT: UpdateSpeed_WALKING_RIGHT(vx, vy); break;
+	case GIMMICK_STATE_WALKING_LEFT: UpdateSpeed_WALKING_LEFT(vx, vy); break;
+	case GIMMICK_STATE_JUMP: UpdateSpeed_JUMP(vx, vy, nx); break;
+	case GIMMICK_STATE_JUMP_LEFT: UpdateSpeed_JUMP_LEFT(vx, vy); break;
+	case GIMMICK_STATE_JUMP_RIGHT: UpdateSpeed_JUMP_RIGHT(vx, vy); break;
+	}
+
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
@@ -35,6 +45,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (dynamic_cast<CSwing*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 
 		if (dynamic_cast<CSlopeBrick*>(coObjects->at(i))) {
+			newCoObjects.push_back(coObjects->at(i));
 			CSlopeBrick* brick = dynamic_cast<CSlopeBrick*>(coObjects->at(i));
 			brick->Collision(this, dy, dx);
 		}
@@ -99,9 +110,8 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		if (ny > 0)
 		{
-			if (vx > 0) state = GIMMICK_STATE_WALKING_RIGHT;
-			else if (vx < 0) state = GIMMICK_STATE_WALKING_LEFT;
-			else if (vx == 0) state = GIMMICK_STATE_IDLE;
+			
+			state = GIMMICK_STATE_IDLE;
 
 		}
 
@@ -132,7 +142,6 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						if (brick->GetState() == NULL)
 						{
-							vx = 0;
 							x = x0 + min_tx * dx + nx * 0.2f;
 						}
 						else
@@ -227,8 +236,19 @@ void CGimmick::Render()
 		ani = GIMMICK_ANI_JUMP_LEFT;
 		break;
 	case GIMMICK_STATE_IDLE:
-		if (nx > 0) ani = GIMMICK_ANI_IDLE_RIGHT;
-		else ani = GIMMICK_ANI_IDLE_LEFT;
+		if (nx > 0)
+		{
+			if (vx != 0)
+				ani = GIMMICK_ANI_WALKING_RIGHT;
+			else
+				ani = GIMMICK_ANI_IDLE_RIGHT;
+		}
+		else {
+			if (vx != 0)
+				ani = GIMMICK_ANI_WALKING_LEFT;
+			else
+				ani = GIMMICK_ANI_IDLE_LEFT;
+		}
 		break;
 	case GIMMICK_STATE_WALKING_RIGHT:
 		ani = GIMMICK_ANI_WALKING_RIGHT;
@@ -254,19 +274,16 @@ void CGimmick::SetState(int state)
 	switch (state)
 	{
 	case GIMMICK_STATE_WALKING_RIGHT:
-		vx = GIMMICK_WALKING_SPEED;
 		nx = 1;
 		break;
 	case GIMMICK_STATE_WALKING_LEFT:
-		vx = -GIMMICK_WALKING_SPEED;
 		nx = -1;
 		break;
 	case GIMMICK_STATE_JUMP:
 		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
-		vy = GIMMICK_JUMP_SPEED_Y;
+		vy = GIMMICK_JUMP_SPEED;
 		break;
 	case GIMMICK_STATE_IDLE:
-		vx = 0;
 		break;
 	case GIMMICK_STATE_JUMP_RIGHT:
 		vx = GIMMICK_WALKING_SPEED;
@@ -295,3 +312,85 @@ void CGimmick::GetBoundingBox(float& left, float& top, float& right, float& bott
 	}
 }
 
+void CGimmick::UpdateSpeed_IDLE(float& vx, float& vy, int nx)
+{
+	if (vx == 0) return;
+	
+	if (nx > 0)
+	{
+		vx = vx - GIMMICK_INERTIA;
+		if (vx < 0)
+			vx = 0;
+		return;
+	}
+
+	if (nx < 0)
+	{
+		vx = vx + GIMMICK_INERTIA;
+		if (vx > 0)
+			vx = 0;
+		return;
+	}
+}
+
+void CGimmick::UpdateSpeed_WALKING_RIGHT(float& vx, float& vy)
+{
+	if (vx == GIMMICK_WALKING_SPEED) return;
+
+	vx = vx + GIMMICK_INERTIA;
+
+	if (vx > GIMMICK_WALKING_SPEED)
+		vx = GIMMICK_WALKING_SPEED;
+	return;
+
+}
+
+void CGimmick::UpdateSpeed_WALKING_LEFT(float& vx, float& vy)
+{
+	if (vx == -GIMMICK_WALKING_SPEED) return;
+
+	vx = vx - GIMMICK_INERTIA;
+
+	if (vx < -GIMMICK_WALKING_SPEED)
+		vx = -GIMMICK_WALKING_SPEED;
+	return;
+}
+
+void CGimmick::UpdateSpeed_JUMP(float& vx, float& vy, int nx)
+{
+	if (bol_jump == TRUE || vy <= 0) return;
+	vy = 0; 
+
+	if (vx == 0) return;
+
+	if (nx > 0)
+	{
+		vx = vx - GIMMICK_INERTIA;
+		if (vx < 0)
+			vx = 0;
+		return;
+	}
+
+	if (nx < 0)
+	{
+		vx = vx + GIMMICK_INERTIA;
+		if (vx > 0)
+			vx = 0;
+		return;
+	}
+
+
+}
+
+void CGimmick::UpdateSpeed_JUMP_RIGHT(float& vx, float& vy)
+{
+	if (bol_jump == TRUE || vy <= 0) return;
+	vy = 0;
+
+}
+
+void CGimmick::UpdateSpeed_JUMP_LEFT(float& vx, float& vy)
+{
+	if (bol_jump == TRUE || vy <= 0) return;
+	vy = 0;
+}

@@ -456,13 +456,29 @@ void CPlayScene::Unload()
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
-	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
+	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	CGimmick* gimmick = ((CPlayScene*)scence)->GetPlayer();
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
 		gimmick->SetState(GIMMICK_STATE_JUMP);
+		gimmick->JUMP();
+		break;
+	case DIK_A:
+		break;
+	}
+}
+
+void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
+{
+	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
+
+	CGimmick* gimmick = ((CPlayScene*)scence)->GetPlayer();
+	switch (KeyCode)
+	{
+	case DIK_SPACE:
+		gimmick->STOP_JUMP();
 		break;
 	case DIK_A:
 		break;
@@ -478,15 +494,16 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	if (gimmick->GetState() == GIMMICK_STATE_DIE) return;
 	else if (gimmick->GetState() != GIMMICK_STATE_JUMP && gimmick->GetState() != GIMMICK_STATE_JUMP_RIGHT && gimmick->GetState() != GIMMICK_STATE_JUMP_LEFT)
 	{
+		gimmick->SetState(GIMMICK_STATE_IDLE);
+
 		if (game->IsKeyDown(DIK_RIGHT))
 			gimmick->SetState(GIMMICK_STATE_WALKING_RIGHT);
 		else if (game->IsKeyDown(DIK_LEFT))
 			gimmick->SetState(GIMMICK_STATE_WALKING_LEFT);
-		else
-			gimmick->SetState(GIMMICK_STATE_IDLE);
 	}
 	else
 	{
+
 		if (game->IsKeyDown(DIK_RIGHT))
 			gimmick->SetState(GIMMICK_STATE_JUMP_RIGHT);
 		else if (game->IsKeyDown(DIK_LEFT))
