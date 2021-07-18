@@ -127,12 +127,14 @@
   <ItemGroup>
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Cord.cpp" />
     <ClCompile Include="CPinion.cpp" />
     <ClCompile Include="FallenBomb.cpp" />
     <ClCompile Include="Fire.cpp" />
     <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="Gun.cpp" />
     <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="SlopeBrick.cpp" />
     <ClCompile Include="PlatformsMoving.cpp" />
@@ -160,12 +162,14 @@
   <ItemGroup>
     <ClInclude Include="Animations.h" />
     <ClInclude Include="Brick.h" />
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Cord.h" />
     <ClInclude Include="CPinion.h" />
     <ClInclude Include="FallenBomb.h" />
     <ClInclude Include="Fire.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="Gun.h" />
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="SlopeBrick.h" />
     <ClInclude Include="PlatformsMoving.h" />

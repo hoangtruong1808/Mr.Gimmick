@@ -17,6 +17,8 @@
 #include "Window.h"
 #include "Tunnel.h"
 #include "Tube.h"
+#include "Bullet.h"
+#include "Gun.h"
 
 using namespace std;
 
@@ -55,6 +57,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_SWING	13
 #define OBJECT_TYPE_TUNNEL	14
 #define OBJECT_TYPE_TUBE	15
+#define OBJECT_TYPE_GUN	16
+#define OBJECT_TYPE_BULLET	17
 #define OBJECT_TYPE_WINDOW	20
 
 #define OBJECT_TYPE_PORTAL	50
@@ -270,7 +274,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new CSwing();
 		break;
-	}	
+	}
 	case OBJECT_TYPE_TUNNEL:
 	{
 		int t = atof(tokens[4].c_str());
@@ -288,7 +292,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CWindow();
 		break;
 	}
-
+	case OBJECT_TYPE_GUN:
+	{
+		obj = new CGun();
+		break;
+	}
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -429,6 +437,9 @@ void CPlayScene::Update(DWORD dt)
 
 	quadtree->Clear();
 
+}
+void CPlayScene::AddObject(CGameObject* a) {
+	objects.push_back(a);
 }
 
 void CPlayScene::Render()

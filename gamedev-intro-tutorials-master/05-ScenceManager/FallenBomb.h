@@ -26,7 +26,7 @@ public:
 	virtual void SetState(int state);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-	void StartExplode() { explode_start = GetTickCount64(); }
+	void StartExplode() { explode_start = GetTickCount(); }
 	void Attack();
 	void Die();
 	virtual void Render();
