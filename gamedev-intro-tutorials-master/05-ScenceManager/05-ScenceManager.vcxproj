@@ -126,15 +126,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp" />
+    <ClCompile Include="Boat.cpp" />
+    <ClCompile Include="BoatBomb.cpp" />
+    <ClCompile Include="BoatWindow.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Cannon.cpp" />
+    <ClCompile Include="CannonBullet.cpp" />
+    <ClCompile Include="CBird.cpp" />
     <ClCompile Include="Cord.cpp" />
     <ClCompile Include="CPinion.cpp" />
     <ClCompile Include="FallenBomb.cpp" />
     <ClCompile Include="Fire.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="Intro.cpp" />
     <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="SlopeBrick.cpp" />
     <ClCompile Include="PlatformsMoving.cpp" />
@@ -156,20 +163,28 @@
     <ClCompile Include="Scence.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
+    <ClCompile Include="Water.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Worm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
+    <ClInclude Include="Bird.h" />
+    <ClInclude Include="Boat.h" />
+    <ClInclude Include="BoatBomb.h" />
+    <ClInclude Include="BoatWindow.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Cannon.h" />
+    <ClInclude Include="CannonBullet.h" />
     <ClInclude Include="Cord.h" />
     <ClInclude Include="CPinion.h" />
     <ClInclude Include="FallenBomb.h" />
     <ClInclude Include="Fire.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Gun.h" />
+    <ClInclude Include="Intro.h" />
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="SlopeBrick.h" />
     <ClInclude Include="PlatformsMoving.h" />
@@ -191,6 +206,7 @@
     <ClInclude Include="Scence.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Textures.h" />
+    <ClInclude Include="Water.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="Worm.h" />
   </ItemGroup>

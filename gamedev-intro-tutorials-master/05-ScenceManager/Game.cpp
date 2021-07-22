@@ -5,6 +5,7 @@
 #include "Utils.h"
 
 #include "PlayScence.h"
+#include "Intro.h"
 
 CGame * CGame::__instance = NULL;
 
@@ -338,7 +339,11 @@ void CGame::_ParseSection_SCENES(string line)
 	int id = atoi(tokens[0].c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[1]);
 
-	LPSCENE scene = new CPlayScene(id, path);
+	LPSCENE scene;
+	if (id == 0)
+		scene = new CIntro(id, path);
+	else
+		scene = new CPlayScene(id, path);
 	scenes[id] = scene;
 }
 

@@ -19,6 +19,12 @@
 #include "Tube.h"
 #include "Bullet.h"
 #include "Gun.h"
+#include "Water.h"
+#include "Boat.h"
+#include "BoatBomb.h"
+#include "BoatWindow.h"
+#include "Cannon.h"
+#include "CannonBullet.h"
 
 using namespace std;
 
@@ -60,6 +66,12 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_GUN	16
 #define OBJECT_TYPE_BULLET	17
 #define OBJECT_TYPE_WINDOW	20
+#define OBJECT_TYPE_WATER	30
+#define OBJECT_TYPE_BOAT	31
+#define OBJECT_TYPE_BOATBOMB	32
+#define OBJECT_TYPE_BOATWINDOW	33
+#define OBJECT_TYPE_CANNON	34
+#define OBJECT_TYPE_CANNONBULLET	35
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -166,7 +178,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	int ani_set_id = atoi(tokens[3].c_str());
 
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
-
+	 
 	CGameObject* obj = NULL;
 
 	switch (object_type)
@@ -295,6 +307,39 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GUN:
 	{
 		obj = new CGun();
+		break;
+	}
+	case OBJECT_TYPE_WATER:
+	{
+		obj = new CWater();
+		break;
+	}
+	case OBJECT_TYPE_BOAT:
+	{
+		obj = new CBoat();
+		CBoat* boat = (CBoat*)obj;
+		int end = atoi(tokens[4].c_str());
+		boat->SetEnd(end);
+		break;
+	}
+	case OBJECT_TYPE_BOATBOMB:
+	{
+		obj = new CBoatBomb();
+		break;
+	}
+	case OBJECT_TYPE_BOATWINDOW:
+	{
+		obj = new CBoatWindow();
+		break;
+	}
+	case OBJECT_TYPE_CANNON:
+	{
+		obj = new CCannon();
+		break;
+	}
+	case OBJECT_TYPE_CANNONBULLET:
+	{
+		obj = new CCannonBullet();
 		break;
 	}
 	default:

@@ -11,7 +11,10 @@
 #include "PlatformsMoving.h"
 #include "SlopeBrick.h"
 #include "Swing.h"
-
+#include "Boat.h"
+#include "Water.h"
+#include "Cannon.h"
+#include "CannonBullet.h"
 
 CGimmick::CGimmick() : CGameObject()
 {
@@ -43,7 +46,10 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (dynamic_cast<CBrick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CPlatformsMoving*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CSwing*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
-
+		else if (dynamic_cast<CBoat*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CWater*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CCannon*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CCannonBullet*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		if (dynamic_cast<CSlopeBrick*>(coObjects->at(i))) {
 			newCoObjects.push_back(coObjects->at(i));
 			CSlopeBrick* brick = dynamic_cast<CSlopeBrick*>(coObjects->at(i));
@@ -103,14 +109,14 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			y = y0 + min_ty * dy + ny * 0.4f;
 		else y = y + dy;
 		*/
-		if (nx==0)
+		if (nx == 0)
 			x = x + dx;
 		if (ny == 0)
 			y = y + dy;
 
 		if (ny > 0)
 		{
-			
+
 			state = GIMMICK_STATE_IDLE;
 
 		}
@@ -120,14 +126,14 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		//
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
-			
+
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
 			//Brick
 			if (dynamic_cast<CBrick*>(e->obj))
-			{ 
+			{
 				CBrick* brick = dynamic_cast<CBrick*>(e->obj);
-				
+
 				if (e->ny != 0)
 				{
 					vy = 0;
@@ -145,7 +151,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							x = x0 + min_tx * dx + nx * 0.2f;
 						}
 						else
-							x = x + dx; 
+							x = x + dx;
 					}
 				}
 
@@ -160,7 +166,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				}
 				else if (e->ny != 0)
-				{	
+				{
 					vy = -0.0015;
 					if (e->ny > 0)
 					{
@@ -181,7 +187,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 								y = y0 + min_ty * dy + ny * 5.0f;
 								y += pm->GetPosition_dy();
 							}
-							
+
 							//pm->Collision(this, y);
 						}
 					}
@@ -189,7 +195,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						y = y0 + min_ty * dy + ny * 0.2f;
 					}
 				}
-				
+
 
 			}
 			else if (dynamic_cast<CSlopeBrick*>(e->obj))
@@ -200,12 +206,38 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					y += dy;
 
 			}
+			else if (dynamic_cast<CBoat*>(e->obj))
+			{
+				CBoat* boat = dynamic_cast<CBoat*>(e->obj);
+				boat->SetState(BOAT_STATE_DRIFT);
+				x = x0 + min_tx * (boat->dx);
+
+			}
 			else if (dynamic_cast<CPortal*>(e->obj))
 			{
 				CPortal* p = dynamic_cast<CPortal*>(e->obj);
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
+				
 			}
-
+			else if (dynamic_cast<CCannon*>(e->obj))
+			{
+				CCannon* cannon = dynamic_cast<CCannon*>(e->obj);
+				if (e->ny != 0)
+				{
+					vy = 0;
+				}
+				if (e->nx != 0)
+				{
+					//this->vy = -100.0f;
+					cannon->state = CANNON_STATE_MOVE;	
+					if (state == GIMMICK_STATE_IDLE)
+					{
+						cannon->state = CANNON_STATE_IDLE;
+					}
+					cannon->x += dx;
+					x += dx;
+				}
+			}
 		}
 	}
 
@@ -217,7 +249,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CGimmick::Render()
 {
 	int ani = -1;
-	
+
 	switch (state)
 	{
 	case GIMMICK_STATE_DIE:
@@ -262,7 +294,7 @@ void CGimmick::Render()
 	int alpha = 255;
 	if (untouchable) alpha = 128;
 
-	animation_set->at(ani)->Render(x, y+3, alpha);
+	animation_set->at(ani)->Render(x, y + 3, alpha);
 
 	//RenderBoundingBox();
 }
@@ -315,7 +347,7 @@ void CGimmick::GetBoundingBox(float& left, float& top, float& right, float& bott
 void CGimmick::UpdateSpeed_IDLE(float& vx, float& vy, int nx)
 {
 	if (vx == 0) return;
-	
+
 	if (nx > 0)
 	{
 		vx = vx - GIMMICK_INERTIA;
@@ -359,7 +391,7 @@ void CGimmick::UpdateSpeed_WALKING_LEFT(float& vx, float& vy)
 void CGimmick::UpdateSpeed_JUMP(float& vx, float& vy, int nx)
 {
 	if (bol_jump == TRUE || vy <= 0) return;
-	vy = 0; 
+	vy = 0;
 
 	if (vx == 0) return;
 
