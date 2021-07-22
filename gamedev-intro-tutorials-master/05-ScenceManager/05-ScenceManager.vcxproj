@@ -134,7 +134,6 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Cannon.cpp" />
     <ClCompile Include="CannonBullet.cpp" />
-    <ClCompile Include="CBird.cpp" />
     <ClCompile Include="Cord.cpp" />
     <ClCompile Include="CPinion.cpp" />
     <ClCompile Include="FallenBomb.cpp" />
@@ -169,7 +168,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
-    <ClInclude Include="Bird.h" />
     <ClInclude Include="Boat.h" />
     <ClInclude Include="BoatBomb.h" />
     <ClInclude Include="BoatWindow.h" />

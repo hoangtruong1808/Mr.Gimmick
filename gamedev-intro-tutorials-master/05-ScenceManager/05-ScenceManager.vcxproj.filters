@@ -132,9 +132,6 @@
     <ClCompile Include="BoatWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CBird.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Cannon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -255,9 +252,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BoatWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Bird.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Cannon.h">
