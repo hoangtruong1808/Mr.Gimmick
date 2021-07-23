@@ -75,7 +75,6 @@ void CQuadtree::Insert(LPGAMEOBJECT obj)
     if (this->IsContain(obj))
     { 
         objects_list->push_back(obj);
-        DebugOut(L"[INFO] Done loading %d\n", obj);
     }
     // Split and move all objects in list into it’s corresponding nodes
     if (objects_list->size() > MAX_OBJECT_IN_REGION && level < MAX_LEVEL)

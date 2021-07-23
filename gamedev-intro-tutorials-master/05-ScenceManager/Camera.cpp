@@ -39,6 +39,9 @@ RECT CCamera::GetCamBound()
 
 void CCamera::Update(float x, float y)
 {
+	playerPos.x = x;
+	playerPos.y = y;
+
 	camPos.x = x;
 	camPos.y = y;
 	camPos.x -= ScreenWidth / 2;
@@ -82,7 +85,7 @@ bool CCamera::isContain(RECT rect)
 
 bool CCamera::isContain(LPGAMEOBJECT obj)
 {
-	//Lấy biên giới hạn camera
+	
 	RECT Rect;
 	float left, top, right, bottom;
 	obj->GetBoundingBox(left, top, right, bottom);
@@ -91,6 +94,7 @@ bool CCamera::isContain(LPGAMEOBJECT obj)
 	Rect.right = int(right);
 	Rect.bottom = int(bottom);
 
+	//Lấy biên giới hạn camera
 	RECT camRect;
 	camRect.left = camPos.x;
 	camRect.top = camPos.y;
@@ -98,7 +102,7 @@ bool CCamera::isContain(LPGAMEOBJECT obj)
 	camRect.bottom = camPos.y - ScreenHeight;
 
 	//Kiểm tra Pos có nằm trong Camera hay không
-	if (Rect.left > camRect.right || Rect.right < camRect.left || Rect.top < camRect.bottom || Rect.bottom > camRect.top)
+	if (Rect.left - 16 > camRect.right || Rect.right + 16 < camRect.left || Rect.top + 16 < camRect.bottom || Rect.bottom - 16 > camRect.top)
 	{
 		return false;
 	}

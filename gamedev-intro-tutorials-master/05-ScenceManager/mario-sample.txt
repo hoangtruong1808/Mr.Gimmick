@@ -1,11 +1,8 @@
 [SETTINGS]
-start	6
+start	1
 #scene list
 [SCENES]
-0	intro\intro.txt
 1	map\map1\scene1\scene1.txt
 2	map\map1\scene2\scene2.txt
 3	map\map1\scene3\scene3.txt
-4	map\map1\scene4\scene4.txt
-5	map\map1\scene5\scene5.txt
-6	map\map2\scene1\scene1.txt
+4	map\map2\scene1\scene1.txt

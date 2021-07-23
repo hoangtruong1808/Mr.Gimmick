@@ -102,9 +102,9 @@ void CFallenBomb::Render()
 	else if (state == FALLENBOMB_STATE_EXPLODE)
 		ani = FALLENBOMB_ANI_EXPLODE;
 
+	int alpha = 255;
 
-	animation_set->at(ani)->Render(x, y);
-	RenderBoundingBox();
+	animation_set->at(ani)->Render(x, y, alpha);
 }
 
 void CFallenBomb::SetState(int state)
@@ -145,7 +145,7 @@ void CFallenBomb::Die()
 		{
 			StartExplode();
 		}
-		if (GetTickCount() - explode_start >= FALLENBOMB_EXPLODE_TIME)
+		if (GetTickCount64() - explode_start >= FALLENBOMB_EXPLODE_TIME)
 		{
 			SetState(FALLENBOMB_STATE_DIE);
 		}

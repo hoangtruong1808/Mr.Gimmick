@@ -11,10 +11,7 @@
 #include "PlatformsMoving.h"
 #include "SlopeBrick.h"
 #include "Swing.h"
-#include "Boat.h"
-#include "Water.h"
-#include "Cannon.h"
-#include "CannonBullet.h"
+
 
 CGimmick::CGimmick() : CGameObject()
 {
@@ -22,10 +19,12 @@ CGimmick::CGimmick() : CGameObject()
 	SetState(GIMMICK_STATE_IDLE);
 }
 
+
 void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += GIMMICK_GRAVITY * dt;
 
+	
 	switch (state)
 	{
 	case GIMMICK_STATE_IDLE: UpdateSpeed_IDLE(vx, vy, nx); break;
@@ -46,10 +45,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (dynamic_cast<CBrick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CPlatformsMoving*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CSwing*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
-		else if (dynamic_cast<CBoat*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
-		else if (dynamic_cast<CWater*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
-		else if (dynamic_cast<CCannon*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
-		else if (dynamic_cast<CCannonBullet*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+
 		if (dynamic_cast<CSlopeBrick*>(coObjects->at(i))) {
 			newCoObjects.push_back(coObjects->at(i));
 			CSlopeBrick* brick = dynamic_cast<CSlopeBrick*>(coObjects->at(i));
@@ -70,6 +66,8 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// turn off collision when die 
 	if (state != GIMMICK_STATE_DIE)
 		CalcPotentialCollisions(&newCoObjects, coEvents);
+
+	
 
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount() - untouchable_start > GIMMICK_UNTOUCHABLE_TIME)
@@ -109,16 +107,32 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			y = y0 + min_ty * dy + ny * 0.4f;
 		else y = y + dy;
 		*/
-		if (nx == 0)
+		if (nx==0)
 			x = x + dx;
 		if (ny == 0)
 			y = y + dy;
 
 		if (ny > 0)
 		{
-
-			state = GIMMICK_STATE_IDLE;
-
+			if (state == GIMMICK_STATE_JUMP || state == GIMMICK_STATE_JUMP_RIGHT || state == GIMMICK_STATE_JUMP_LEFT)
+			{
+				state = GIMMICK_STATE_IDLE;
+				
+				if (this->nx > 0)
+				{
+					if (vx >= 0.05)
+						vx = 0.1f;
+					else if (vx >0.01f)
+						vx = 0.07f;
+				}
+				else
+				{
+					if (vx <= -0.05)
+						vx = -0.1f;
+					else if (vx < -0.01f)
+						vx = -0.07f;
+				}
+			}
 		}
 
 		//
@@ -126,14 +140,14 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		//
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
-
+			
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
 			//Brick
 			if (dynamic_cast<CBrick*>(e->obj))
-			{
+			{ 
 				CBrick* brick = dynamic_cast<CBrick*>(e->obj);
-
+				
 				if (e->ny != 0)
 				{
 					vy = 0;
@@ -148,10 +162,10 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						if (brick->GetState() == NULL)
 						{
+							vx = 0;
 							x = x0 + min_tx * dx + nx * 0.2f;
 						}
-						else
-							x = x + dx;
+						
 					}
 				}
 
@@ -166,7 +180,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				}
 				else if (e->ny != 0)
-				{
+				{	
 					vy = -0.0015;
 					if (e->ny > 0)
 					{
@@ -187,7 +201,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 								y = y0 + min_ty * dy + ny * 5.0f;
 								y += pm->GetPosition_dy();
 							}
-
+							
 							//pm->Collision(this, y);
 						}
 					}
@@ -195,7 +209,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						y = y0 + min_ty * dy + ny * 0.2f;
 					}
 				}
-
+				
 
 			}
 			else if (dynamic_cast<CSlopeBrick*>(e->obj))
@@ -206,38 +220,28 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					y += dy;
 
 			}
-			else if (dynamic_cast<CBoat*>(e->obj))
-			{
-				CBoat* boat = dynamic_cast<CBoat*>(e->obj);
-				boat->SetState(BOAT_STATE_DRIFT);
-				x = x0 + min_tx * (boat->dx);
-
-			}
 			else if (dynamic_cast<CPortal*>(e->obj))
 			{
 				CPortal* p = dynamic_cast<CPortal*>(e->obj);
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
-				
 			}
-			else if (dynamic_cast<CCannon*>(e->obj))
-			{
-				CCannon* cannon = dynamic_cast<CCannon*>(e->obj);
-				if (e->ny != 0)
-				{
-					vy = 0;
-				}
-				if (e->nx != 0)
-				{
-					//this->vy = -100.0f;
-					cannon->state = CANNON_STATE_MOVE;	
-					if (state == GIMMICK_STATE_IDLE)
-					{
-						cannon->state = CANNON_STATE_IDLE;
-					}
-					cannon->x += dx;
-					x += dx;
-				}
-			}
+
+		}
+	}
+
+	if (magic_star != NULL)
+	{
+		if (bol_star == true)
+		{
+			magic_star->Update(dt, coObjects);
+			magic_star->SetPosition(x, y + 16);
+		}
+		else
+		{
+			if (magic_star->GetState() == MAGICSTAR_STATE_DIE1)
+				magic_star = NULL;
+			else
+				magic_star->Update(dt, coObjects);
 		}
 	}
 
@@ -249,7 +253,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CGimmick::Render()
 {
 	int ani = -1;
-
+	
 	switch (state)
 	{
 	case GIMMICK_STATE_DIE:
@@ -294,7 +298,9 @@ void CGimmick::Render()
 	int alpha = 255;
 	if (untouchable) alpha = 128;
 
-	animation_set->at(ani)->Render(x, y + 3, alpha);
+	animation_set->at(ani)->Render(x, y+3, alpha);
+	if (magic_star != NULL)
+		magic_star->Render();
 
 	//RenderBoundingBox();
 }
@@ -313,7 +319,7 @@ void CGimmick::SetState(int state)
 		break;
 	case GIMMICK_STATE_JUMP:
 		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
-		vy = GIMMICK_JUMP_SPEED;
+		//vy = GIMMICK_JUMP_SPEED;
 		break;
 	case GIMMICK_STATE_IDLE:
 		break;
@@ -344,10 +350,11 @@ void CGimmick::GetBoundingBox(float& left, float& top, float& right, float& bott
 	}
 }
 
+
 void CGimmick::UpdateSpeed_IDLE(float& vx, float& vy, int nx)
 {
 	if (vx == 0) return;
-
+	
 	if (nx > 0)
 	{
 		vx = vx - GIMMICK_INERTIA;
@@ -390,27 +397,27 @@ void CGimmick::UpdateSpeed_WALKING_LEFT(float& vx, float& vy)
 
 void CGimmick::UpdateSpeed_JUMP(float& vx, float& vy, int nx)
 {
+	if (vx != 0)
+	{
+		if (nx > 0)
+		{
+			vx = vx - GIMMICK_INERTIA/2 ;
+			if (vx < 0)
+				vx = 0;
+			return;
+		}
+
+		if (nx < 0)
+		{
+			vx = vx + GIMMICK_INERTIA/2 ;
+			if (vx > 0)
+				vx = 0;
+			return;
+		}
+	}
+
 	if (bol_jump == TRUE || vy <= 0) return;
-	vy = 0;
-
-	if (vx == 0) return;
-
-	if (nx > 0)
-	{
-		vx = vx - GIMMICK_INERTIA;
-		if (vx < 0)
-			vx = 0;
-		return;
-	}
-
-	if (nx < 0)
-	{
-		vx = vx + GIMMICK_INERTIA;
-		if (vx > 0)
-			vx = 0;
-		return;
-	}
-
+	vy = 0; 
 
 }
 
@@ -425,4 +432,41 @@ void CGimmick::UpdateSpeed_JUMP_LEFT(float& vx, float& vy)
 {
 	if (bol_jump == TRUE || vy <= 0) return;
 	vy = 0;
+}
+
+void CGimmick::JUMP() 
+{ 
+	if (state != GIMMICK_STATE_JUMP && state != GIMMICK_STATE_JUMP_RIGHT && state != GIMMICK_STATE_JUMP_LEFT)
+	{
+		bol_jump = true;
+		SetState(GIMMICK_STATE_JUMP);
+		vy = GIMMICK_JUMP_SPEED;
+	}
+}
+void CGimmick::STOP_JUMP() 
+{ 
+	bol_jump = false; 
+}
+
+void CGimmick::MAGICSTAR()
+{
+	if (bol_star == true || magic_star != NULL) return;
+	bol_star = true;
+	magic_star = new CMagicStar();
+	magic_star->SetPosition(x, y + 16);
+}
+
+void CGimmick::STOP_MAGICSTAR()
+{
+	bol_star = false;
+	if (magic_star != NULL)
+	{
+		if (magic_star->GetState() == MAGICSTAR_STATE_BIG)
+		{
+			magic_star->SetState(MAGICSTAR_STATE_BIG_RUN);
+			magic_star->SetSpeed(magic_star->GetPosition_vx() + vx, magic_star->GetPosition_vy() + vy);
+			magic_star->SetNX(nx);
+		}
+		else if (magic_star->GetState() != MAGICSTAR_STATE_BIG_RUN)  magic_star = NULL;
+	}
 }

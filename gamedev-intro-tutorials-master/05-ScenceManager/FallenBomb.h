@@ -13,7 +13,7 @@
 
 #define FALLENBOMB_ANI_IDLE 0
 #define FALLENBOMB_ANI_FALL 1
-#define FALLENBOMB_ANI_EXPLODE 2	
+#define FALLENBOMB_ANI_EXPLODE 2
 
 #define	FALLENBOMB_EXPLODE_TIME	250
 
@@ -26,7 +26,7 @@ public:
 	virtual void SetState(int state);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-	void StartExplode() { explode_start = GetTickCount(); }
+	void StartExplode() { explode_start = GetTickCount64(); }
 	void Attack();
 	void Die();
 	virtual void Render();
