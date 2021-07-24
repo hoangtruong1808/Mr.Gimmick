@@ -31,7 +31,7 @@ public:
 	int GetWidth() { return this->ScreenWidth; }
 	int GetHeight() { return this->ScreenHeight; }
 	RECT GetCamBound();
-	void GetPlayerPos(float& x, float& y) { x = playerPos.x; y = playerPos.y;}
+	void GetPlayerPos(float& x, float& y) { x = playerPos.x; y = playerPos.y; }
 
 	bool isContain(RECT rect);
 	bool isContain(LPGAMEOBJECT obj);

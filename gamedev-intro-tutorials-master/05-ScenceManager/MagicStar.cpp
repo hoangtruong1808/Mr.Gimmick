@@ -55,14 +55,14 @@ void CMagicStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			star5.x = star_len / len * star5.x;
 		}
 	}
-		break;
+	break;
 	case MAGICSTAR_STATE_SMALL_1:
 	{
 		rally_start = rally_start + dt;
 		if (rally_start > 400)
 			state = MAGICSTAR_STATE_BIG;
 	}
-		break;
+	break;
 	case MAGICSTAR_STATE_BIG:
 		break;
 	case MAGICSTAR_STATE_BIG_RUN:
@@ -124,16 +124,16 @@ void CMagicStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 					if (e->ny != 0)
 					{
-						vy = -vy/1.25;
+						vy = -vy / 1.25;
 						if (e->ny > 0)
 						{
 							if (brick->GetState() != NULL)
 								x += brick->GetBrickSpeed() * dt;
-							if (vy > -0.02f && vy <0.02f)
+							if (vy > -0.02f && vy < 0.02f)
 								SetState(MAGICSTAR_STATE_DIE);
-							
+
 						}
-							
+
 						y = y0 + min_ty * dy + ny * 0.2f;
 					}
 					else
@@ -141,7 +141,7 @@ void CMagicStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						if (e->nx != 0)
 						{
 							vx = -vx;
-				
+
 							x = x0 + min_tx * dx + nx * 0.2f;
 						}
 					}
@@ -150,13 +150,13 @@ void CMagicStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 	}
-		break;
+	break;
 	case MAGICSTAR_STATE_DIE:
 		rally_start = rally_start + dt;
 		if (rally_start > 400)
 			state = MAGICSTAR_STATE_DIE1;
 		break;
-	}	
+	}
 }
 
 void CMagicStar::Render()
@@ -171,10 +171,10 @@ void CMagicStar::Render()
 		animation_set->at(0)->Render(x + 4 + star5.x, y - 8 + star5.y);
 		break;
 	case MAGICSTAR_STATE_SMALL_1:
-		animation_set->at(1)->Render(x - 5 , y + 7);
+		animation_set->at(1)->Render(x - 5, y + 7);
 		break;
 	case MAGICSTAR_STATE_BIG:
-		animation_set->at(2)->Render(x , y );
+		animation_set->at(2)->Render(x, y);
 		break;
 	case MAGICSTAR_STATE_BIG_RUN:
 		animation_set->at(2)->Render(x, y);

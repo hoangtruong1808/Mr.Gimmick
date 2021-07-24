@@ -17,6 +17,14 @@
 #include "Window.h"
 #include "Tunnel.h"
 #include "Tube.h"
+#include "Bullet.h"
+#include "Gun.h"
+#include "Water.h"
+#include "Boat.h"
+#include "BoatBomb.h"
+#include "BoatWindow.h"
+#include "Cannon.h"
+#include "CannonBullet.h"
 #include "BlackEnemy.h"
 
 using namespace std;
@@ -57,7 +65,15 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_SWING	13
 #define OBJECT_TYPE_TUNNEL	14
 #define OBJECT_TYPE_TUBE	15
+#define OBJECT_TYPE_GUN	16
+#define OBJECT_TYPE_BULLET	17
 #define OBJECT_TYPE_WINDOW	20
+#define OBJECT_TYPE_WATER	30
+#define OBJECT_TYPE_BOAT	31
+#define OBJECT_TYPE_BOATBOMB	32
+#define OBJECT_TYPE_BOATWINDOW	33
+#define OBJECT_TYPE_CANNON	34
+#define OBJECT_TYPE_CANNONBULLET	35
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -164,7 +180,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	int ani_set_id = atoi(tokens[3].c_str());
 
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
-
+	 
 	CGameObject* obj = NULL;
 
 	switch (object_type)
@@ -181,10 +197,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
 	case OBJECT_TYPE_ENEMYBLACK:
-		
+
 		obj = new CBlackEnemy();
 		break;
-
 	case OBJECT_TYPE_BRICK:
 	{
 		if (tokens.size() < 6) return;
@@ -277,7 +292,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new CSwing();
 		break;
-	}	
+	}
 	case OBJECT_TYPE_TUNNEL:
 	{
 		int t = atof(tokens[4].c_str());
@@ -295,7 +310,44 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CWindow();
 		break;
 	}
-
+	case OBJECT_TYPE_GUN:
+	{
+		obj = new CGun();
+		break;
+	}
+	case OBJECT_TYPE_WATER:
+	{
+		obj = new CWater();
+		break;
+	}
+	case OBJECT_TYPE_BOAT:
+	{
+		obj = new CBoat();
+		CBoat* boat = (CBoat*)obj;
+		int end = atoi(tokens[4].c_str());
+		boat->SetEnd(end);
+		break;
+	}
+	case OBJECT_TYPE_BOATBOMB:
+	{
+		obj = new CBoatBomb();
+		break;
+	}
+	case OBJECT_TYPE_BOATWINDOW:
+	{
+		obj = new CBoatWindow();
+		break;
+	}
+	case OBJECT_TYPE_CANNON:
+	{
+		obj = new CCannon();
+		break;
+	}
+	case OBJECT_TYPE_CANNONBULLET:
+	{
+		obj = new CCannonBullet();
+		break;
+	}
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -390,6 +442,7 @@ void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
+
 	quadtree = new CQuadtree(0, 0, 0, map->GetMapWidth(), map->GetMapHeight());
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
@@ -436,6 +489,9 @@ void CPlayScene::Update(DWORD dt)
 
 	quadtree->Clear();
 
+}
+void CPlayScene::AddObject(CGameObject* a) {
+	objects.push_back(a);
 }
 
 void CPlayScene::Render()

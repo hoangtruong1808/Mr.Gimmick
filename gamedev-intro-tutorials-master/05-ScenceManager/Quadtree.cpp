@@ -48,10 +48,10 @@ void CQuadtree::Split()
 {
     nodes = new CQuadtree * [4];
 
-    nodes[0] = new CQuadtree(level + 1, region->x, region->y,region->x + (region->width - region->x) / 2, region->y + (region->height - region->y) / 2); // left bottom
-    nodes[1] = new CQuadtree(level + 1, region->x + (region->width - region->x) / 2, region->y, region->width , region->y + (region->height - region->y) / 2); // right bottom
-    nodes[2] = new CQuadtree(level + 1, region->x, region->y + (region->height - region->y) / 2, region->x + (region->width - region->x) / 2, region->height );
-    nodes[3] = new CQuadtree(level + 1, region->x + (region->width - region->x) / 2, region->y + (region->height - region->y) / 2, region->width , region->height);
+    nodes[0] = new CQuadtree(level + 1, region->x, region->y, region->x + (region->width - region->x) / 2, region->y + (region->height - region->y) / 2); // left bottom
+    nodes[1] = new CQuadtree(level + 1, region->x + (region->width - region->x) / 2, region->y, region->width, region->y + (region->height - region->y) / 2); // right bottom
+    nodes[2] = new CQuadtree(level + 1, region->x, region->y + (region->height - region->y) / 2, region->x + (region->width - region->x) / 2, region->height);
+    nodes[3] = new CQuadtree(level + 1, region->x + (region->width - region->x) / 2, region->y + (region->height - region->y) / 2, region->width, region->height);
 }
 
 void CQuadtree::Insert(LPGAMEOBJECT obj)
@@ -73,7 +73,7 @@ void CQuadtree::Insert(LPGAMEOBJECT obj)
 
     // Insert entity into current quadtree
     if (this->IsContain(obj))
-    { 
+    {
         objects_list->push_back(obj);
     }
     // Split and move all objects in list into it’s corresponding nodes
@@ -105,12 +105,12 @@ void CQuadtree::Retrieve(vector<LPGAMEOBJECT>* return_objects_list, LPGAMEOBJECT
             nodes[0]->Retrieve(return_objects_list, obj);
         if (nodes[1]->IsContain(obj))
             nodes[1]->Retrieve(return_objects_list, obj);
-        if (nodes[2]->IsContain(obj))    
+        if (nodes[2]->IsContain(obj))
             nodes[2]->Retrieve(return_objects_list, obj);
         if (nodes[3]->IsContain(obj))
             nodes[3]->Retrieve(return_objects_list, obj);
 
-        return ; // Return here to ignore rest.
+        return; // Return here to ignore rest.
     }
 
     // Add all entities in current region into return_objects_list
@@ -123,7 +123,7 @@ void CQuadtree::Retrieve(vector<LPGAMEOBJECT>* return_objects_list, LPGAMEOBJECT
             return_objects_list->push_back(objects_list->at(i));
         }
     }
-   
+
 }
 
 vector<LPGAMEOBJECT> CQuadtree::SortDuplicateObj(vector<LPGAMEOBJECT> obj)

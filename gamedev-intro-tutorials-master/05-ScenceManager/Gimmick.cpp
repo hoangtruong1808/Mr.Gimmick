@@ -24,7 +24,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += GIMMICK_GRAVITY * dt;
 
-	
+
 	switch (state)
 	{
 	case GIMMICK_STATE_IDLE: UpdateSpeed_IDLE(vx, vy, nx); break;
@@ -67,7 +67,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (state != GIMMICK_STATE_DIE)
 		CalcPotentialCollisions(&newCoObjects, coEvents);
 
-	
+
 
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount() - untouchable_start > GIMMICK_UNTOUCHABLE_TIME)
@@ -107,7 +107,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			y = y0 + min_ty * dy + ny * 0.4f;
 		else y = y + dy;
 		*/
-		if (nx==0)
+		if (nx == 0)
 			x = x + dx;
 		if (ny == 0)
 			y = y + dy;
@@ -117,12 +117,12 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (state == GIMMICK_STATE_JUMP || state == GIMMICK_STATE_JUMP_RIGHT || state == GIMMICK_STATE_JUMP_LEFT)
 			{
 				state = GIMMICK_STATE_IDLE;
-				
+
 				if (this->nx > 0)
 				{
 					if (vx >= 0.05)
 						vx = 0.1f;
-					else if (vx >0.01f)
+					else if (vx > 0.01f)
 						vx = 0.07f;
 				}
 				else
@@ -140,14 +140,14 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		//
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
-			
+
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
 			//Brick
 			if (dynamic_cast<CBrick*>(e->obj))
-			{ 
+			{
 				CBrick* brick = dynamic_cast<CBrick*>(e->obj);
-				
+
 				if (e->ny != 0)
 				{
 					vy = 0;
@@ -165,7 +165,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							vx = 0;
 							x = x0 + min_tx * dx + nx * 0.2f;
 						}
-						
+
 					}
 				}
 
@@ -180,7 +180,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				}
 				else if (e->ny != 0)
-				{	
+				{
 					vy = -0.0015;
 					if (e->ny > 0)
 					{
@@ -201,7 +201,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 								y = y0 + min_ty * dy + ny * 5.0f;
 								y += pm->GetPosition_dy();
 							}
-							
+
 							//pm->Collision(this, y);
 						}
 					}
@@ -209,7 +209,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						y = y0 + min_ty * dy + ny * 0.2f;
 					}
 				}
-				
+
 
 			}
 			else if (dynamic_cast<CSlopeBrick*>(e->obj))
@@ -253,7 +253,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CGimmick::Render()
 {
 	int ani = -1;
-	
+
 	switch (state)
 	{
 	case GIMMICK_STATE_DIE:
@@ -298,7 +298,7 @@ void CGimmick::Render()
 	int alpha = 255;
 	if (untouchable) alpha = 128;
 
-	animation_set->at(ani)->Render(x, y+3, alpha);
+	animation_set->at(ani)->Render(x, y + 3, alpha);
 	if (magic_star != NULL)
 		magic_star->Render();
 
@@ -354,7 +354,7 @@ void CGimmick::GetBoundingBox(float& left, float& top, float& right, float& bott
 void CGimmick::UpdateSpeed_IDLE(float& vx, float& vy, int nx)
 {
 	if (vx == 0) return;
-	
+
 	if (nx > 0)
 	{
 		vx = vx - GIMMICK_INERTIA;
@@ -401,7 +401,7 @@ void CGimmick::UpdateSpeed_JUMP(float& vx, float& vy, int nx)
 	{
 		if (nx > 0)
 		{
-			vx = vx - GIMMICK_INERTIA/2 ;
+			vx = vx - GIMMICK_INERTIA / 2;
 			if (vx < 0)
 				vx = 0;
 			return;
@@ -409,7 +409,7 @@ void CGimmick::UpdateSpeed_JUMP(float& vx, float& vy, int nx)
 
 		if (nx < 0)
 		{
-			vx = vx + GIMMICK_INERTIA/2 ;
+			vx = vx + GIMMICK_INERTIA / 2;
 			if (vx > 0)
 				vx = 0;
 			return;
@@ -417,7 +417,7 @@ void CGimmick::UpdateSpeed_JUMP(float& vx, float& vy, int nx)
 	}
 
 	if (bol_jump == TRUE || vy <= 0) return;
-	vy = 0; 
+	vy = 0;
 
 }
 
@@ -434,8 +434,8 @@ void CGimmick::UpdateSpeed_JUMP_LEFT(float& vx, float& vy)
 	vy = 0;
 }
 
-void CGimmick::JUMP() 
-{ 
+void CGimmick::JUMP()
+{
 	if (state != GIMMICK_STATE_JUMP && state != GIMMICK_STATE_JUMP_RIGHT && state != GIMMICK_STATE_JUMP_LEFT)
 	{
 		bol_jump = true;
@@ -443,9 +443,9 @@ void CGimmick::JUMP()
 		vy = GIMMICK_JUMP_SPEED;
 	}
 }
-void CGimmick::STOP_JUMP() 
-{ 
-	bol_jump = false; 
+void CGimmick::STOP_JUMP()
+{
+	bol_jump = false;
 }
 
 void CGimmick::MAGICSTAR()

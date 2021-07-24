@@ -52,9 +52,9 @@ void CCamera::Update(float x, float y)
 
 	if (camPos.y < ScreenHeight)
 		camPos.y = ScreenHeight;
-	
+
 	if (camPos.y > MapHeight) camPos.y = MapHeight;
-	
+
 	if (camPos.x > MapWidth - ScreenWidth) camPos.x = MapWidth - ScreenWidth;
 	CGame::GetInstance()->SetCamPos(camPos.x, camPos.y);
 }
@@ -85,7 +85,7 @@ bool CCamera::isContain(RECT rect)
 
 bool CCamera::isContain(LPGAMEOBJECT obj)
 {
-	
+
 	RECT Rect;
 	float left, top, right, bottom;
 	obj->GetBoundingBox(left, top, right, bottom);

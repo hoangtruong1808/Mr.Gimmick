@@ -22,15 +22,15 @@ void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	camera->GetPlayerPos(cx, cy);
 
 
-	
+
 	switch (state)
 	{
 	case BLACKENEMY_STATE_WALKING_RIGHT: Update_BLACKENEMY_STATE_WALKING_RIGHT(dt, coObjects, cx, cy); break;
 	case BLACKENEMY_STATE_WALKING_LEFT: Update_BLACKENEMY_STATE_WALKING_LEFT(dt, coObjects, cx, cy); break;
-	//case BLACKENEMY_STATE_FLY_RIGHT:	Update_BLACKENEMY_STATE_FLY_RIGHT(dt, coObjects, cx, cy); break;
-	//case BLACKENEMY_STATE_FLY_LEFT:		Update_BLACKENEMY_STATE_FLY_LEFT(dt, coObjects, cx, cy); break;
-	//case BLACKENEMY_STATE_WALKING_FLY_RIGHT:	Update_BLACKENEMY_STATE_WALKING_FLY_RIGHT(dt, coObjects, cx, cy); break;
-	//case BLACKENEMY_STATE_WALKING_FLY_LEFT:	Update_BLACKENEMY_STATE_WALKING_FLY_LEFT(dt, coObjects, cx, cy); break;
+		//case BLACKENEMY_STATE_FLY_RIGHT:	Update_BLACKENEMY_STATE_FLY_RIGHT(dt, coObjects, cx, cy); break;
+		//case BLACKENEMY_STATE_FLY_LEFT:		Update_BLACKENEMY_STATE_FLY_LEFT(dt, coObjects, cx, cy); break;
+		//case BLACKENEMY_STATE_WALKING_FLY_RIGHT:	Update_BLACKENEMY_STATE_WALKING_FLY_RIGHT(dt, coObjects, cx, cy); break;
+		//case BLACKENEMY_STATE_WALKING_FLY_LEFT:	Update_BLACKENEMY_STATE_WALKING_FLY_LEFT(dt, coObjects, cx, cy); break;
 	}
 }
 
@@ -83,7 +83,7 @@ void CBlackEnemy::SetState(int state)
 		vx = BLACKENEMY_WALKING_SPEED;
 		break;
 	case BLACKENEMY_STATE_WALKING_LEFT:
-		vx = - BLACKENEMY_WALKING_SPEED;
+		vx = -BLACKENEMY_WALKING_SPEED;
 		break;
 	}
 
@@ -95,7 +95,7 @@ void CBlackEnemy::Update_BLACKENEMY_STATE_WALKING_RIGHT(DWORD dt, vector<LPGAMEO
 
 
 	if (x > cx)
-	{	
+	{
 		if (start_change_state == 0)
 			start_change_state = GetTickCount();
 		else
@@ -167,8 +167,8 @@ void CBlackEnemy::Update_BLACKENEMY_STATE_WALKING_RIGHT(DWORD dt, vector<LPGAMEO
 							vy = 0.15f;
 					}
 					y = y0 + min_ty * dy + ny * 0.2f;
-					
-					
+
+
 				}
 				else
 				{
@@ -181,7 +181,7 @@ void CBlackEnemy::Update_BLACKENEMY_STATE_WALKING_RIGHT(DWORD dt, vector<LPGAMEO
 						if (vy <= 0)
 							vy = 0.15f;
 						if (x > cx)
-						SetState(BLACKENEMY_STATE_WALKING_LEFT);
+							SetState(BLACKENEMY_STATE_WALKING_LEFT);
 					}
 				}
 

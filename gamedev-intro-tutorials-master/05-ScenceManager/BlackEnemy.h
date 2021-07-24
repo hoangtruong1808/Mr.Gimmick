@@ -36,7 +36,7 @@ public:
 	void SetState(int state);
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	void Update_BLACKENEMY_STATE_WALKING_RIGHT(DWORD dt, vector<LPGAMEOBJECT>* objects , float cx, float cy);
+	void Update_BLACKENEMY_STATE_WALKING_RIGHT(DWORD dt, vector<LPGAMEOBJECT>* objects, float cx, float cy);
 	void Update_BLACKENEMY_STATE_WALKING_LEFT(DWORD dt, vector<LPGAMEOBJECT>* objects, float cx, float cy);
 	//void Update_BLACKENEMY_STATE_FLY_RIGHT(DWORD dt, vector<LPGAMEOBJECT>* objects, float cx, float cy);
 	//void Update_BLACKENEMY_STATE_FLY_LEFT(DWORD dt, vector<LPGAMEOBJECT>* objects, float cx, float cy);
@@ -44,4 +44,5 @@ public:
 	//void Update_BLACKENEMY_STATE_WALKING_FLY_LEFT(DWORD dt, vector<LPGAMEOBJECT>* objects, float cx, float cy);
 
 };
+
 

@@ -1,4 +1,4 @@
- #pragma once
+#pragma once
 #include "GameObject.h"
 #include "MagicStar.h"
 
@@ -37,7 +37,7 @@
 
 class CGimmick : public CGameObject
 {
-	
+
 
 	CMagicStar* magic_star;
 	int untouchable;
@@ -54,7 +54,7 @@ public:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
 
-	void UpdateSpeed_IDLE(float &vx, float &vy, int nx);
+	void UpdateSpeed_IDLE(float& vx, float& vy, int nx);
 	void UpdateSpeed_WALKING_RIGHT(float& vx, float& vy);
 	void UpdateSpeed_WALKING_LEFT(float& vx, float& vy);
 	void UpdateSpeed_JUMP(float& vx, float& vy, int nx);
@@ -67,6 +67,6 @@ public:
 	void MAGICSTAR();
 	void STOP_MAGICSTAR();
 
-	
+
 
 };
