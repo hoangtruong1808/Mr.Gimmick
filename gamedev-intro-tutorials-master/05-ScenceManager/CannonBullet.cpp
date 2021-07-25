@@ -4,18 +4,19 @@
 #include "Brick.h"
 #include "SlopeBrick.h"
 #include "Fire.h"
+#include "PlayScence.h"
 
 CCannonBullet::CCannonBullet()
 {
 	SetState(CANNONBULLET_STATE_MOVE);
 }
 
-void CCannonBullet::GetBoundingBox(float& l, float& t, float& r, float& b)
+void CCannonBullet::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	l = x;
-	t = y;
-	r = l + CANNONBULLET_BOX_WIDTH;
-	b = t - CANNONBULLET_BOX_HEIGHT;
+	left = x;
+	top = y;
+	right = left + CANNONBULLET_BOX_WIDTH;
+	bottom = top - CANNONBULLET_BOX_HEIGHT;
 }
 
 void CCannonBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -106,6 +107,26 @@ void CCannonBullet::Die()
 	if (this->y <= CANNONBULLET_DIE_Y)
 	{
 		SetState(CANNONBULLET_STATE_DIE);
+	}
+}
+void CCannonBullet::Collision()
+{
+	if (state == CANNONBULLET_STATE_MOVE)
+	{
+		CGimmick* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		float pl, pt, pr, pb;
+		player->GetBoundingBox(pl, pt, pr, pb);
+		float l, t, r, b;
+		GetBoundingBox(l, t, r, b);
+		if (pr >= l && pl <= r)
+		{
+			player->x += dx;
+			if (!player->bol_jump)
+			{
+				player->y = y + 16;
+				player->vy = 0;
+			}
+		}
 	}
 }
 

@@ -25,7 +25,11 @@
 #include "BoatWindow.h"
 #include "Cannon.h"
 #include "CannonBullet.h"
+#include "Turtle.h"
+#include "Bird.h"
 #include "BlackEnemy.h"
+#include "BlackBoss.h"
+#include "Zone.h"
 
 using namespace std;
 
@@ -47,6 +51,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define SCENE_SECTION_OBJECTS	6
 #define SCENE_SECTION_MAP	7
+#define SCENE_SECTION_ZONES	8
 
 #define OBJECT_TYPE_GIMMICK	0
 #define OBJECT_TYPE_BRICK	1
@@ -68,12 +73,15 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_GUN	16
 #define OBJECT_TYPE_BULLET	17
 #define OBJECT_TYPE_WINDOW	20
+#define OBJECT_TYPE_BLACKBOSS	22
 #define OBJECT_TYPE_WATER	30
 #define OBJECT_TYPE_BOAT	31
 #define OBJECT_TYPE_BOATBOMB	32
 #define OBJECT_TYPE_BOATWINDOW	33
 #define OBJECT_TYPE_CANNON	34
 #define OBJECT_TYPE_CANNONBULLET	35
+#define OBJECT_TYPE_TURTLE	36
+#define OBJECT_TYPE_BIRD	37
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -161,7 +169,22 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 
 	CAnimationSets::GetInstance()->Add(ani_set_id, s);
 }
+void CPlayScene::_ParseSection_ZONES(string line)
+{
+	vector<string> tokens = split(line);
 
+	if (tokens.size() < 4) return; // skip invalid lines
+
+	float l = (float)atof(tokens[0].c_str());
+	float t = (float)atof(tokens[1].c_str());
+	float r = (float)atof(tokens[2].c_str());
+	float b = (float)atof(tokens[3].c_str());
+	float revival_x = (float)atof(tokens[4].c_str());
+	float revival_y = (float)atof(tokens[5].c_str());
+
+	CZone* zone = new CZone(l, t, r, b, revival_x, revival_y);
+	zones.push_back(zone);
+}
 /*
 	Parse a line in section [OBJECTS]
 */
@@ -348,6 +371,24 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CCannonBullet();
 		break;
 	}
+	case OBJECT_TYPE_TURTLE:
+	{
+		obj = new CTurtle();
+		CTurtle* turtle = (CTurtle*)obj;
+		int start = atoi(tokens[4].c_str());
+		int end = atoi(tokens[5].c_str());
+		turtle->SetStart(start);
+		turtle->SetEnd(end);
+		break;
+	}
+	case OBJECT_TYPE_BIRD:
+		obj = new CBird(atoi(tokens[4].c_str()), atof(tokens[5].c_str()));
+		break;
+	case OBJECT_TYPE_BLACKBOSS:
+	{
+		obj = new CBlackBoss();
+		break;
+	}
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -411,6 +452,9 @@ void CPlayScene::Load()
 		if (line == "[MAP]") {
 			section = SCENE_SECTION_MAP; continue;
 		}
+		if (line == "[ZONES]") { 
+			section = SCENE_SECTION_ZONES; continue; 
+		}
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
 
 		//
@@ -424,6 +468,7 @@ void CPlayScene::Load()
 		case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
 		case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
 		case SCENE_SECTION_MAP: _ParseSection_MAP(line); break;
+		case SCENE_SECTION_ZONES: _ParseSection_ZONES(line); break;
 		}
 	}
 
@@ -436,6 +481,35 @@ void CPlayScene::Load()
 	camera->SetCamMap(map->GetMapWidth(), map->GetMapHeight());
 	quadtree = new CQuadtree(0, 0, 0, map->GetMapWidth(), map->GetMapHeight());
 
+}
+void CPlayScene::GetZonePosition(float& l, float& t, float& r, float& b)
+{
+	SetZone();
+	l = this->zone_l;
+	t = this->zone_t;
+	r = this->zone_r;
+	b = this->zone_b;
+}
+void CPlayScene::SetZone() {
+	float x, y;
+	player->GetPosition(x, y);
+	for (unsigned int i = 0; i < zones.size(); i++)
+	{
+		boolean inZone = true;
+		if (x < zones[i]->l) inZone = false;
+		if (x > zones[i]->r) inZone = false;
+		if (y > zones[i]->t) inZone = false;
+		if (y < zones[i]->b) inZone = false;
+
+		if (inZone) {
+			this->zone_l = zones[i]->l;
+			this->zone_t = zones[i]->t;
+			this->zone_r = zones[i]->r;
+			this->zone_b = zones[i]->b;
+			/*revival_x = zones[i]->revival_x;
+			revival_y = zones[i]->revival_y;*/
+		}
+	}
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -513,6 +587,10 @@ void CPlayScene::Unload()
 
 	objects.clear();
 	player = NULL;
+
+	for (unsigned int i = 0; i < zones.size(); i++)
+		delete zones[i];
+	zones.clear();
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }

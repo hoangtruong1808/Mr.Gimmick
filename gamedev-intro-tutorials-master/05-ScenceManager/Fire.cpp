@@ -5,6 +5,7 @@ void CFire::Render()
 	int ani = FIRE_ANI_BURN;
 
 	animation_set->at(ani)->Render(x, y);
+	RenderBoundingBox();
 }
 
 void CFire::GetBoundingBox(float& l, float& t, float& r, float& b)

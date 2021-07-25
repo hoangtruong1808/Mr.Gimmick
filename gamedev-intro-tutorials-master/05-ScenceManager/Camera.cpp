@@ -1,7 +1,7 @@
 ﻿#include "Camera.h"
 #include <cstddef>
 #include "Gimmick.h"
-
+#include "Playscence.h"
 
 CCamera* CCamera::__intance = NULL;
 
@@ -39,6 +39,9 @@ RECT CCamera::GetCamBound()
 
 void CCamera::Update(float x, float y)
 {
+	float zone_l, zone_t, zone_r, zone_b;
+	CScene* scene = CGame::GetInstance()->GetCurrentScene();
+	((CPlayScene*)scene)->GetZonePosition(zone_l, zone_t, zone_r, zone_b);
 	playerPos.x = x;
 	playerPos.y = y;
 
@@ -47,7 +50,7 @@ void CCamera::Update(float x, float y)
 	camPos.x -= ScreenWidth / 2;
 	camPos.y += ScreenHeight / 2;
 
-	if (camPos.x < 0)
+	/*if (camPos.x < 0)
 		camPos.x = 0;
 
 	if (camPos.y < ScreenHeight)
@@ -55,7 +58,13 @@ void CCamera::Update(float x, float y)
 
 	if (camPos.y > MapHeight) camPos.y = MapHeight;
 
-	if (camPos.x > MapWidth - ScreenWidth) camPos.x = MapWidth - ScreenWidth;
+	if (camPos.x > MapWidth - ScreenWidth) camPos.x = MapWidth - ScreenWidth;*/
+
+	if (camPos.x < zone_l) camPos.x = zone_l;
+	if (camPos.x + ScreenWidth > zone_r) camPos.x = zone_r - ScreenWidth;
+
+	if (camPos.y > zone_t) camPos.y = zone_t;
+	if (camPos.y - ScreenHeight < zone_b) camPos.y = zone_b + ScreenHeight;
 	CGame::GetInstance()->SetCamPos(camPos.x, camPos.y);
 }
 
@@ -109,3 +118,4 @@ bool CCamera::isContain(LPGAMEOBJECT obj)
 
 	return true;
 }
+

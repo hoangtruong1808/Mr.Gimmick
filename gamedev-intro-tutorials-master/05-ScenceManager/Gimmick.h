@@ -37,14 +37,16 @@
 
 class CGimmick : public CGameObject
 {
-
-
 	CMagicStar* magic_star;
 	int untouchable;
 	DWORD untouchable_start;
-	bool bol_jump = false;
+	
 	bool bol_star = false;
 public:
+	bool bol_jump = false;
+	bool inSewer = false;// check in sewer
+	bool equalinSewer = false; // check in sewer3
+	float XSewer, YSewer, nSewer; // check out sewer 
 	CGimmick();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();

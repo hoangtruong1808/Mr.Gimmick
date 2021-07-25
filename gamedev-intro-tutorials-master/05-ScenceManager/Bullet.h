@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-#define BULLET_GRAVITY				-0.005f
+#define BULLET_GRAVITY				-0.001f
 
 #define BULLET_BOX_WIDTH 12
 #define BULLET_BOX_HEIGHT 12

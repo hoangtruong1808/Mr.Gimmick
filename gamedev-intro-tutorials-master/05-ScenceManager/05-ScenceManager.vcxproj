@@ -126,6 +126,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp" />
+    <ClCompile Include="Bird.cpp" />
+    <ClCompile Include="BlackBoss.cpp" />
     <ClCompile Include="BlackEnemy.cpp" />
     <ClCompile Include="Boat.cpp" />
     <ClCompile Include="BoatBomb.cpp" />
@@ -154,6 +156,7 @@
     <ClCompile Include="Swing.cpp" />
     <ClCompile Include="Tube.cpp" />
     <ClCompile Include="Tunnel.cpp" />
+    <ClCompile Include="Turtle.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -167,9 +170,12 @@
     <ClCompile Include="Water.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Worm.cpp" />
+    <ClCompile Include="Zone.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
+    <ClInclude Include="Bird.h" />
+    <ClInclude Include="BlackBoss.h" />
     <ClInclude Include="BlackEnemy.h" />
     <ClInclude Include="Boat.h" />
     <ClInclude Include="BoatBomb.h" />
@@ -198,6 +204,7 @@
     <ClInclude Include="Swing.h" />
     <ClInclude Include="Tube.h" />
     <ClInclude Include="Tunnel.h" />
+    <ClInclude Include="Turtle.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
@@ -211,6 +218,7 @@
     <ClInclude Include="Water.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="Worm.h" />
+    <ClInclude Include="Zone.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

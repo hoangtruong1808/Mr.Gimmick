@@ -1,14 +1,32 @@
-#include "Worm.h"
+#include "Turtle.h"
 #include "Utils.h"
 #include "Gimmick.h"
+#include "MagicStar.h"
 #include "Brick.h"
 
-CWorm::CWorm() : CGameObject()
+CTurtle::CTurtle() : CGameObject()
 {
-	SetState(WORM_STATE_WALKING_LEFT);
+	SetState(TURTLE_STATE_WALKING_LEFT);
 }
 
-void CWorm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+
+void CTurtle::GetBoundingBox(float& l, float& t, float& r, float& b)
+{
+	l = x;
+	r = x + TURTLE_BBOX_WIDTH;
+	if (state == TURTLE_STATE_WALKING_LEFT || state == TURTLE_STATE_WALKING_RIGHT)
+	{
+		t = y;
+		b = y - TURTLE_BBOX_HEIGHT;
+	}
+	else
+	{
+		t = y;
+		b = y - TURTLE_BBOX_HEIGHT;
+	}
+}
+
+void CTurtle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 	x += dx;
@@ -27,12 +45,12 @@ void CWorm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (x < start)
 		{
 			x = start;
-			vx = WORM_SPEED;
+			SetState(TURTLE_STATE_WALKING_RIGHT);
 		}
 		else if (x > end)
 		{
 			x = end;
-			vx = -WORM_SPEED;
+			SetState(TURTLE_STATE_WALKING_LEFT);
 		}
 	}
 	else
@@ -59,7 +77,7 @@ void CWorm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			x = x0 + min_tx * dx + nx * 0.1f;
 			if (dynamic_cast<CMagicStar*>(e->obj))
 			{
-				SetState(WORM_STATE_DIE);
+				SetState(TURTLE_STATE_DIE_RIGHT);
 			}
 		}
 	}
@@ -67,45 +85,49 @@ void CWorm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 }
 
-void CWorm::Render()
+void CTurtle::Render()
 {
 	int ani = -1;
-	if (vx > 0)
+	switch (state)
 	{
-		ani = WORM_ANI_WALKING_RIGHT;
-	}
-	else
-	{
-		ani = WORM_ANI_WALKING_LEFT;
+	case TURTLE_STATE_WALKING_RIGHT:
+		ani = TURTLE_ANI_WALKING_RIGHT;
+		break;
+	case TURTLE_STATE_WALKING_LEFT:
+		ani = TURTLE_ANI_WALKING_LEFT;
+		break;
+	case TURTLE_STATE_DIE_RIGHT:
+		ani = TURTLE_ANI_DIE_RIGHT;
+		break;
+	case TURTLE_STATE_DIE_LEFT:
+		ani = TURTLE_ANI_DIE_LEFT;
+		break;
 	}
 	animation_set->at(ani)->Render(x, y);
 	RenderBoundingBox();
 }
 
-void CWorm::GetBoundingBox(float& l, float& t, float& r, float& b)
-{
-	l = x;
-	t = y;
-	r = x + WORM_BBOX_WIDTH;
-	b = y - WORM_BBOX_HEIGHT;
-}
 
-void CWorm::SetState(int state)
+void CTurtle::SetState(int state)
 {
 	CGameObject::SetState(state);
 
 	switch (state)
 	{
-	case WORM_STATE_WALKING_RIGHT:
-		vx = WORM_SPEED;
+	case TURTLE_STATE_WALKING_RIGHT:
+		vx = TURTLE_SPEED;
 		nx = 1;
 		break;
-	case WORM_STATE_WALKING_LEFT:
-		vx = -WORM_SPEED;
+	case TURTLE_STATE_WALKING_LEFT:
+		vx = -TURTLE_SPEED;
 		nx = -1;
 		break;
-	case WORM_STATE_DIE:
-		vy = -1;
+	case TURTLE_STATE_DIE_RIGHT:
+		vx = 0;
+		nx = 1;
+		break;
+	case TURTLE_STATE_DIE_LEFT:
+		vx = 0;
 		nx = -1;
 		break;
 	}

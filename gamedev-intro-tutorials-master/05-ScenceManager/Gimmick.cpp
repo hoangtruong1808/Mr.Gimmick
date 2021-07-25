@@ -1,4 +1,4 @@
-#include <iostream>
+	#include <iostream>
 #include <fstream>
 
 #include "Gimmick.h"
@@ -7,11 +7,18 @@
 #include "Utils.h"
 #include "Game.h"
 #include "Brick.h"
+#include "Gun.h"
 #include "Portal.h"
 #include "PlatformsMoving.h"
 #include "SlopeBrick.h"
 #include "Swing.h"
-
+#include "Water.h"
+#include "Turtle.h"
+#include "Tube.h"
+#include "Bird.h"
+#include "Boat.h"
+#include "Cannon.h"
+#include "CannonBullet.h"
 
 CGimmick::CGimmick() : CGameObject()
 {
@@ -44,12 +51,28 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if (dynamic_cast<CBrick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CPlatformsMoving*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CWater*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CPortal*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CTurtle*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CGun*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		else if (dynamic_cast<CSwing*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
-
+		//else if (dynamic_cast<CTube*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CBird*>(coObjects->at(i)))
+		{
+			if (!((CBird*)(coObjects->at(i)))->FlyHigher())
+				newCoObjects.push_back(coObjects->at(i));
+		}
+		else if (dynamic_cast<CBoat*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		else if (dynamic_cast<CCannon*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		if (dynamic_cast<CSlopeBrick*>(coObjects->at(i))) {
 			newCoObjects.push_back(coObjects->at(i));
 			CSlopeBrick* brick = dynamic_cast<CSlopeBrick*>(coObjects->at(i));
 			brick->Collision(this, dy, dx);
+		}
+		if (dynamic_cast<CCannonBullet*>(coObjects->at(i))) {
+			newCoObjects.push_back(coObjects->at(i));
+			CCannonBullet* bullet = dynamic_cast<CCannonBullet*>(coObjects->at(i));
+			bullet->Collision();
 		}
 
 		/*if (dynamic_cast<CPlatformsMoving*>(coObjects->at(i))) {
@@ -57,7 +80,31 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			brick->Collision(this, dy, dx, dt);
 		}*/
 	}
-
+	if (inSewer == true)
+	{
+		if (YSewer != 0)
+		{
+			if (nSewer == 1 && (y > YSewer + 0.25))
+			{
+				inSewer = false;
+			}
+			if (nSewer == -1 && (y < YSewer - 0.25))
+			{
+				inSewer = false;
+			}
+		}
+		if (XSewer != 0)
+		{
+			if (nSewer == 1 && (x > XSewer + 0.25))
+			{
+				inSewer = false;
+			}
+			if (nSewer == -1 && (x < XSewer - 0.25))
+			{
+				inSewer = false;
+			}
+		}
+	}
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -87,7 +134,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float min_tx, min_ty, nx = 0, ny;
 		float rdx = 0;
 		float rdy = 0;
-
+		float tempy = vy;
 		// TODO: This is a very ugly designed function!!!!
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
@@ -99,7 +146,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float y0, x0;
 		x0 = x;
 		y0 = y;
-
+		
 		/*if (nx != 0)
 			x = x0 + min_tx * dx + nx * 0.4f;
 		else x = x + dx;
@@ -220,6 +267,105 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					y += dy;
 
 			}
+			if (dynamic_cast<CGun*>(e->obj))
+			{
+				CGun* gun = dynamic_cast<CGun*>(e->obj);
+				if (e->ny != 0)
+				{
+					vy = 0;
+				}
+				if (e->nx != 0)
+				{
+					gun->x += dx;
+					x += dx;
+				}
+			}
+			if (dynamic_cast<CSwing*>(e->obj)) {
+				CSwing* swing = dynamic_cast<CSwing*>(e->obj);
+
+				if (swing->GetState() == SWING_STATE_OPEN || swing->GetState() == SWING_STATE_STOP)
+				{
+					x += dx;
+					y += dy;
+				}
+				else
+				{
+					if (e->ny > 0)
+					{
+						if (state == GIMMICK_STATE_WALKING_RIGHT || state == GIMMICK_STATE_WALKING_LEFT)
+						{
+							x = x0 + min_tx * dx + nx * 0.1f;
+						}
+						else
+						{
+							x = x0 + swing->dx;
+						}
+						vy = 0;
+					}
+					y = y0 + min_ty * dy + ny * 0.1f;
+				}
+			}
+			if (dynamic_cast<CBoat*>(e->obj))
+			{
+				CBoat* boat = dynamic_cast<CBoat*>(e->obj);
+				boat->SetState(BOAT_STATE_DRIFT);
+
+				if (boat->GetState() == BOAT_STATE_IDLE)
+				{
+					x += dx;
+					y += dy;
+				}
+				else
+				{
+					if (e->ny > 0)
+					{
+						if (state == GIMMICK_STATE_WALKING_RIGHT || state == GIMMICK_STATE_WALKING_LEFT)
+						{
+							x = x0 + min_tx * dx + nx * 0.1f;
+						}
+						else
+						{
+							x = x0 + boat->dx;
+						}
+						vy = 0;
+					}
+
+					y = y0 + min_ty * dy + ny * 0.1f;
+				}
+
+			}
+			if (dynamic_cast<CCannon*>(e->obj))
+			{
+				CCannon* cannon = dynamic_cast<CCannon*>(e->obj);
+				if (e->ny != 0)
+				{
+					vy = 0;
+				}
+				if (e->nx != 0)
+				{
+					//this->vy = -100.0f;
+					cannon->state = CANNON_STATE_MOVE;
+					if (state == GIMMICK_STATE_IDLE)
+					{
+						cannon->state = CANNON_STATE_IDLE;
+					}
+					cannon->x += dx;
+					x += dx;
+				}
+			}
+			if (dynamic_cast<CBird*>(e->obj))
+			{
+				CBird* bird = dynamic_cast<CBird*>(e->obj);
+				x = x0 + min_tx * dx + nx * 0.1f;
+				y = y0 + min_ty * dy + ny * 0.1f;
+				vy = 0;
+
+				bird->isPlayerOn(true);
+
+			}
+			if (dynamic_cast<CTube*>(e->obj)) {
+
+			}
 			else if (dynamic_cast<CPortal*>(e->obj))
 			{
 				CPortal* p = dynamic_cast<CPortal*>(e->obj);
@@ -227,8 +373,9 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 
 		}
+		if (equalinSewer && tempy != 0)
+			vy = tempy;
 	}
-
 	if (magic_star != NULL)
 	{
 		if (bol_star == true)

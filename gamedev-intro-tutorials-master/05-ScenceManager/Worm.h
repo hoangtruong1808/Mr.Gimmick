@@ -8,9 +8,11 @@
 
 #define WORM_STATE_WALKING_RIGHT 0
 #define WORM_STATE_WALKING_LEFT 1
+#define WORM_STATE_DIE	2
 
 #define WORM_ANI_WALKING_RIGHT 0
 #define WORM_ANI_WALKING_LEFT 1
+#define WORM_ANI_DIE 2
 
 class CWorm : public CGameObject
 {

@@ -3,6 +3,8 @@
 #include "Game.h"
 #include "GameObject.h"
 #include "Gimmick.h"
+#include "Zone.h"
+
 
 class CCamera
 {
@@ -38,6 +40,7 @@ public:
 
 	void SetCamMap(float mapWidth, float mapHeight);
 	void Update(float x, float y);
+
 };
 
 

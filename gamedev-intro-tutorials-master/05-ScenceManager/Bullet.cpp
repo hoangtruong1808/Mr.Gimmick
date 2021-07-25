@@ -44,6 +44,7 @@ void CBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	coEvents.clear();
 	CalcPotentialCollisions(&newCoObjects, coEvents);
 
+	Die();
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -73,7 +74,6 @@ void CBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CFire*>(e->obj))
 			{
 				SetState(BULLET_STATE_EXPLODE);
-				Die();
 			}
 		}
 	}

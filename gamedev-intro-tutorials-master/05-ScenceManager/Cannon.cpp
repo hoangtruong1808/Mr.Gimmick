@@ -106,7 +106,7 @@ void CCannon::Attack()
 	{
 		time = CANNON_ATTACK_TIME;
 		CCannonBullet* bullet = new CCannonBullet();
-		bullet->SetPosition(x - 16, y);
+		bullet->SetPosition(x-15 , y);
 		bullet->SetSpeed(-0.1f, 0);
 		LPANIMATION_SET ani = CAnimationSets::GetInstance()->Get(350001);
 		bullet->SetAnimationSet(ani);

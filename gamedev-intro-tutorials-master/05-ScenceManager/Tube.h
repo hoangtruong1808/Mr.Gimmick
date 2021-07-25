@@ -14,15 +14,14 @@
 
 class CTube : public CGameObject
 {
-
-private:
-	int type;
 public:
+	int type;
 	CTube(int t);
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {};
 	void SetState(int state) {};
-
+	float GetX() { return this->x; };
+	float GetY() { return this->y; };
 };
 
