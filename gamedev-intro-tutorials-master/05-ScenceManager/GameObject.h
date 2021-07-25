@@ -72,6 +72,8 @@ public:
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetPosX(float x) { this->x = x; }
 	void SetPosY(float y) { this->y = y; }
+	void SetVX(float vx) { this->vx = vx; }
+	void SetVY(float vy) { this->vy = vy; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void SetNX(int nx) { this->nx = nx; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }

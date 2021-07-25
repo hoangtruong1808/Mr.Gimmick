@@ -23,7 +23,7 @@
 
 CGimmick::CGimmick() : CGameObject()
 {
-	lever = 1;
+	lever = 10;
 	untouchable = 0;
 	SetState(GIMMICK_STATE_IDLE);
 }
@@ -66,6 +66,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			vy += GIMMICK_GRAVITY * dt;
 
+			CGameObject::Update(dt);
 
 			switch (state)
 			{
@@ -77,8 +78,8 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			case GIMMICK_STATE_JUMP_RIGHT: UpdateSpeed_JUMP_RIGHT(vx, vy); break;
 			}
 
-			// Calculate dx, dy 
-			CGameObject::Update(dt);
+		
+			
 
 			// Simple fall down
 			vector<LPGAMEOBJECT> newCoObjects;
@@ -659,9 +660,10 @@ void CGimmick::STOP_MAGICSTAR()
 	{
 		if (magic_star->GetState() == MAGICSTAR_STATE_BIG)
 		{
+			magic_star->SetNX(nx);
 			magic_star->SetState(MAGICSTAR_STATE_BIG_RUN);
 			magic_star->SetSpeed(magic_star->GetPosition_vx() + vx, magic_star->GetPosition_vy() + vy);
-			magic_star->SetNX(nx);
+			
 		}
 		else if (magic_star->GetState() != MAGICSTAR_STATE_BIG_RUN)  magic_star = NULL;
 	}

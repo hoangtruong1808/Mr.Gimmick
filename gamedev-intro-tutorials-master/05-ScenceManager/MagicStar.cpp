@@ -194,7 +194,9 @@ void CMagicStar::SetState(int state)
 	switch (state)
 	{
 	case MAGICSTAR_STATE_BIG_RUN:
-		vx = 0.1f;
+		if (nx > 0)
+			vx = 0.1f;
+		else vx = -0.1f;
 		break;
 	case MAGICSTAR_STATE_DIE:
 		rally_start = 0;
