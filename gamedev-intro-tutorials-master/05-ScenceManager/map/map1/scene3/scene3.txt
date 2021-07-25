@@ -6,14 +6,19 @@
 30	textures\stage1.png	215	121	214
 40	map\map1\scene3\scene3.png	255	0	0
 50	textures\Hazards_and_Interactables.png	203	102	185
-60	textures\enemy_left.png	57	189	255
-70	textures\enemy_right.png	57	189	255
+60	textures\enemy_left.png	0	0	255
+70	textures\enemy_right.png	0	0	255
 80	textures\tunnel.png	215	121	214
 
 [MAP]
 # TileSetID	MapY	MapX	TileSizeY	TileSizeX	MapMatrixPath
 
 0	12	95	12	12	map\map1\scene3\scene3_map.txt
+
+[ZONES]
+0	192	768	0	530	98
+768	192	1280	0	1248	82
+1280	192	1520	0	1536	82
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -222,6 +227,28 @@
 #BULLET
 170001	102	22	118	38	50
 
+#MAGIC STAR
+#SMALL
+40100	8	141	16	149	10
+40101	20	141	28	149	10
+
+40102	228	134	254	161	10
+40103	256	134	282	161	10
+
+40104	171	134	197	161	10
+40105	200	134	226	161	10
+
+#BIG
+40110	284	141	300	157	10
+40111	302	141	318	157	10
+
+#DIE
+40120	326	145	336	155	10
+40121	340	142	356	157	10
+40122	359	142	375	157	10
+40123	380	145	392	155	10
+40124	397	146	405	154	10
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 
@@ -342,6 +369,17 @@
 #===GUN===
 160001	160001	2200	160002	250
 170001	170001	100
+
+# MAGIC STAR
+#SMALL
+40100	40100	50	40101	50
+40101	40104	100	40105	100	40102	100	40103	100
+
+#BIG
+40110	40110	50	40111	50
+
+#DIE
+40120	40120	50	40121	50	40122	50	40123	50	40124	50
 #
 # id	ani1	ani2	ani3
 #
@@ -428,6 +466,9 @@
 
 #BULLET
 170001	170001	70201
+
+#MAGIC STAR
+40100	40100	40101	40110	40120
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
@@ -730,7 +771,7 @@
 13	1316	125	130001
 
 # GIMMICK
-0	720	112	20101
+0	272	142	20101
 
 #	TUNNEL
 14	737	95	140001	0

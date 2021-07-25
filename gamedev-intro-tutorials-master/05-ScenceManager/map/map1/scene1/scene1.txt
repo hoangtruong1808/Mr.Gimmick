@@ -13,7 +13,13 @@
 
 0	24	64	8	11	map\map1\scene1\scene1_map.txt
 
+[ZONES]
+0	192	1024	0	64	434
+0	384	1024	192	64	434
+
+
 # id	left	top	right	bottom	texture_id
+
 [SPRITES]
 
 # GIMMICK
@@ -458,4 +464,4 @@
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
-50	992	16	0	1008	0	2
+50	992	16	0	1008	0	0
