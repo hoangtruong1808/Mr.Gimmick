@@ -524,7 +524,8 @@ void CPlayScene::Update(DWORD dt)
 		if (camera->isContain(objects[i]))
 		{
 			coObjects.push_back(objects[i]);
-			if (!dynamic_cast<CGimmick*>(objects[i]))
+			if (!dynamic_cast<CGimmick*>(objects[i]) &&
+				!dynamic_cast<CBlackEnemy*>(objects[i]))
 				quadtree->Insert(objects[i]);
 		}
 	}
@@ -533,7 +534,8 @@ void CPlayScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < coObjects.size(); i++)
 	{
-		if (dynamic_cast<CGimmick*>(coObjects[i]))
+		if (dynamic_cast<CGimmick*>(coObjects[i]) ||
+			dynamic_cast<CBlackEnemy*>(objects[i]))
 		{
 			vector<LPGAMEOBJECT> coObjects_quadtree;
 			quadtree->Retrieve(&coObjects_quadtree, coObjects[i]);
@@ -633,7 +635,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	CGimmick* gimmick = ((CPlayScene*)scence)->GetPlayer();
 
 	// disable control key when Mario die 
-	if (gimmick->GetState() == GIMMICK_STATE_DIE) return;
+	if (gimmick->GetState() == GIMMICK_STATE_DIE || gimmick->GetState() == GIMMICK_STATE_STUNNED) return;
 	else if (gimmick->GetState() != GIMMICK_STATE_JUMP && gimmick->GetState() != GIMMICK_STATE_JUMP_RIGHT && gimmick->GetState() != GIMMICK_STATE_JUMP_LEFT)
 	{
 		gimmick->SetState(GIMMICK_STATE_IDLE);

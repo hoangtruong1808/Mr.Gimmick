@@ -16,6 +16,8 @@
 #define GIMMICK_STATE_DIE			400
 #define GIMMICK_STATE_JUMP_RIGHT	500
 #define GIMMICK_STATE_JUMP_LEFT		600
+#define GIMMICK_STATE_STUNNED		700
+
 
 #define GIMMICK_ANI_IDLE_RIGHT		0
 #define GIMMICK_ANI_IDLE_LEFT		1
@@ -24,19 +26,22 @@
 #define GIMMICK_ANI_JUMP_RIGHT		4
 #define GIMMICK_ANI_JUMP_LEFT		5
 
-#define GIMMICK_ANI_DIE				6
+#define GIMMICK_ANI_STUNNED_RIGHT	6
+#define GIMMICK_ANI_STUNNED_LEFT	7
+#define GIMMICK_ANI_DIE				8
 
 #define GIMMICK_BBOX_WIDTH  15
 #define GIMMICK_BBOX_HEIGHT 15
 
 #define GIMMICK_BBOX_JUMP_WIDTH  15
-#define GIMMICK_BBOX_JUMP_HEIGHT 20
+#define GIMMICK_BBOX_JUMP_HEIGHT 18
 
 #define GIMMICK_UNTOUCHABLE_TIME 5000
 
 
 class CGimmick : public CGameObject
 {
+	int lever;
 	CMagicStar* magic_star;
 	int untouchable;
 	DWORD untouchable_start;
@@ -51,7 +56,7 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
 	void SetState(int state);
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
+	void StartUntouchable();
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 

@@ -57,9 +57,11 @@ void MapGame::Render()
 				x0 = j * 16 + int(cam_x/16) * 16; // lấy vị trí chia hết cho 16
 				y0 = int(cam_y/16) * 16 - i*16;
 				
-				temp = int(game_map.MAP_Y - y0/16)* game_map.MAP_X  + int(x0/16) ; // lấy vị trí  tile                      
-				int val = game_map.ArrayTile[temp] ;
+				temp = int(game_map.MAP_Y - y0/16)* game_map.MAP_X  + int(x0/16) ; // lấy vị trí  tile   
+				int val = game_map.ArrayTile[temp];
 				DrawTiles(val, x0, y0);
+				
+					
 		}
 	}
 

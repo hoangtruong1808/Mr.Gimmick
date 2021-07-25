@@ -21,4 +21,5 @@ public:
 	//virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void SetState(int state);
 	float GetBrickSpeed() { return brick_speed; }
+	void Collision(LPGAMEOBJECT object, float dy, float dx);
 };

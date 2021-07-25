@@ -24,12 +24,16 @@ void CFallenBomb::GetBoundingBox(float& left, float& top, float& right, float& b
 
 void CFallenBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (state == FALLENBOMB_STATE_DIE)
+		return;
+
 	CGameObject::Update(dt);
 	vector<LPGAMEOBJECT> newCoObjects;
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
 		if (dynamic_cast<CBrick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
-		else if (dynamic_cast<CSlopeBrick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		if (dynamic_cast<CSlopeBrick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		if (dynamic_cast<CGimmick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 	}
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -62,8 +66,13 @@ void CFallenBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
+			if (e->ny != 0)
+			{
+				SetState(FALLENBOMB_STATE_EXPLODE);
+			}
+
 			//Brick
-			if (dynamic_cast<CBrick*>(e->obj))
+			/*if (dynamic_cast<CBrick*>(e->obj))
 			{
 				CBrick* brick = dynamic_cast<CBrick*>(e->obj);
 				if (e->ny != 0)
@@ -79,6 +88,11 @@ void CFallenBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					SetState(FALLENBOMB_STATE_EXPLODE);
 				}
+			}*/
+			if (dynamic_cast<CGimmick*>(e->obj))
+			{
+				CGimmick* gimmick = dynamic_cast<CGimmick*>(e->obj);
+				gimmick->StartUntouchable();
 			}
 		}
 	}
