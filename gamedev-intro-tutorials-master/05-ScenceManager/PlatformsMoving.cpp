@@ -2,26 +2,41 @@
 #include "Utils.h"
 #include "Gimmick.h"
 
-void CPlatformsMoving::Collision(LPGAMEOBJECT object, float& y)
+void CPlatformsMoving::Collision(DWORD time, LPGAMEOBJECT object, float dy, float dd)
 {
-	
+
 	float l, t, r, b;
 	this->GetBoundingBox(l, t, r, b);
 
 	float obj_l, obj_t, obj_r, obj_b;
 	object->GetBoundingBox(obj_l, obj_t, obj_r, obj_b);
 
+
+	if (obj_r   < l || obj_l  > r || obj_t  < b || obj_b - 2> t)
+		return;
+
 	float obj_width = obj_r - obj_l;
 	float obj_height = obj_t - obj_b;
-	if (y - obj_height < t)
-	{
-		if (dy > 0)
-			y = this->y + obj_height + 3;
-		else
-			y = this->y + obj_height + 1;
-	}
-}
 
+	float check_x;
+	float check_y;
+
+	if (obj_b < t + 2)
+	{
+
+		if (this->state == PM_STATE_WIDTH)
+		{
+
+			object->SetPosX(this->x + obj_height - 8);
+		}
+		else if (this->state == PM_STATE_HEIGHT)
+		{
+			object->SetPosY(this->y + obj_height + 1);
+		}
+	}
+
+
+}
 void CPlatformsMoving::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);

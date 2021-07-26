@@ -4,8 +4,8 @@
 
 
 #define GIMMICK_WALKING_SPEED		0.1f 
-#define GIMMICK_JUMP_SPEED			0.25f
-#define GIMMICK_GRAVITY				-0.0005f
+#define GIMMICK_JUMP_SPEED			0.3f
+#define GIMMICK_GRAVITY				-0.0006f
 #define GIMMICK_INERTIA				0.004f
 #define GIMMICK_DIE_DEFLECT_SPEED	 0.5f
 
@@ -42,12 +42,13 @@
 class CGimmick : public CGameObject
 {
 	int lever;
-	CMagicStar* magic_star;
 	int untouchable;
 	DWORD untouchable_start;
 	
 	bool bol_star = false;
 public:
+	CMagicStar* magic_star;
+
 	bool bol_jump = false;
 	bool inSewer = false;// check in sewer
 	bool equalinSewer = false; // check in sewer3

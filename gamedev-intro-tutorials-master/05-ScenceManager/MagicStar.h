@@ -24,11 +24,14 @@
 #define MAGICSTAR_BBOX_BIG_WIDTH		16
 #define MAGICSTAR_BBOX_BIG_HEIGHT		16
 
+#define MAGICSTAR_DIE_TIME				3000
+
 class CMagicStar : public CGameObject
 {
 	DWORD rally_start;
 	D3DXVECTOR2 star1, star2, star3, star4, star5;
 	float star_len, star_vy;
+	DWORD time_die;
 public:
 	CMagicStar();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);

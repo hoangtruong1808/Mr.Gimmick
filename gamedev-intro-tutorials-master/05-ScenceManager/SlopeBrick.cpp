@@ -26,7 +26,7 @@ void CSlopeBrick::Collision(LPGAMEOBJECT object, float dy, float dx)
 
 	float obj_width = obj_r - obj_l;
 	float obj_height = obj_t - obj_b;
-	
+
 	//if (!this->isContain(object))
 		//return;
 	if (state == SLOPE_STATE_BACK)
@@ -36,7 +36,7 @@ void CSlopeBrick::Collision(LPGAMEOBJECT object, float dy, float dx)
 		if (dynamic_cast<CGimmick*>(object))
 		{
 			CGimmick* gimmick = dynamic_cast<CGimmick*>(object);
-			if ((gimmick->GetState() == GIMMICK_STATE_JUMP || gimmick->GetState() == GIMMICK_STATE_JUMP_RIGHT || gimmick->GetState() == GIMMICK_STATE_JUMP_LEFT)&&gimmick->GetPosition_vy() <0 )
+			if ((gimmick->GetState() == GIMMICK_STATE_JUMP || gimmick->GetState() == GIMMICK_STATE_JUMP_RIGHT || gimmick->GetState() == GIMMICK_STATE_JUMP_LEFT) && gimmick->GetPosition_vy() < 0)
 				gimmick->SetState(GIMMICK_STATE_IDLE);
 		}
 		if (object->nx > 0)
@@ -44,17 +44,21 @@ void CSlopeBrick::Collision(LPGAMEOBJECT object, float dy, float dx)
 		else
 			object->SetVX(object->GetPosition_vx() - BRICK_SPEED);
 
-		float check_x = obj_r + dx ;
+		float check_x = obj_r + dx;
 		float check_y = obj_b + dy;
 
 		float y_col = this->y - (r - check_x) * this->ratio_hw;
-		
+
 		if (check_y < y_col)
 		{
 			check_x = check_x - obj_width;
 			check_y = y_col + obj_height;
 
 			object->SetPosition(check_x - dx, check_y - dy);
+			if (dynamic_cast<CMagicStar*>(object))
+			{
+				object->SetVY(-object->GetPosition_vy());
+			}
 		}
 	}
 	else if (state == SLOPE_STATE_UP) {
@@ -75,15 +79,18 @@ void CSlopeBrick::Collision(LPGAMEOBJECT object, float dy, float dx)
 		float check_y = obj_b + dy;
 
 		float y_col = this->y - (check_x - l) * this->ratio_hw;
-		
+
 		if (check_y < y_col)
 		{
 			check_y = y_col + obj_height;
 			object->SetPosition(check_x - dx, check_y - dy);
+			if (dynamic_cast<CMagicStar*>(object))
+			{
+				object->SetVY(-object->GetPosition_vy());
+			}
 		}
 	}
-		
-	
+
 }
 
 void CSlopeBrick::SetState(int state)

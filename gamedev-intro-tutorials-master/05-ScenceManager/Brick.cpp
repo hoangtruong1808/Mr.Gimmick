@@ -16,7 +16,7 @@ void CBrick::Collision(LPGAMEOBJECT object, float dy, float dx)
 	object->GetBoundingBox(obj_l, obj_t, obj_r, obj_b);
 
 
-	if (obj_r   < l || obj_l  > r || obj_t  < b || obj_b + 4> t)
+	if (obj_r   < l || obj_l  > r || obj_t  < b || obj_b > t)
 		return;
 
 	float obj_width = obj_r - obj_l;

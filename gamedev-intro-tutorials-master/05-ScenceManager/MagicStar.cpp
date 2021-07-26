@@ -1,6 +1,9 @@
 #include "MagicStar.h"
 #include "Brick.h"
-
+#include "BlackEnemy.h"
+#include "SlopeBrick.h"
+#include "Gimmick.h"
+#include "Fire.h"
 
 CMagicStar::CMagicStar() : CGameObject()
 {
@@ -68,8 +71,28 @@ void CMagicStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	case MAGICSTAR_STATE_BIG_RUN:
 	{
 		if (y < 0) { state = MAGICSTAR_STATE_DIE1; return; }
+
 		vy += MAGICSTAR_GRAVITY * dt;
 		CGameObject::Update(dt);
+
+
+		vector<LPGAMEOBJECT> newCoObjects;
+		for (UINT i = 0; i < coObjects->size(); i++)
+		{
+			if (dynamic_cast<CBrick*>(coObjects->at(i)))
+			{
+				CBrick* brick = dynamic_cast<CBrick*>(coObjects->at(i));
+				brick->Collision(this, dy, dx);
+				newCoObjects.push_back(coObjects->at(i));
+			}
+			else if (dynamic_cast<CSlopeBrick*>(coObjects->at(i))) {
+				CSlopeBrick* brick = dynamic_cast<CSlopeBrick*>(coObjects->at(i));
+				brick->Collision(this, dy, dx);
+				newCoObjects.push_back(coObjects->at(i));
+			}
+			else if (dynamic_cast<CFire*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+			else if (dynamic_cast<CBlackEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		}
 
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;
@@ -78,7 +101,7 @@ void CMagicStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		if (state == MAGICSTAR_STATE_DIE) return;
 
-		CalcPotentialCollisions(coObjects, coEvents);
+		CalcPotentialCollisions(&newCoObjects, coEvents);
 
 		if (coEvents.size() == 0)
 		{
@@ -124,7 +147,7 @@ void CMagicStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 					if (e->ny != 0)
 					{
-						vy = -vy / 1.25;
+
 						if (e->ny > 0)
 						{
 							if (brick->GetState() != NULL)
@@ -132,7 +155,12 @@ void CMagicStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							if (vy > -0.02f && vy < 0.02f)
 								SetState(MAGICSTAR_STATE_DIE);
 
+							if (vy < 0 && vy < -0.3f)
+								vy = 0.3f;
+							else vy = -vy / 1.25;
+
 						}
+						else vy = -vy / 1.25;
 
 						y = y0 + min_ty * dy + ny * 0.2f;
 					}
@@ -141,10 +169,26 @@ void CMagicStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						if (e->nx != 0)
 						{
 							vx = -vx;
-
 							x = x0 + min_tx * dx + nx * 0.2f;
 						}
 					}
+				}
+				else if (dynamic_cast<CSlopeBrick*>(e->obj))
+				{
+					if (e->nx != 0)
+						x += dx;
+					else if (e->ny != 0)
+						y += dy;
+				}
+				else if (dynamic_cast<CBlackEnemy*>(e->obj))
+				{
+					CBlackEnemy* enemy = dynamic_cast<CBlackEnemy*>(e->obj);
+					enemy->SetState(BLACKENEMY_STATE_DIE);
+					this->SetState(MAGICSTAR_STATE_DIE);
+				}
+				else if (dynamic_cast<CFire*>(e->obj))
+				{
+					this->SetState(MAGICSTAR_STATE_DIE);
 				}
 			}
 		}
@@ -184,7 +228,7 @@ void CMagicStar::Render()
 		break;
 	}
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CMagicStar::SetState(int state)
@@ -211,3 +255,4 @@ void CMagicStar::GetBoundingBox(float& left, float& top, float& right, float& bo
 	right = x + MAGICSTAR_BBOX_BIG_WIDTH;
 	bottom = y - MAGICSTAR_BBOX_BIG_HEIGHT;
 }
+

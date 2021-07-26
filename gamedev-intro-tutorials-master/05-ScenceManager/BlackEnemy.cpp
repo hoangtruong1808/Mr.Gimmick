@@ -20,12 +20,24 @@ void CBlackEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	CGameObject::Update(dt);
 
+	if (state == BLACKENEMY_STATE_DIE)
+	{
+		y = y + dy;
+		return;
+	}
+
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
-		if (dynamic_cast<CSlopeBrick*>(coObjects->at(i))) {
-			CSlopeBrick* brick = dynamic_cast<CSlopeBrick*>(coObjects->at(i));
+		if (dynamic_cast<CBrick*>(coObjects->at(i)))
+		{
+			CBrick* brick = dynamic_cast<CBrick*>(coObjects->at(i));
 			brick->Collision(this, dy, dx);
 		}
+		else
+			if (dynamic_cast<CSlopeBrick*>(coObjects->at(i))) {
+				CSlopeBrick* brick = dynamic_cast<CSlopeBrick*>(coObjects->at(i));
+				brick->Collision(this, dy, dx);
+			}
 	}
 
 	//CGimmick* gimmick = CGimmick::GetInstance();
@@ -92,7 +104,7 @@ void CBlackEnemy::Render()
 		ani = BLACKENEMY_ANI_WALKING_FLY_LEFT;
 		break;
 	case BLACKENEMY_STATE_DIE:
-		ani = BLACKENEMY_ANI_WALKING_RIGHT;
+		ani = BLACKENEMY_ANI_DIE;
 		break;
 	}
 	animation_set->at(ani)->Render(x, y);
@@ -115,7 +127,6 @@ void CBlackEnemy::SetState(int state)
 	{
 	case BLACKENEMY_STATE_WALKING_RIGHT:
 		nx = 1;
-		vx = BLACKENEMY_WALKING_SPEED;
 		break;
 	case BLACKENEMY_STATE_WALKING_LEFT:
 		nx = -1;
@@ -157,6 +168,7 @@ void CBlackEnemy::Update_BLACKENEMY_STATE_WALKING_RIGHT(DWORD dt, vector<LPGAMEO
 		}
 	}
 
+	vx = BLACKENEMY_WALKING_SPEED;
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -216,7 +228,7 @@ void CBlackEnemy::Update_BLACKENEMY_STATE_WALKING_RIGHT(DWORD dt, vector<LPGAMEO
 						else {
 							if (brick->GetState() != NULL)
 								x += brick->GetBrickSpeed() * dt;
-							if (((x > l - 18 && x < l + 2) || (x > r - 18 && x < r + 2)) && nx != 0)
+							if (((x > l - 18 && x < l + 2) || (x > r - 18 && x < r + 2)))
 								vy = 0.2f;
 						}
 					}
@@ -237,6 +249,18 @@ void CBlackEnemy::Update_BLACKENEMY_STATE_WALKING_RIGHT(DWORD dt, vector<LPGAMEO
 
 			}
 			else if (dynamic_cast<CSlopeBrick*>(e->obj)) {
+				if (e->nx != 0)
+					x += dx;
+				else if (e->ny != 0)
+					y += dy;
+			}
+			else if (dynamic_cast<CGimmick*>(e->obj))
+			{
+				CGimmick* gimmick = dynamic_cast<CGimmick*>(e->obj);
+				if (e->ny != -1)
+					gimmick->StartUntouchable();
+			}
+			else if (dynamic_cast<CBlackEnemy*>(e->obj)) {
 				if (e->nx != 0)
 					x += dx;
 				else if (e->ny != 0)
@@ -263,6 +287,7 @@ void CBlackEnemy::Update_BLACKENEMY_STATE_WALKING_LEFT(DWORD dt, vector<LPGAMEOB
 		}
 	}
 
+	vx = -BLACKENEMY_WALKING_SPEED;
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -322,7 +347,7 @@ void CBlackEnemy::Update_BLACKENEMY_STATE_WALKING_LEFT(DWORD dt, vector<LPGAMEOB
 						{
 							if (brick->GetState() != NULL)
 								x += brick->GetBrickSpeed() * dt;
-							if ((x > l - 2 && x < l + 2) || (x > r - 2 && x < r + 2) && nx != 0)
+							if ((x > l - 2 && x < l + 2) || (x > r - 2 && x < r + 2))
 								vy = 0.2f;
 						}
 					}
@@ -343,6 +368,18 @@ void CBlackEnemy::Update_BLACKENEMY_STATE_WALKING_LEFT(DWORD dt, vector<LPGAMEOB
 
 			}
 			else if (dynamic_cast<CSlopeBrick*>(e->obj)) {
+				if (e->nx != 0)
+					x += dx;
+				else if (e->ny != 0)
+					y += dy;
+			}
+			else if (dynamic_cast<CGimmick*>(e->obj))
+			{
+				CGimmick* gimmick = dynamic_cast<CGimmick*>(e->obj);
+				if (e->ny != -1)
+					gimmick->StartUntouchable();
+			}
+			else if (dynamic_cast<CBlackEnemy*>(e->obj)) {
 				if (e->nx != 0)
 					x += dx;
 				else if (e->ny != 0)
@@ -377,7 +414,8 @@ void CBlackEnemy::Update_BLACKENEMY_STATE_FLY_RIGHT(DWORD dt, vector<LPGAMEOBJEC
 		vx = vx + 0.001f;
 		if (y > cy)
 		{
-			vy = -0.1f;
+			if (cy - y > 32)
+				vy = -0.1f;
 		}
 		else vy = 0.1f;
 	}
@@ -457,6 +495,18 @@ void CBlackEnemy::Update_BLACKENEMY_STATE_FLY_RIGHT(DWORD dt, vector<LPGAMEOBJEC
 
 			}
 			else if (dynamic_cast<CSlopeBrick*>(e->obj)) {
+				if (e->nx != 0)
+					x += dx;
+				else if (e->ny != 0)
+					y += dy;
+			}
+			else if (dynamic_cast<CGimmick*>(e->obj))
+			{
+				CGimmick* gimmick = dynamic_cast<CGimmick*>(e->obj);
+				if (e->ny != -1)
+					gimmick->StartUntouchable();
+			}
+			else if (dynamic_cast<CBlackEnemy*>(e->obj)) {
 				if (e->nx != 0)
 					x += dx;
 				else if (e->ny != 0)
@@ -572,6 +622,18 @@ void CBlackEnemy::Update_BLACKENEMY_STATE_FLY_LEFT(DWORD dt, vector<LPGAMEOBJECT
 
 			}
 			else if (dynamic_cast<CSlopeBrick*>(e->obj)) {
+				if (e->nx != 0)
+					x += dx;
+				else if (e->ny != 0)
+					y += dy;
+			}
+			else if (dynamic_cast<CGimmick*>(e->obj))
+			{
+				CGimmick* gimmick = dynamic_cast<CGimmick*>(e->obj);
+				if (e->ny != -1)
+					gimmick->StartUntouchable();
+			}
+			else if (dynamic_cast<CBlackEnemy*>(e->obj)) {
 				if (e->nx != 0)
 					x += dx;
 				else if (e->ny != 0)

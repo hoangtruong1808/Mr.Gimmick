@@ -19,6 +19,7 @@
 #include "Boat.h"
 #include "Cannon.h"
 #include "CannonBullet.h"
+#include "BlackEnemy.h"
 
 
 CGimmick::CGimmick() : CGameObject()
@@ -83,6 +84,23 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			// Simple fall down
 			vector<LPGAMEOBJECT> newCoObjects;
+			if (magic_star != NULL)
+			{
+				if (bol_star == true)
+				{
+					magic_star->SetPosition(x, y + 16);
+				}
+				else
+				{
+					if (magic_star->GetState() == MAGICSTAR_STATE_DIE1)
+						magic_star = NULL;
+					else
+					{
+						newCoObjects.push_back(magic_star);
+					}
+				}
+			}
+
 			for (UINT i = 0; i < coObjects->size(); i++)
 			{
 				if (dynamic_cast<CBrick*>(coObjects->at(i)))
@@ -91,7 +109,12 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					brick->Collision(this, dy, dx);
 					newCoObjects.push_back(coObjects->at(i));
 				}
-				else if (dynamic_cast<CPlatformsMoving*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+				else if (dynamic_cast<CPlatformsMoving*>(coObjects->at(i)))
+				{
+					CPlatformsMoving* brick = dynamic_cast<CPlatformsMoving*>(coObjects->at(i));
+					brick->Collision(dt, this, dy, dx);
+					newCoObjects.push_back(coObjects->at(i));
+				}
 				else if (dynamic_cast<CWater*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 				else if (dynamic_cast<CPortal*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 				else if (dynamic_cast<CTurtle*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
@@ -105,16 +128,17 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				else if (dynamic_cast<CBoat*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 				else if (dynamic_cast<CCannon*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
-				if (dynamic_cast<CSlopeBrick*>(coObjects->at(i))) {
+				else if (dynamic_cast<CSlopeBrick*>(coObjects->at(i))) {
 					newCoObjects.push_back(coObjects->at(i));
 					CSlopeBrick* brick = dynamic_cast<CSlopeBrick*>(coObjects->at(i));
 					brick->Collision(this, dy, dx);
 				}
-				if (dynamic_cast<CCannonBullet*>(coObjects->at(i))) {
+				else if (dynamic_cast<CCannonBullet*>(coObjects->at(i))) {
 					newCoObjects.push_back(coObjects->at(i));
 					CCannonBullet* bullet = dynamic_cast<CCannonBullet*>(coObjects->at(i));
 					bullet->Collision();
 				}
+				else if (dynamic_cast<CBlackEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 
 				/*if (dynamic_cast<CPlatformsMoving*>(coObjects->at(i))) {
 					CPlatformsMoving* brick = dynamic_cast<CPlatformsMoving*>(coObjects->at(i));
@@ -241,8 +265,11 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							vy = 0;
 							if (e->ny > 0)
 								if (brick->GetState() != NULL)
+								{
 									x += brick->GetBrickSpeed() * dt;
-							y = y0 + min_ty * dy + ny * 0.2f;
+									y = y0 + min_ty * dy + ny * 0.2f;
+								}
+							y = y0 + min_ty * dy + ny * 0.1f;
 						}
 						else
 						{
@@ -250,9 +277,10 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							{
 								if (brick->GetState() == NULL)
 								{
-									vx = 0;
-									x = x0 + min_tx * dx + nx * 0.2f;
+									//vx = 0;
+									x = x0 + min_tx * dx + nx * 0.1f;
 								}
+								else x += dx;
 
 							}
 						}
@@ -263,41 +291,13 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						CPlatformsMoving* pm = dynamic_cast<CPlatformsMoving*>(e->obj);
 						if (e->nx != 0)
 						{
-							vx = 0;
-							x = x0 + min_tx * dx + nx * 0.2f;
+							x = x0 + min_tx * dx + nx * 0.1f;
 
 						}
 						else if (e->ny != 0)
 						{
-							vy = -0.0015;
-							if (e->ny > 0)
-							{
-								if (pm->GetState() == PM_STATE_WIDTH)
-								{
-									y = y0 + min_ty * dy + ny * 0.2f;
-									x += pm->GetPosition_dx();
-									//pm->Collision(this, this->dy, this->dx, dt);
-								}
-								else
-								{
-									if (pm->GetPosition_dy() < 0)
-									{
-										y = y0 + min_ty * dy + ny * 2.0f;
-									}
-									else
-									{
-										y = y0 + min_ty * dy + ny * 5.0f;
-										y += pm->GetPosition_dy();
-									}
-
-									//pm->Collision(this, y);
-								}
-							}
-							else {
-								y = y0 + min_ty * dy + ny * 0.2f;
-							}
+							y = y0 + min_ty * dy + ny * 0.2f;
 						}
-
 
 					}
 					else if (dynamic_cast<CSlopeBrick*>(e->obj))
@@ -417,21 +417,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (equalinSewer && tempy != 0)
 					vy = tempy;
 			}
-			if (magic_star != NULL)
-			{
-				if (bol_star == true)
-				{
-					magic_star->Update(dt, coObjects);
-					magic_star->SetPosition(x, y + 16);
-				}
-				else
-				{
-					if (magic_star->GetState() == MAGICSTAR_STATE_DIE1)
-						magic_star = NULL;
-					else
-						magic_star->Update(dt, coObjects);
-				}
-			}
+			
 
 			// clean up collision events
 			for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];

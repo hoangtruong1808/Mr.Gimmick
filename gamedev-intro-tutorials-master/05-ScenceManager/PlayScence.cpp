@@ -579,6 +579,7 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
 	{
+		if (dynamic_cast<CCord*>(objects[i]) || dynamic_cast<CSmallPinion*>(objects[i]) || dynamic_cast<CPinion*>(objects[i])) continue;
 		if (camera->isContain(objects[i]))
 		{
 			coObjects.push_back(objects[i]);
@@ -592,12 +593,25 @@ void CPlayScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < coObjects.size(); i++)
 	{
-		if (dynamic_cast<CGimmick*>(coObjects[i]) ||
-			dynamic_cast<CBlackEnemy*>(objects[i]))
+		if (dynamic_cast<CGimmick*>(coObjects[i]))
 		{
+			CGimmick* gimmick = dynamic_cast<CGimmick*>(coObjects[i]);
+			if (gimmick->magic_star != NULL)
+			{
+				//CMagicStar* magic_star = gimmick->magic_star;
+				vector<LPGAMEOBJECT> coObjects_quadtree;
+				quadtree->Retrieve(&coObjects_quadtree, gimmick->magic_star);
+				gimmick->magic_star->Update(dt, &coObjects_quadtree);
+			}
 			vector<LPGAMEOBJECT> coObjects_quadtree;
 			quadtree->Retrieve(&coObjects_quadtree, coObjects[i]);
 			coObjects[i]->Update(dt, &coObjects_quadtree);
+		}
+		else if (dynamic_cast<CBlackEnemy*>(objects[i]))
+		{
+			vector<LPGAMEOBJECT> coObjects_quadtree;
+				quadtree->Retrieve(&coObjects_quadtree, coObjects[i]);
+				coObjects[i]->Update(dt, &coObjects_quadtree);
 		}
 		else if (!(dynamic_cast<CBrick*>(coObjects[i])))
 			coObjects[i]->Update(dt, &coObjects);

@@ -35,6 +35,8 @@ void CBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			CSlopeBrick* brick = dynamic_cast<CSlopeBrick*>(coObjects->at(i));
 			brick->Collision(this, dy, dx);
 		}
+		else
+			if (dynamic_cast<CGimmick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 
 	}
 
@@ -74,6 +76,12 @@ void CBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CFire*>(e->obj))
 			{
 				SetState(BULLET_STATE_EXPLODE);
+			}
+			if (dynamic_cast<CGimmick*>(e->obj))
+			{
+				SetState(BULLET_STATE_EXPLODE);
+				CGimmick* gimmick = dynamic_cast<CGimmick*>(e->obj);
+				gimmick->StartUntouchable();
 			}
 		}
 	}
