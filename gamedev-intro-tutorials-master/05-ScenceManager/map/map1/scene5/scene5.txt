@@ -382,7 +382,7 @@
 20	768	112	200001
 
 #BOSS
-22	64	96	220001
+22	80	96	220001
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

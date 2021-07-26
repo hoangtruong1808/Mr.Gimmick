@@ -211,4 +211,3 @@ void CMagicStar::GetBoundingBox(float& left, float& top, float& right, float& bo
 	right = x + MAGICSTAR_BBOX_BIG_WIDTH;
 	bottom = y - MAGICSTAR_BBOX_BIG_HEIGHT;
 }
-

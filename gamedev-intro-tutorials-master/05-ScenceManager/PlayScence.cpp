@@ -30,6 +30,10 @@
 #include "BlackEnemy.h"
 #include "BlackBoss.h"
 #include "Zone.h"
+#include "BombEnemy.h"
+#include "BlackBomb.h"
+#include "IdleEnemy.h"
+#include "OrangeBoss.h"
 
 using namespace std;
 
@@ -74,6 +78,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_BULLET	17
 #define OBJECT_TYPE_WINDOW	20
 #define OBJECT_TYPE_BLACKBOSS	22
+
 #define OBJECT_TYPE_WATER	30
 #define OBJECT_TYPE_BOAT	31
 #define OBJECT_TYPE_BOATBOMB	32
@@ -82,7 +87,11 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_CANNONBULLET	35
 #define OBJECT_TYPE_TURTLE	36
 #define OBJECT_TYPE_BIRD	37
-
+#define OBJECT_TYPE_BOMBENEMY	40
+#define OBJECT_TYPE_BLACKBOMB	41
+#define	OBJECT_TYPE_IDLEENEMY	42
+#define OBJECT_TYPE_ORANGEBOSS	48
+#define OBJECT_TYPE_BOSSWEAPON	49
 #define OBJECT_TYPE_PORTAL	50
 
 #define MAX_SCENE_LINE 1024
@@ -389,6 +398,24 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CBlackBoss();
 		break;
 	}
+	case OBJECT_TYPE_BLACKBOMB:
+	{
+		obj = new CBlackBomb();
+		break;
+	}
+	case OBJECT_TYPE_BOMBENEMY:
+		obj = new CBombEnemy(atof(tokens[4].c_str()), atof(tokens[5].c_str()));
+		break;
+	case OBJECT_TYPE_IDLEENEMY:
+	{
+		obj = new CIdleEnemy();
+		break;
+	}
+	case OBJECT_TYPE_ORANGEBOSS:
+	{
+		obj = new CSwordBoss();
+		break;
+	}
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -480,7 +507,38 @@ void CPlayScene::Load()
 	camera = CCamera::GetInstance();
 	camera->SetCamMap(map->GetMapWidth(), map->GetMapHeight());
 	quadtree = new CQuadtree(0, 0, 0, map->GetMapWidth(), map->GetMapHeight());
+	CScene* Scene = CGame::GetInstance()->GetCurrentScene();
+	if (Scene->Getid() == 1)
+	{
+		Sound::GetInstance()->Stop("Intro");
+		Sound::GetInstance()->Play("Scene1-zone1", 1);
+		
+	}
+	if (Scene->Getid() == 6)
+	{
+		if (player->x >= 16 && player->x <= 496 && player->y <= 788 && player->y >= 240)
+		{
+			//Sound::GetInstance()->StopAll();
+			Sound::GetInstance()->Stop("SOUND_Boss_1");
+			Sound::GetInstance()->Stop("SOUND_Sence_2");
+			Sound::GetInstance()->Play("SOUND_Scene_High_1", 1);
+		}
+		else if (player->x >= 1808 && player->x <= 2064 && player->y <= 398 && player->y >= 192)
+		{
+			//Sound::GetInstance()->StopAll();
+			Sound::GetInstance()->Stop("SOUND_Scene_High_1");
+			Sound::GetInstance()->Stop("SOUND_Sence_2");
+			Sound::GetInstance()->Play("SOUND_Boss_1", 1);
+		}
+		else
+		{
+			//Sound::GetInstance()->StopAll();
+			Sound::GetInstance()->Stop("SOUND_Scene_High_1");
+			Sound::GetInstance()->Stop("SOUND_Boss_1");
+			Sound::GetInstance()->Play("SOUND_Sence_2", 1);
+		}
 
+	}
 }
 void CPlayScene::GetZonePosition(float& l, float& t, float& r, float& b)
 {
@@ -616,10 +674,12 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 {
 	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
-
 	CGimmick* gimmick = ((CPlayScene*)scence)->GetPlayer();
 	switch (KeyCode)
 	{
+	case DIK_2:
+		CGame::GetInstance()->SwitchScene(5);
+		break;
 	case DIK_Z:
 		gimmick->STOP_JUMP();
 		break;

@@ -5,15 +5,13 @@
 #include "Utils.h"
 #include "Textures.h"
 #include "Sprites.h"
-#include "Intro.h"
-#include "Sound.h"
-#include "Game.h"
+#include "Outtro.h"
 
 using namespace std;
 
-CIntro::CIntro(int id, LPCWSTR filePath) :	CScene(id, filePath)
+COuttro::COuttro(int id, LPCWSTR filePath) : CScene(id, filePath)
 {
-	key_handler = new CIntroKeyHandler(this);
+	key_handler = new COuttroKeyHandler(this);
 	this->map = nullptr;
 }
 
@@ -33,7 +31,7 @@ CIntro::CIntro(int id, LPCWSTR filePath) :	CScene(id, filePath)
 #define MAX_SCENE_LINE 1024
 
 
-void CIntro::_ParseSection_TEXTURES(string line)
+void COuttro::_ParseSection_TEXTURES(string line)
 {
 	vector<string> tokens = split(line);
 
@@ -48,7 +46,7 @@ void CIntro::_ParseSection_TEXTURES(string line)
 	CTextures::GetInstance()->Add(texID, path.c_str(), D3DCOLOR_XRGB(R, G, B));
 }
 
-void CIntro::_ParseSection_MAP(string line)
+void COuttro::_ParseSection_MAP(string line)
 {
 	vector<string> tokens = split(line);
 
@@ -67,7 +65,7 @@ void CIntro::_ParseSection_MAP(string line)
 	DebugOut(L"[INFO] Load map OK\n");
 }
 
-void CIntro::_ParseSection_SPRITES(string line)
+void COuttro::_ParseSection_SPRITES(string line)
 {
 	vector<string> tokens = split(line);
 
@@ -90,7 +88,7 @@ void CIntro::_ParseSection_SPRITES(string line)
 	CSprites::GetInstance()->Add(ID, l, t, r, b, tex);
 }
 
-void CIntro::_ParseSection_ANIMATIONS(string line)
+void COuttro::_ParseSection_ANIMATIONS(string line)
 {
 	vector<string> tokens = split(line);
 
@@ -111,7 +109,7 @@ void CIntro::_ParseSection_ANIMATIONS(string line)
 	CAnimations::GetInstance()->Add(ani_id, ani);
 }
 
-void CIntro::_ParseSection_ANIMATION_SETS(string line)
+void COuttro::_ParseSection_ANIMATION_SETS(string line)
 {
 	vector<string> tokens = split(line);
 
@@ -137,7 +135,7 @@ void CIntro::_ParseSection_ANIMATION_SETS(string line)
 /*
 	Parse a line in section [OBJECTS]
 */
-void CIntro::_ParseSection_OBJECTS(string line)
+void COuttro::_ParseSection_OBJECTS(string line)
 {
 	vector<string> tokens = split(line);
 
@@ -167,11 +165,8 @@ void CIntro::_ParseSection_OBJECTS(string line)
 	obj->SetAnimationSet(ani_set);
 	objects.push_back(obj);
 }
-void CIntro::LoadSound()
-{
-	Sound::GetInstance()->LoadSound("sound/01_Good-Morning.wav", "Intro");
-}
-void CIntro::Load()
+
+void COuttro::Load()
 {
 	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
 
@@ -221,12 +216,11 @@ void CIntro::Load()
 	f.close();
 
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
-	Sound::GetInstance()->Play("Intro", 1);
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
 
-void CIntro::Update(DWORD dt)
+void COuttro::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
@@ -249,21 +243,21 @@ void CIntro::Update(DWORD dt)
 	SetCamPos();
 }
 
-void CIntro::SetCamPos() {
+void COuttro::SetCamPos() {
 	float y = CGame::GetInstance()->GetScreenHeight();
 	CGame::GetInstance()->SetCamPos(0, y);
 }
 
-void CIntro::SetIntroPos()
+void COuttro::SetOuttroPos()
 {
 	float screen_width = CGame::GetInstance()->GetScreenWidth();
 	float screen_height = CGame::GetInstance()->GetScreenHeight();
 
-	this->intro_x = (screen_width - INTRO_WIDTH) / 2;
-	this->intro_y = (screen_height + INTRO_HEIGHT) / 2;
+	this->outtro_x = (screen_width - OUTTRO_WIDTH) / 2;
+	this->outtro_y = (screen_height + OUTTRO_HEIGHT) / 2;
 }
 
-void CIntro::Render()
+void COuttro::Render()
 {
 	if (map)
 		map->Render();
@@ -272,15 +266,15 @@ void CIntro::Render()
 		if (!dynamic_cast<CGimmick*>(objects[i]))
 			objects[i]->Render();
 
-	SetIntroPos();
-	CAnimations::GetInstance()->Get(INTRO_ANI)->Render(this->intro_x, this->intro_y);
+	SetOuttroPos();
+	CAnimations::GetInstance()->Get(OUTTRO_ANI)->Render(this->outtro_x, this->outtro_y);
 
 }
 
 /*
 	Unload current scene
 */
-void CIntro::Unload()
+void COuttro::Unload()
 {
 	for (int i = 0; i < objects.size(); i++)
 		delete objects[i];
@@ -290,7 +284,7 @@ void CIntro::Unload()
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
 
-void CIntroKeyHandler::OnKeyDown(int KeyCode)
+void COuttroKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 	CGame* game = CGame::GetInstance();
@@ -298,7 +292,9 @@ void CIntroKeyHandler::OnKeyDown(int KeyCode)
 	{
 	case DIK_SPACE:
 		game->SwitchScene(1);
-		Sound::GetInstance()->Play("Intro", 1, 100000);
+		break;
+	case DIK_A:
+		game->SwitchScene(1);
 		break;
 	}
 }

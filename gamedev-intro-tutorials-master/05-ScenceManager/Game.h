@@ -1,7 +1,7 @@
 #pragma once
 
 #include <unordered_map>
-
+#include "Sound.h"
 #include <Windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
@@ -58,10 +58,13 @@ public:
 
 	void Load(LPCWSTR gameFile);
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
+	void LoadSound();
 	void SwitchScene(int scene_id);
 
 	int GetScreenWidth() { return screen_width; }
 	int GetScreenHeight() { return screen_height; }
+
+	HWND GetHWND() { return hWnd; }
 
 	static void SweptAABB(
 		float ml,			// move left 

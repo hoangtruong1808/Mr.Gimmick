@@ -9,15 +9,40 @@
 60	textures\enemy_right.png	0	0	255
 70	textures\enemy_left.png	0	0	255
 80	textures\WaterWave.png	255	201	14
-
+90	textures\EnemyBoom.png	57	189	255
 [MAP]
 # TileSetID	MapY	MapX	TileSizeY	TileSizeX	MapMatrixPath
 
 0	12	32	3	11	map\map2\scene2\scene2_map.txt
 
 [ZONES]
-16	192	1808	0	64	274
+0	192	512	0	64	274
 
+[SOUNDS]
+Audio/01_Good-Morning.wav	SOUND_Intro
+Audio/02_No-Limits.wav	SOUND_World_Map
+Audio/03_Happy-Birthday.wav	SOUND_Scene_1
+Audio/04_Just-Friends.wav	SOUND_Scene_High_1
+Audio/05_Aporia.wav	SOUND_Boss_1
+Audio/03_Good-Weather.wav	SOUND_Sence_2
+Audio/17_Siesta.wav	SOUND_Sence_7
+Audio/18_Good-Night.wav	SOUND_Ending_2
+Audio/Sound Effect (1).wav	SOUND_Effect_1
+Audio/Sound Effect (2).wav	SOUND_Effect_2
+Audio/Sound Effect (3).wav	SOUND_Effect_3
+Audio/Sound Effect (8).wav	SOUND_Effect_8
+Audio/Sound Effect (14).wav	SOUND_Effect_14
+Audio/Sound Effect (16).wav	SOUND_Effect_16
+Audio/Sound Effect (19).wav	SOUND_Effect_19
+Audio/Sound Effect (24).wav	SOUND_Effect_24
+Audio/Sound Effect (25).wav	SOUND_Effect_25
+Audio/Sound Effect (26).wav	SOUND_Effect_26
+Audio/Sound Effect (35).wav	SOUND_Effect_35
+Audio/Sound Effect (45).wav	SOUND_Effect_45
+Audio/Sound Effect (73).wav	SOUND_Effect_73
+Audio/Sound Effect (78).wav	SOUND_Effect_78
+Audio/Sound Effect (80).wav	SOUND_Effect_80
+Audio/Sound Effect (84).wav	SOUND_Effect_84
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -73,6 +98,10 @@
 20502	10	245	22	257	10
 20503	25	243	41	259	10
 20504	44	243	60	259	10
+
+#BRICK
+30100	136	24	152	40	10
+
 
 #MAGIC STAR
 #SMALL
@@ -165,6 +194,32 @@
 60313	284	18	300	36	70
 60314	266	18	282	36	70
 
+# ENEMY BOOM
+# walking rihgt
+400001	0	0	16	32	90
+400002	18	0	34	32	90
+400003	36	0	52	32	90
+# walking left
+400011	54	0	70	32	90
+400012	72	0	88	32	90
+400013	90	0	106	32	90
+# die right
+400021	108	0	124	16	90
+# die left
+400031	126	0	142	16	90
+
+# MINIBOOM
+# walking
+410001	108	16	124	32	90
+410002	126	16	142	32	90
+# die
+410101	78	142	94	158	70
+410102	61	142	77	158	70
+410103	42	142	58	158	70
+410104	23	142	39	158	70
+410105	8	142	24	158	70
+#IDLE ENEMY
+420001	660	2	676	17	70
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
@@ -188,6 +243,9 @@
 20451	20451	100	20452	100	20453	100	20454	100	20455	100	20456	100	20457	100	20458	100	20459	100
 #die
 20501	20501	200	20502	400	20503	600	20504	800
+
+#BRICK
+30100	30100	100
 
 # MAGIC STAR
 #SMALL
@@ -221,12 +279,32 @@
 # FLY SETTING LEFT
 70200	60200	200	60201	400	60202	350	60203	300	60204	200
 
+#====== ENEMY BOOM ========
+# walking left
+400011	400011	100	400012	100	400013	100
+# walking right
+400001	400001	100	400002	100	400003	100
+# die right
+400021	400021	100
+#die left
+400031	400031	100
+
+#====== MINIBOOM========
+# walking
+410001	410001	50	410002	50
+410011	410101	50	410102	50	410103	50	410104	50	410105	50
+
+#======IDLEENEMY====
+420001	420001	100
 
 # id	ani1	ani2	ani3
 #
 [ANIMATION_SETS]
 # GIMMICK				
 20101	20101	20151	20201	20251	20301	20351	20401	20451	20501
+
+# BRICK
+30100	30100
 
 #MAGIC STAR
 40100	40100	40101	40110	40120
@@ -235,11 +313,45 @@
 
 50100	50100	60100	50200	60200	50300	60300	70100	70200
 
+# ENEMY BOOM
+400001	400001	400011	400021	400031
+
+# MINIBOOM
+410001	410001	40120
+
+#IDLEENEMY
+420001	420001	420001
 
 [OBJECTS]
 # type: 0 = Gimmick , 1 = Brick, 2 = Goomba, 4= Platforms Moving, 5 = Slope
 
 # BRICK : type	x	y	ani_set_id	width	height
+1	0	176	30100	208	16
+1	176	160	30100	32	32
+1	224	192	30100	64	80
+1	160	112	30100	192	32
+1	304	160	30100	32	32
+1	304	176	30100	208	16
+1	0	32	30100	512	32
+
+1	0	160	30100	16	128
+1	496	160	30100	16	128
+1	16	64	30100	96	32
+1	128	96	30100	16	16
+1	432	96	30100	64	64
+1	416	80	30100	16	336
+1	400	64	30100	16	32
+1	384	48	30100	16	16
+
+# EnemyBoom
+40	256	64	400001	116	380
+40	336	64	400001	116	380
+40	448	128	400001	436	492
+40	48	96	400001	24	110
+
+#IDLEENEMY
+42	128	115	420001
 
 # GIMMICK
-0	64	64	20101
+0	128	64	20101
+

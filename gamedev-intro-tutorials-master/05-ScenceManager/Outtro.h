@@ -5,16 +5,16 @@
 #include "Scence.h"
 #include "GameObject.h""
 
-#define INTRO_ANI	10001
-#define INTRO_WIDTH		128
-#define INTRO_HEIGHT	80
+#define OUTTRO_ANI	10001
+#define OUTTRO_WIDTH		128
+#define OUTTRO_HEIGHT	80
 
 
-class CIntro : public CScene
+class COuttro : public CScene
 {
-protected:	
-	float intro_x; 
-	float intro_y;
+protected:
+	float outtro_x;
+	float outtro_y;
 	MapGame* map = nullptr;
 
 	DWORD start = 0;
@@ -31,24 +31,24 @@ protected:
 
 
 public:
-	CIntro(int id, LPCWSTR filePath);
+	COuttro(int id, LPCWSTR filePath);
 
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
 	void SetCamPos();
-	void SetIntroPos();
-	void LoadSound();
+	void SetOuttroPos();
+
 	//friend class CPlayScenceKeyHandler;
 };
 
-class CIntroKeyHandler : public CScenceKeyHandler
+class COuttroKeyHandler : public CScenceKeyHandler
 {
 public:
 	virtual void KeyState(BYTE* states) {};
 	virtual void OnKeyDown(int KeyCode);
 	virtual void OnKeyUp(int KeyCode) {};
-	CIntroKeyHandler(CScene* s) :CScenceKeyHandler(s) {};
+	COuttroKeyHandler(CScene* s) :CScenceKeyHandler(s) {};
 };
 

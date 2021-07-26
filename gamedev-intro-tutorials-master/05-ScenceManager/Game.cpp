@@ -6,6 +6,8 @@
 
 #include "PlayScence.h"
 #include "Intro.h"
+#include "Outtro.h"
+#include "Sound.h"
 
 CGame * CGame::__instance = NULL;
 
@@ -342,6 +344,8 @@ void CGame::_ParseSection_SCENES(string line)
 	LPSCENE scene;
 	if (id == 0)
 		scene = new CIntro(id, path);
+	else if (id == 99)
+		scene = new CIntro(id, path);
 	else
 		scene = new CPlayScene(id, path);
 	scenes[id] = scene;
@@ -382,7 +386,7 @@ void CGame::Load(LPCWSTR gameFile)
 	f.close();
 
 	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n",gameFile);
-
+	LoadSound();
 	SwitchScene(current_scene);
 }
 
@@ -401,3 +405,13 @@ void CGame::SwitchScene(int scene_id)
 	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();	
 }
+
+void CGame::LoadSound()
+{
+	Sound::GetInstance()->LoadSound("sound/01_Good-Morning.wav", "Intro");
+	Sound::GetInstance()->LoadSound("sound/03_Happy-Birthday.wav", "Scene1-zone1");
+	Sound::GetInstance()->LoadSound("sound/04_Just-Friends.wav", "SOUND_Scene_High_1");
+	Sound::GetInstance()->LoadSound("sound/05_Aporia.wav", "SOUND_Boss_1");
+	Sound::GetInstance()->LoadSound("sound/03_Good-Weather.wav", "SOUND_Sence_2");
+}
+

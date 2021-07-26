@@ -70,9 +70,7 @@ void CFallenBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				SetState(FALLENBOMB_STATE_EXPLODE);
 			}
-
-			//Brick
-			/*if (dynamic_cast<CBrick*>(e->obj))
+			if (dynamic_cast<CBrick*>(e->obj))
 			{
 				CBrick* brick = dynamic_cast<CBrick*>(e->obj);
 				if (e->ny != 0)
@@ -80,7 +78,6 @@ void CFallenBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					SetState(FALLENBOMB_STATE_EXPLODE);
 				}
 			}
-			//SlopeBrick
 			if (dynamic_cast<CSlopeBrick*>(e->obj))
 			{
 				CSlopeBrick* slope_brick = dynamic_cast<CSlopeBrick*>(e->obj);
@@ -88,7 +85,7 @@ void CFallenBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					SetState(FALLENBOMB_STATE_EXPLODE);
 				}
-			}*/
+			}
 			if (dynamic_cast<CGimmick*>(e->obj))
 			{
 				CGimmick* gimmick = dynamic_cast<CGimmick*>(e->obj);

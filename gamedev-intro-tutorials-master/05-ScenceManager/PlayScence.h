@@ -34,6 +34,7 @@ protected:
 	void _ParseSection_OBJECTS(string line);
 	void _ParseSection_MAP(string line);
 	void _ParseSection_ZONES(string line);
+	void _ParseSection_SOUNDS(string line);
 	vector<CZone*> zones;
 	float zone_l = -9999.0f;
 	float zone_t = 9999.0f;

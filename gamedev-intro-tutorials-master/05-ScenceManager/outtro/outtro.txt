@@ -1,0 +1,96 @@
+# id	file_path	transparent_color_r	g	b
+[TEXTURES]
+0	Map\Gimmick!(J)-Level1_bank.png	255	0	0
+10	textures\gimmick_right.png	0	0	255
+20	textures\gimmick_left.png	0	0	255
+30	textures\stage1.png	215	121	214
+40	outtro\outtro1.png	200	205	250
+
+#[MAP]
+# PosX	PosY	TotalRowsOfMap	TotalColumnsOfMap	TotalRowsOfTileSet		TotalColumnsOfTileSet	TileSetID	MapMatrixPath
+
+
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+# GIMMICK
+# idle right					
+20101	2	2	18	21	10
+20102	22	2	38	21	10
+# idle left					
+20151	399	2	415	21	20
+20152	379	2	395	21	20
+# walk right					
+20201	2	24	18	43	10
+20202	21	24	37	43	10
+20203	39	24	55	43	10
+20204	58	24	74	43	10
+20205	79	24	95	43	10
+20206	99	24	115	43	10
+# walk left					
+20251	399	24	415	43	20
+20252	380	24	396	43	20
+20253	362	24	378	43	20
+20254	343	24	359	43	20
+20255	322	24	338	43	20
+20256	302	24	318	43	20
+# jump right					
+20301	2	46	18	70	10
+# jump left					
+20351	399	46	415	70	20
+# pipe right
+# pipe left
+# stun right
+# stun left
+
+#====OUTTRO SCENE
+#OUTTRO1
+00101	0	0	128	80	40
+00201	0	80	128	160	40
+00301	0	160	128	240	40
+00302	128	160	256	240	40
+00401	0	240	128	320	40
+00501	0	320	128	400	40
+00601	0	400	128	480	40
+00701	0	480	128	560	40
+00801	0	560	128	640	40
+00901	0	640	128	720	40
+00902	128	640	256	720	40
+00903	256	640	384	720	40
+00904	384	640	512	720	40
+01001	0	720	128	800	40
+01002	128	720	256	800	40
+01003	256	720	384	800	40
+01101	0	800	128	880	40
+
+
+	
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+
+# ==== GIMMICK=========
+# idle right					
+20101	20101	1000	20102	100
+# idle left					
+20151	20151	1000	20152	100
+# walk right					
+20201	20201	100	20202	100	20203	100	20204	100	20205	100	20206	100
+# walk left					
+20251	20251	100	20252	100	20253	100	20254	100	20255	100	20256	100
+# jump right					
+20301	20301	100
+# jump left					
+20351	20351	100
+
+
+# ==== INTRO ========
+#MAIN INTRO
+#
+10001	00101	2000	00201	1000	00301	800	00302	800	00401	2000	00501	2000	00601	2000	00701	2000	00801	2000	00902	800	00901	800	00903	800	00904	800	01001	500	01003	500	01002	900	01101	1000000
+
+
+
+[OBJECTS]
+# type	x	y	ani_set_id	extra_settings per object type
+# type: 1 = Brick , 2 = Gimmick, 3 = CogwheelSmall, 4 = Cogwhell, 5 = Chain, 6 = BlueFire, 7 = InclinedBrick, 8 = Conveyor
+
+
