@@ -34,6 +34,7 @@
 #include "BlackBomb.h"
 #include "IdleEnemy.h"
 #include "OrangeBoss.h"
+#include "MoveArea.h"
 
 using namespace std;
 
@@ -90,6 +91,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_BOMBENEMY	40
 #define OBJECT_TYPE_BLACKBOMB	41
 #define	OBJECT_TYPE_IDLEENEMY	42
+#define OBJECT_TYPE_MOVEAREA	43
 #define OBJECT_TYPE_ORANGEBOSS	48
 #define OBJECT_TYPE_BOSSWEAPON	49
 #define OBJECT_TYPE_PORTAL	50
@@ -406,6 +408,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BOMBENEMY:
 		obj = new CBombEnemy(atof(tokens[4].c_str()), atof(tokens[5].c_str()));
 		break;
+	case OBJECT_TYPE_MOVEAREA:
+		obj = new CMoveArea(atof(tokens[4].c_str()), atof(tokens[5].c_str()));
+		break;
 	case OBJECT_TYPE_IDLEENEMY:
 	{
 		obj = new CIdleEnemy();
@@ -413,7 +418,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_ORANGEBOSS:
 	{
-		obj = new CSwordBoss();
+		obj = new COrangeBoss();
 		break;
 	}
 	default:
@@ -564,8 +569,8 @@ void CPlayScene::SetZone() {
 			this->zone_t = zones[i]->t;
 			this->zone_r = zones[i]->r;
 			this->zone_b = zones[i]->b;
-			/*revival_x = zones[i]->revival_x;
-			revival_y = zones[i]->revival_y;*/
+			revival_x = zones[i]->revival_x;
+			revival_y = zones[i]->revival_y;
 		}
 	}
 }
@@ -583,8 +588,6 @@ void CPlayScene::Update(DWORD dt)
 		if (camera->isContain(objects[i]))
 		{
 			coObjects.push_back(objects[i]);
-			if (!dynamic_cast<CGimmick*>(objects[i]) &&
-				!dynamic_cast<CBlackEnemy*>(objects[i]))
 				quadtree->Insert(objects[i]);
 		}
 	}

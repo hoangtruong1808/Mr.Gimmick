@@ -2,13 +2,13 @@
 #include "Utils.h"
 #include "MagicStar.h"
 
-CSwordBoss::CSwordBoss()
+COrangeBoss::COrangeBoss()
 {
 	nx = -1;
 	SetState(ORANGEBOSS_STATE_WALK);
 }
 
-void CSwordBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void COrangeBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CScene* scene = CGame::GetInstance()->GetCurrentScene();
 	CGimmick* player = ((CPlayScene*)scene)->GetPlayer();
@@ -30,6 +30,18 @@ void CSwordBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
+	if (life_counts == 3) // dinh 2 vien dan la boss se crazy
+	{
+		crazy = true;
+	}
+	else 
+	{
+		crazy = false;
+	}
+	if (life_counts == 1)
+	{
+		SetState(ORANGEBOSS_STATE_DIE);
+	}
 	if (player->x + GIMMICK_BBOX_WIDTH / 2 < x + ORANGEBOSS_BBOX_WIDTH / 2)
 		nx = -1;
 	else
@@ -95,28 +107,11 @@ void CSwordBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					onGround = true;
 				}
 			}
-			/*if (dynamic_cast<CGimmick*>(e->obj))
+			if (dynamic_cast<CGimmick*>(e->obj))
 			{
-				CGimmick* star = dynamic_cast<CGimmick*>(e->obj);
-				star->SetState(GIMMICK_STATE_STUNNED);
-				if (life_counts == 1)
-				{
-					SetState(ORANGEBOSS_STATE_DIE);
-				}
-				else
-				{
-					SetState(ORANGEBOSS_STATE_STUN);
-					life_counts -= 1;
-				}
-
-				if (life_counts == 3) // dinh 2 vien dan la boss se crazy
-				{
-					crazy = true;
-				}
-				else
-					crazy = false;
-
-			}*/
+				CGimmick* gimmick = dynamic_cast<CGimmick*>(e->obj);
+				gimmick->StartUntouchable();
+			}
 		}
 	}
 	// clean up newCoObjects
@@ -125,7 +120,7 @@ void CSwordBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
-void CSwordBoss::Render()
+void COrangeBoss::Render()
 {
 	int ani = 0;
 	if (state == ORANGEBOSS_STATE_WALK) {
@@ -187,7 +182,7 @@ void CSwordBoss::Render()
 	//RenderBoundingBox();
 }
 
-void CSwordBoss::SetState(int state)
+void COrangeBoss::SetState(int state)
 {
 	CGameObject::SetState(state);
 	switch (state)
@@ -217,13 +212,13 @@ void CSwordBoss::SetState(int state)
 		else {
 			vx = -ORANGEBOSS_DEFLECT_SPEED_X;
 		}
-		vy = ORANGEBOSS_DEFLECT_SPEED_Y;
+		vy = -ORANGEBOSS_DEFLECT_SPEED_Y;
 		break;
 
 	}
 }
 
-void CSwordBoss::GetBoundingBox(float& l, float& t, float& r, float& b)
+void COrangeBoss::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
 	t = y;
@@ -231,7 +226,7 @@ void CSwordBoss::GetBoundingBox(float& l, float& t, float& r, float& b)
 	b = y - ORANGEBOSS_BBOX_HEIGHT;
 }
 
-void CSwordBoss::Jump()
+void COrangeBoss::Jump()
 {
 	CScene* scene = CGame::GetInstance()->GetCurrentScene();
 	CGimmick* player = ((CPlayScene*)scene)->GetPlayer();
@@ -249,7 +244,7 @@ void CSwordBoss::Jump()
 	vy = ORANGEBOSS_JUMP_SPEED;
 }
 
-void CSwordBoss::CalculateSpeed()
+void COrangeBoss::CalculateSpeed()
 {
 	CScene* scene = CGame::GetInstance()->GetCurrentScene();
 	CGimmick* player = ((CPlayScene*)scene)->GetPlayer();
@@ -369,7 +364,7 @@ void CSwordBoss::CalculateSpeed()
 }
 
 
-void CSwordBoss::CalculateState()
+void COrangeBoss::CalculateState()
 {
 	// tinh thoi gian tan cogn
 	if (state == ORANGEBOSS_STATE_ATTACK && GetTickCount64() - attack_start >= ORANGEBOSS_ATTACK_TIME)

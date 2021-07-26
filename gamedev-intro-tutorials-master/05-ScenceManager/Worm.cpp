@@ -48,18 +48,10 @@ void CWorm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
-			if (dynamic_cast<CBrick*>(e->obj))
+			if (dynamic_cast<CGimmick*>(e->obj))
 			{
-				y = y0 + min_ty * dy + ny * 0.1f;
-				if (e->ny != 0)
-				{
-					vy = 0;
-				}
-			}
-			x = x0 + min_tx * dx + nx * 0.1f;
-			if (dynamic_cast<CMagicStar*>(e->obj))
-			{
-				SetState(WORM_STATE_DIE);
+				CGimmick* gimmick = dynamic_cast<CGimmick*>(e->obj);
+				gimmick->StartUntouchable();
 			}
 		}
 	}
@@ -105,8 +97,9 @@ void CWorm::SetState(int state)
 		nx = -1;
 		break;
 	case WORM_STATE_DIE:
-		vy = -1;
-		nx = -1;
+		vy = -0.15;
+		vx = 0;
+		nx = 0;
 		break;
 	}
 }

@@ -8,7 +8,7 @@
 
 CBlackEnemy::CBlackEnemy() : CGameObject()
 {
-	SetState(BLACKENEMY_STATE_WALKING_LEFT);
+	SetState(BLACKENEMY_STATE_WALKING_RIGHT);
 }
 
 

@@ -21,7 +21,10 @@ void CBlackBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CalculateState();
 
 	CalculateShooting();
-
+	if (life_count == 1)
+	{
+		SetState(BLACKBOSS_STATE_DIE);
+	}
 	vector<LPGAMEOBJECT> newCoObjects;
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
@@ -73,6 +76,12 @@ void CBlackBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					vy = 0;
 				}
+			}
+			else if (dynamic_cast<CGimmick*>(e->obj))
+			{
+				CGimmick* gimmick = dynamic_cast<CGimmick*>(e->obj);
+				if (e->ny != -1)
+					gimmick->StartUntouchable();
 			}
 
 		}
@@ -138,7 +147,7 @@ void CBlackBoss::SetState(int state)
 		break;
 	case BLACKBOSS_STATE_DIE:
 		ax = 0;
-		vy = BLACKBOSS_DEFLECT_SPEED;
+		vy = -BLACKBOSS_DEFLECT_SPEED;
 		vx = -BLACKBOSS_DEFLECT_SPEED;
 		break;
 	}
@@ -198,6 +207,7 @@ void CBlackBoss::Shoot(float init_vx, float init_vy)
 	//Bay 1 doan
 	enemy->vx = init_vx;
 	enemy->vy = init_vy;
+	enemy->nx = 1;
 
 	//enemy->SetState(BLACKENEMY_STATE_BULLET);
 }
@@ -222,13 +232,13 @@ void CBlackBoss::CalculateShooting()
 	if (state == BLACKBOSS_STATE_SHOOTING && shots_count != 0 && GetTickCount64() - shoot_time >= BLACKBOSS_SHOOT_TIME) {
 		if (shots_count % 3 == 1) //tam gan
 		{
-			Shoot(0.1, 0.07f);
+			Shoot(-0.1, 0.07f);
 			shots_count += 1;
 			shoot_time = GetTickCount64();
 		}
 		else if (shots_count % 3 == 2) //tam trung
 		{
-			Shoot(1.0f, 0.16f);
+			Shoot(-1.0f, 0.16f);
 			shots_count += 1;
 			shoot_time = GetTickCount64();
 		}

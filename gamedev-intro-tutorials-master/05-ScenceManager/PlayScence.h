@@ -56,6 +56,11 @@ public:
 	void SetZone();
 	CGimmick* GetPlayer() { return player; }
 	CMagicStar* GetStar() { return star; }
+	void GetRevivalPosition(float& x, float& y) {
+		x = this->revival_x;
+		y = this->revival_y;
+	}
+
 	//friend class CPlayScenceKeyHandler;
 };
 

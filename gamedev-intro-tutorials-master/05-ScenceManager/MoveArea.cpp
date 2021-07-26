@@ -1,17 +1,27 @@
-#include "Water.h"
+#include "MoveArea.h"
 #include "Gimmick.h"
 
-void CWater::Render()
+CMoveArea::CMoveArea(float x, float y)
 {
-	int ani = WATER_ANI_WAVE;
-	int alpha = 255;
-	animation_set->at(ani)->Render(x, y, alpha);
+	this->move_x = x;
+	this->move_y = y;
 }
 
-void CWater::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CMoveArea::Render()
+{
+	RenderBoundingBox();
+}
+
+void CMoveArea::GetBoundingBox(float& l, float& t, float& r, float& b)
+{
+	l = x;
+	t = y;
+	r = x + MOVEAREA_BBOX_WIDTH;
+	b = y - MOVEAREA_BBOX_HEIGHT;
+}
+void CMoveArea::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
-
 	vector<LPGAMEOBJECT> newCoObjects;
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
@@ -26,15 +36,14 @@ void CWater::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (coEvents.size() == 0)
 	{
-		return;
+		x += dx;
+		y += dy;
 	}
 	else
 	{
 		float min_tx, min_ty, nx = 0, ny;
 		float rdx = 0;
 		float rdy = 0;
-
-
 
 		float y0, x0;
 		x0 = x;
@@ -45,19 +54,20 @@ void CWater::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			if (dynamic_cast<CGimmick*>(e->obj))
+			//Brick
+		if (dynamic_cast<CGimmick*>(e->obj))
 			{
 				CGimmick* gimmick = dynamic_cast<CGimmick*>(e->obj);
-				gimmick->SetState(GIMMICK_STATE_DIE);
+				gimmick->x = this->move_x;
+				gimmick->y = this->move_y;
+				gimmick->vx = 0;
+				gimmick->vy = 0;
 			}
+
 		}
 	}
-}
-
-void CWater::GetBoundingBox(float& l, float& t, float& r, float& b)
-{
-	l = x;
-	t = y;
-	r = x + WATER_BBOX_WIDTH;
-	b = y - WATER_BBOX_HEIGHT;
+	for (UINT i = 0; i < newCoObjects.size(); i++)
+		newCoObjects[i] = nullptr;
+	for (UINT i = 0; i < coEvents.size(); i++)
+		delete coEvents[i];
 }

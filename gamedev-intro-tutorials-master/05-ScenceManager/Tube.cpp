@@ -33,7 +33,6 @@ void CTube::Render()
 	}
 
 	animation_set->at(ani)->Render(x, y);
-	RenderBoundingBox();
 }
 
 void CTube::GetBoundingBox(float& l, float& t, float& r, float& b) 

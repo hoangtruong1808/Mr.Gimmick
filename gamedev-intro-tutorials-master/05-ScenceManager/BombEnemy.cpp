@@ -84,13 +84,11 @@ void CBombEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->ny != 0)
 					this->vy = 0;
 			}
-			if (dynamic_cast<CMagicStar*>(e->obj))
+			else if (dynamic_cast<CGimmick*>(e->obj))
 			{
-				Shot();
-				if (this->state == BOMBENEMY_STATE_WALKING_RIGHT)
-					this->SetState(BOMBENEMY_STATE_DIE_RIGHT);
-				else
-					this->SetState(BOMBENEMY_STATE_DIE_LEFT);
+				CGimmick* gimmick = dynamic_cast<CGimmick*>(e->obj);
+				if (e->ny != -1)
+					gimmick->StartUntouchable();
 			}
 		}
 	}
@@ -107,7 +105,7 @@ void CBombEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CBombEnemy::Shot() {
 	CBlackBomb* bomb = new CBlackBomb();
 
-	bomb->SetPosition(this->x, this->y);
+	bomb->SetPosition(this->x, this->y+16);
 	if (this->state == BOMBENEMY_STATE_WALKING_RIGHT)
 		bomb->SetState(BLACKBOMB_STATE_WALKING_RIGHT);
 	else

@@ -148,6 +148,7 @@
     <ClCompile Include="IdleEnemy.cpp" />
     <ClCompile Include="Intro.cpp" />
     <ClCompile Include="MagicStar.cpp" />
+    <ClCompile Include="MoveArea.cpp" />
     <ClCompile Include="OrangeBoss.cpp" />
     <ClCompile Include="Outtro.cpp" />
     <ClCompile Include="Quadtree.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="IdleEnemy.h" />
     <ClInclude Include="Intro.h" />
     <ClInclude Include="MagicStar.h" />
+    <ClInclude Include="MoveArea.h" />
     <ClInclude Include="OrangeBoss.h" />
     <ClInclude Include="Outtro.h" />
     <ClInclude Include="Quadtree.h" />

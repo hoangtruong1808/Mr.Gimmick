@@ -4,6 +4,13 @@
 #include "SlopeBrick.h"
 #include "Gimmick.h"
 #include "Fire.h"
+#include "IdleEnemy.h"
+#include "BombEnemy.h"
+#include "OrangeBoss.h"
+#include "Turtle.h"
+#include "Water.h"
+#include "BlackBoss.h"
+#include "Worm.h"
 
 CMagicStar::CMagicStar() : CGameObject()
 {
@@ -92,6 +99,13 @@ void CMagicStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (dynamic_cast<CFire*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 			else if (dynamic_cast<CBlackEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+			else if (dynamic_cast<CIdleEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+			else if (dynamic_cast<CBombEnemy*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+			else if (dynamic_cast<COrangeBoss*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+			else if (dynamic_cast<CTurtle*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+			else if (dynamic_cast<CWater*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+			else if (dynamic_cast<CBlackBoss*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+			else if (dynamic_cast<CWorm*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 		}
 
 		vector<LPCOLLISIONEVENT> coEvents;
@@ -186,7 +200,76 @@ void CMagicStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					enemy->SetState(BLACKENEMY_STATE_DIE);
 					this->SetState(MAGICSTAR_STATE_DIE);
 				}
+				else if (dynamic_cast<CIdleEnemy*>(e->obj))
+				{
+					CIdleEnemy* enemy = dynamic_cast<CIdleEnemy*>(e->obj);
+					enemy->SetState(IDLEENEMY_STATE_DIE);
+					this->SetState(MAGICSTAR_STATE_DIE);
+				}
+				else if (dynamic_cast<CBlackEnemy*>(e->obj))
+				{
+					CBlackEnemy* enemy = dynamic_cast<CBlackEnemy*>(e->obj);
+					enemy->SetState(BLACKENEMY_STATE_DIE);
+					this->SetState(MAGICSTAR_STATE_DIE);
+				}
+				else if (dynamic_cast<CTurtle*>(e->obj))
+				{
+					CTurtle* enemy = dynamic_cast<CTurtle*>(e->obj);
+					if (enemy->GetState() == TURTLE_ANI_WALKING_RIGHT)
+					{
+						enemy->SetState(TURTLE_STATE_DIE_RIGHT);
+					}
+					else
+					{
+						enemy->SetState(TURTLE_STATE_DIE_LEFT);
+					}
+					this->SetState(MAGICSTAR_STATE_DIE);
+				}
+				else if (dynamic_cast<CBombEnemy*>(e->obj))
+				{
+					CBombEnemy* enemy = dynamic_cast<CBombEnemy*>(e->obj);
+					if (e->nx < 0)
+					{
+						enemy->SetState(BOMBENEMY_STATE_DIE_LEFT);
+					}
+					else {
+						enemy->SetState(BOMBENEMY_STATE_DIE_RIGHT);
+					}
+					x += dx;
+					y += dy;
+					enemy->Shot();
+				}
+				else if (dynamic_cast<COrangeBoss*>(e->obj))
+				{
+					COrangeBoss* enemy = dynamic_cast<COrangeBoss*>(e->obj);
+					if (enemy->GetState() !=ORANGEBOSS_STATE_ATTACK)
+					{
+						enemy->SetState(ORANGEBOSS_STATE_STUN);
+						enemy->Injure();
+					}
+			
+					this->SetState(MAGICSTAR_STATE_DIE);
+				}
+				else if (dynamic_cast<CBlackBoss*>(e->obj))
+				{
+					CBlackBoss* enemy = dynamic_cast<CBlackBoss*>(e->obj);
+					enemy->SetState(BLACKBOSS_STATE_STUN);
+					enemy->Injure();
+				
+
+					this->SetState(MAGICSTAR_STATE_DIE);
+				}
+				else if (dynamic_cast<CWorm*>(e->obj))
+				{
+				CWorm* enemy = dynamic_cast<CWorm*>(e->obj);
+				enemy->SetState(WORM_STATE_DIE);
+				this->SetState(MAGICSTAR_STATE_DIE);
+				}
 				else if (dynamic_cast<CFire*>(e->obj))
+				{
+					this->SetState(MAGICSTAR_STATE_DIE);
+				}
+				else if (dynamic_cast<CWater*>(e->obj))
 				{
 					this->SetState(MAGICSTAR_STATE_DIE);
 				}

@@ -37,6 +37,7 @@
 #define GIMMICK_BBOX_JUMP_HEIGHT 18
 
 #define GIMMICK_UNTOUCHABLE_TIME 5000
+#define GIMMICK_REVIVAL_TIME		2000
 
 
 class CGimmick : public CGameObject
@@ -44,7 +45,7 @@ class CGimmick : public CGameObject
 	int lever;
 	int untouchable;
 	DWORD untouchable_start;
-	
+	DWORD die_start;
 	bool bol_star = false;
 public:
 	CMagicStar* magic_star;
@@ -74,7 +75,7 @@ public:
 
 	void MAGICSTAR();
 	void STOP_MAGICSTAR();
-
+	void Revival();
 
 
 };

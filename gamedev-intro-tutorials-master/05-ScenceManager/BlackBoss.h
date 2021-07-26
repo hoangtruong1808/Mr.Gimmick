@@ -32,13 +32,12 @@
 #define BLACKBOSS_BLACKENEMY_ACCELERATION		0.0002f
 #define BLACKBOSS_WALK_SPEED					0.02f
 
-#define BLACKBOSS_STOP_POSITION_X				1105
+#define BLACKBOSS_STOP_POSITION_X				80
 
 #define BLACKBOSS_IDLE_TIME			2000
 #define BLACKBOSS_SHOOT_TIME		1500
 #define BLACKBOSS_BLINK_TIME		450
 
-#define BLACKBOSS_LIFE_COUNT		3
 
 class CBlackBoss : public CGameObject
 {
@@ -51,7 +50,7 @@ public:
 
 	ULONGLONG blink_time = 0;
 
-	int life_count = BLACKBOSS_LIFE_COUNT;
+	int life_count = 4;
 
 	CBlackBoss();
 	~CBlackBoss() {}
@@ -66,5 +65,6 @@ public:
 	void FirstShoot();
 	void CalculateShooting();
 	void CalculateSpeed();
+	void Injure() { life_count -= 1; };
 };
 

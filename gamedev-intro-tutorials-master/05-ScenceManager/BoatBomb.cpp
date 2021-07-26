@@ -26,6 +26,7 @@ void CBoatBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
 		if (dynamic_cast<CWater*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+		if (dynamic_cast<CGimmick*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 	}
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -66,6 +67,11 @@ void CBoatBomb::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					SetState(BOATBOMB_STATE_EXPLODE);
 				}
+			}
+			else if (dynamic_cast<CGimmick*>(e->obj))
+			{
+				CGimmick* gimmick = dynamic_cast<CGimmick*>(e->obj);
+				gimmick->StartUntouchable();
 			}
 
 		}

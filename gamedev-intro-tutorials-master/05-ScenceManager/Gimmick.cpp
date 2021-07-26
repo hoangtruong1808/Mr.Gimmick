@@ -20,6 +20,8 @@
 #include "Cannon.h"
 #include "CannonBullet.h"
 #include "BlackEnemy.h"
+#include "MoveArea.h"
+#include "PlayScence.h"
 
 
 CGimmick::CGimmick() : CGameObject()
@@ -45,7 +47,15 @@ void CGimmick::StartUntouchable()
 
 void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (state == GIMMICK_STATE_DIE) return;
+	if (state == GIMMICK_STATE_DIE && GetTickCount64() - die_start >= GIMMICK_REVIVAL_TIME)
+	{
+		Revival();
+	}
+
+	if (state == GIMMICK_STATE_DIE)
+	{
+		return;
+	}
 	else
 		if (state == GIMMICK_STATE_STUNNED)
 		{
@@ -120,6 +130,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				else if (dynamic_cast<CTurtle*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 				else if (dynamic_cast<CGun*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 				else if (dynamic_cast<CSwing*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
+				else if (dynamic_cast<CMoveArea*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 				//else if (dynamic_cast<CTube*>(coObjects->at(i))) newCoObjects.push_back(coObjects->at(i));
 				else if (dynamic_cast<CBird*>(coObjects->at(i)))
 				{
@@ -145,31 +156,7 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					brick->Collision(this, dy, dx, dt);
 				}*/
 			}
-			if (inSewer == true)
-			{
-				if (YSewer != 0)
-				{
-					if (nSewer == 1 && (y > YSewer + 0.25))
-					{
-						inSewer = false;
-					}
-					if (nSewer == -1 && (y < YSewer - 0.25))
-					{
-						inSewer = false;
-					}
-				}
-				if (XSewer != 0)
-				{
-					if (nSewer == 1 && (x > XSewer + 0.25))
-					{
-						inSewer = false;
-					}
-					if (nSewer == -1 && (x < XSewer - 0.25))
-					{
-						inSewer = false;
-					}
-				}
-			}
+		
 			vector<LPCOLLISIONEVENT> coEvents;
 			vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -404,18 +391,19 @@ void CGimmick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						bird->isPlayerOn(true);
 
 					}
-					if (dynamic_cast<CTube*>(e->obj)) {
-
-					}
+					/*if (dynamic_cast<CMoveArea*>(e->obj)) {
+						CMoveArea* movearea = dynamic_cast<CMoveArea*>(e->obj);
+						x = 100;
+						y = 100;
+					}*/
 					else if (dynamic_cast<CPortal*>(e->obj))
 					{
 						CPortal* p = dynamic_cast<CPortal*>(e->obj);
 						CGame::GetInstance()->SwitchScene(p->GetSceneId());
+
 					}
 
 				}
-				if (equalinSewer && tempy != 0)
-					vy = tempy;
 			}
 			
 
@@ -513,6 +501,11 @@ void CGimmick::SetState(int state)
 	case GIMMICK_STATE_JUMP_LEFT:
 		vx = -GIMMICK_WALKING_SPEED;
 		nx = -1;
+		break;
+	case GIMMICK_STATE_DIE:
+		vx = 0;
+		vy = 0;
+		this->die_start = GetTickCount64();
 		break;
 	}
 }
@@ -653,4 +646,13 @@ void CGimmick::STOP_MAGICSTAR()
 		}
 		else if (magic_star->GetState() != MAGICSTAR_STATE_BIG_RUN)  magic_star = NULL;
 	}
+}
+void CGimmick::Revival() {
+	float revival_x, revival_y;
+	CScene* scene = CGame::GetInstance()->GetCurrentScene();
+	((CPlayScene*)scene)->GetRevivalPosition(revival_x, revival_y);
+	this->SetPosition(revival_x, revival_y);
+	this->SetSpeed(0, 0);
+	this->SetState(GIMMICK_STATE_IDLE);
+	this->untouchable = 0;
 }

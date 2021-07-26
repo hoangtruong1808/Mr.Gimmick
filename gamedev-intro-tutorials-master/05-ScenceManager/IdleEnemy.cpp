@@ -20,8 +20,10 @@ void CIdleEnemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	vy -= IDLEENEMY_GRAVITY * dt;
-
+	if (state != IDLEENEMY_STATE_IDLE)
+		vy -= IDLEENEMY_GRAVITY * dt;
+	if (this->state == IDLEENEMY_STATE_DIE)
+		return;
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -71,7 +73,7 @@ void CIdleEnemy::Render()
 	int ani = -1;
 	if (state == IDLEENEMY_STATE_DIE)
 	{
-		ani = IDLEENEMY_ANI_DIE;
+		return;
 	}
 	else
 	{
@@ -91,7 +93,7 @@ void CIdleEnemy::SetState(int state)
 		vy = 0;
 		break;
 	case IDLEENEMY_STATE_DIE:
-		vx = nx/10;
+		vx = -1/10;
 		vy = 0.08f;
 		break;
 	}

@@ -49,7 +49,7 @@
 #define ORANGEBOSS_MAP_END_LEFT				1816
 
 
-class CSwordBoss : public CGameObject
+class COrangeBoss : public CGameObject
 {
 public:
 	float ax = 0;
@@ -70,8 +70,8 @@ public:
 
 	bool crazy = false;
 
-	CSwordBoss();
-	~CSwordBoss() {}
+	COrangeBoss();
+	~COrangeBoss() {}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	virtual void SetState(int state);
@@ -81,5 +81,6 @@ public:
 	bool isEqual(float a, float b, float equal = 1.0f);
 	void CalculateState();
 	void CreateSword();
+	void Injure() { life_counts -= 1; };
 };
 

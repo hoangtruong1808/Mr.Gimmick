@@ -93,7 +93,6 @@ void CCannon::Render()
 		break;
 	}
 	animation_set->at(ani)->Render(x, y, alpha);
-	RenderBoundingBox();
 }
 void CCannon::SetState(int state) 
 {
