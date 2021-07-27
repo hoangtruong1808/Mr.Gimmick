@@ -8,5 +8,8 @@ start	8
 3	map\map1\scene3\scene3.txt
 4	map\map1\scene4\scene4.txt
 5	map\map1\scene5\scene5.txt
-8	map\map2\map2.txt
+6	map\map2\scene1\scene1.txt
+7	map\map2\scene2\scene2.txt
+8	map\map1\map1.txt
+9	map\map2\map2.txt
 99	outtro\outtro.txt
